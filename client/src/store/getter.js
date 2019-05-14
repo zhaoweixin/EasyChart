@@ -3,5 +3,4 @@ export default {
         return state.someLists.filter(() => param.done)
     },
     
-
 }

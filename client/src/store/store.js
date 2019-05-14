@@ -10,66 +10,8 @@ import mutations from "./mutation"
 Vue.use(Vuex)
 
 const state = {
-  // count: 0,
-  // someLists: [],
-  // chartId:"", //图表id
-  // //chartName:chartName,  //图表名称(类型)
-  // chartComponentName: "", //图表组件名称
-  // chartlayout: myLayout,  //1.图表的布局
-  // configuration: myConfiguration, //2.图表的配置
-  // //coordinate: [x_axis,y_axis],  //坐标轴
-  // chartData: data,  //3.图表数据
-  // //legend: legend, //图示
-  // //tooltip: tip, //提示
-  // interaction: myAction,  //4.交互
-  // size: { //图表样式
-  //   width: width,  //图表的宽
-  //   height: height,  //图表的长
-
-  // },
-  /*x_axis: { //横坐标轴
-    title: Xtitle,  //横坐标名称
-    label: XLabel,  //横坐标标签
-  },
-  y_axis: { //纵坐标轴
-    title: Ytitle,  //纵坐标名称
-    label: YLabel,  //纵坐标标签
-  },
-  label: {
-    offset: chartoffset,  //标签的偏移量
-    text: {
-      fontSize: textFontSize, //字体大小
-      color:  textColor,  //字体颜色
-    }
-
-  },
-  data:[],   //数据
-  gaugecoor: {
-    startAngle: 0,  //起始角度
-    endAngle: 0,  //终止角度
-    innerRadius: 0, //内半径
-    radius: 0,  //半径
-  }*/
-
-  // myLayout: {
-  //   size: size, //图标大小的设置
-  //   padding: [0,0,0,0], //内边距
-
-  // },
-  // myConfiguration: {
-  //   // 根据不同图表进行配置
-  //   legend: false,  //图示
-  //   tooltip: false, //提示
-  //   axis: {
-  //     x_axis: false,  //x轴
-  //     y_axis: false,  //y轴
-  //   },
-
-  // },
-  // data: [],
-  // myAction: {
-
-  // },
+  chartCategory: [bubblechart,bubbleFrequencyChart,gaugechart,groupBarChart,groupPieChart,lineChart,mapBoxView,pieChart,radarChart,ratiochart], //图表中类数组
+  chartComponentArray: [], //图表组件数组
 //bubblechart
   bubblechart: {
     "id": "001",
@@ -122,9 +64,10 @@ const state = {
         "shape": "circle",
         "style": {},
       },
-      "data": [],
-      "interaction": {}
-    } 
+      
+    } ,
+    "data": [],
+    "interaction": {}
   },
 //gaugechart
   gaugechart: {
@@ -303,7 +246,9 @@ const state = {
 
       },
       "coor": "",
-      "label":
+      "label": {
+
+      }
     },
     "data": [],
     "intercation": {
@@ -373,7 +318,7 @@ ratiochart: {
     "tooltip": "",
     "axis": {
       "label": {
-        
+
       }
     },
     "percent": {}
@@ -382,38 +327,40 @@ ratiochart: {
   "interaction": {
 
   }
+},
+
+/** demo
+ * linechart example
+option = {
+  "id": "id1",
+  "style": {
+      "width": "200px",
+      "height": "200px",
+      "color": "orange",
+      ...
+  },
+  "data": [[1,2],[1,2],[1,2],[1,2]],
+  "meta": {
+      //enhenced understanding information
+      "title": "linechart",
+      "legend": "",
+      ...
+  },
+  "api": {
+      //interaction
+      "acceptable": {
+          "x": limit,
+          "y": limit
+      },
+      "available": {
+          "x": limit,
+          "y": limit
+      }
+  }
+  ...
 }
+ */
 
-
-//linechart example
-// option = {
-//   "id": "id1",
-//   "style": {
-//       "width": "200px",
-//       "height": "200px",
-//       "color": "orange",
-//       ...
-//   },
-//   "data": [[1,2],[1,2],[1,2],[1,2]],
-//   "meta": {
-//       //enhenced understanding information
-//       "title": "linechart",
-//       "legend": "",
-//       ...
-//   },
-//   "api": {
-//       //interaction
-//       "acceptable": {
-//           "x": limit,
-//           "y": limit
-//       },
-//       "available": {
-//           "x": limit,
-//           "y": limit
-//       }
-//   }
-//   ...
-// }
 }
 
 export default new Vuex.Store({
@@ -421,7 +368,7 @@ export default new Vuex.Store({
     state,
     mutations,
     actions,
-    getters
+    getters,
     //cart,
     //products
   }
