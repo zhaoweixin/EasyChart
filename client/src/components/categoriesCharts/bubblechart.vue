@@ -4,7 +4,8 @@
 </template>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
-import G2 from '@antv/g2'
+import G2 from '@antv/g2';
+import {mapMutations} from vuex;
 export default {
     data() {
         return {
@@ -61,7 +62,7 @@ export default {
             }],
         //this.$store.data,
 
-        bubblechart: {
+        bubblechartSet: {
             "id": "001",
             "category": "bubblechart", //种类
             "container": {  //布局
@@ -95,7 +96,14 @@ export default {
 
     },
     methods: {
-        initChart(sourceData,bubblechart) {
+        ...mapMutations([
+            'createChartComponet'
+        ]),
+        createChartComponet() {
+            var bubbleChart = initChart(data,bubbleChartSet);
+            this.$store.state.chartComponetArray.push(bubbleChart);
+        },
+        initChart(sourceData,bubblechartSet) {
             //--------基础设置----------------
             var id = bubblechart.id;
             var chart = new G2.chart({
@@ -182,7 +190,9 @@ export default {
             chart.guide(); //设置辅助元素
             chart.render(); //生成图像
         },
-
+        getData() {
+            
+        }
 
     }
 }
