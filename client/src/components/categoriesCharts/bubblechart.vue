@@ -1,12 +1,13 @@
 <template>
-    <div id="bubble"> 
+    <div id="bubblechart"> 
     </div>
 </template>
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<!--<script src="https://d3js.org/d3.v4.min.js"></script>-->
 <script>
 import G2 from '@antv/g2';
-import {mapMutations} from vuex;
+//import {mapMutations} from vuex;
 export default {
+    name: 'bubble',
     data() {
         return {
         sourceData: [{
@@ -96,22 +97,22 @@ export default {
 
     },
     methods: {
-        ...mapMutations([
-            'createChartComponet'
-        ]),
+        // ...mapMutations([
+        //     'createChartComponet'
+        // ]),
         createChartComponet() {
             var bubbleChart = initChart(data,bubbleChartSet);
             this.$store.state.chartComponetArray.push(bubbleChart);
         },
-        initChart(sourceData,bubblechartSet) {
+        initChart() {
             //--------基础设置----------------
             var id = bubblechart.id;
             var chart = new G2.chart({
-                container: 'bubble-container',
-                height: bubblechart.container.height,
-                width: bubblechart.container.width,
+                container: 'bubblechart',
+                height: 100,
+                width: 100,
                 forceFit: false,//大小自适应
-                padding: bubblechart.container.padding,
+                padding: [0,0,0,0],
             });
             chart.animate(false); //设置动画
             //-----------高级设置---------------
@@ -190,11 +191,139 @@ export default {
             chart.guide(); //设置辅助元素
             chart.render(); //生成图像
         },
-        getData() {
-            
+        initTest() {
+           var sourceData= [{
+            item: '高血压',
+            group: 1,
+            value: 34,
+            ratio: 100
+            },  {
+            item: '高血压',
+            group: 2,
+            value: 50,
+            ratio: 100
+            }, {
+            item: '高血压',
+            group: 3,
+            value: 40,
+            ratio: 100
+            },  {
+            item: '高血压',
+            group: 4,
+            value: 20,
+            ratio: 100
+            }, {
+            item: '高血压',
+            group: 5,
+            value: 70,
+            ratio: 100
+            }, {
+            item: '高血压',
+            group: 6,
+            value: 55,
+            ratio: 100
+            }, {
+            item: '高血压',
+            group: 7,
+            value: 55,
+            ratio: 100
+            }, {
+            item: '高血压',
+            group: 8,
+            value: 55,
+            ratio: 100
+            }, {
+            item: '高血压',
+            group: 9,
+            value: 55,
+            ratio: 100
+            }, {
+            item: '高血压',
+            group: 10,
+            value: 55,
+            ratio: 40
+            }];
+        this.chart = new G2.Chart({
+        container: 'bubblechart',
+        height: 350,
+        width: 600,
+        padding: [50, 20, 50, 80],
+        });
+
+        this.chart.source(sourceData, {
+        group: {
+            tickInterval: 1, // 自定义刻度间距
+            nice: false, // 不对最大最小值优化
+        
+        },
+        ratio: {
+            tickInterval: 20,
+            nice: false,
+            max: 100,
+            min: 0
+        }
+        });
+        // 开始配置坐标轴
+        this.chart.axis('group', {
+        label: {
+            formatter: function formatter(val) {
+            return val + ' 组'; // 格式化坐标轴显示文本
+            },
+            textStyle: {
+            fontSize: 12, 
+            textAlign: 'center', 
+            fill: '#ccc', 
+            }
+        },
+        grid: {
+            lineStyle: {
+            stroke: '#d9d9d9',
+            lineWidth: 1,
+            lineDash: [2, 2]
+            }
+        }
+        });
+        this.chart.axis('ratio', {
+        title: {
+            offset: 64
+        },
+        label: {
+            formatter: function formatter(val) {
+            if (val > 0) {
+                return val + ' %';
+            }
+            },
+            textStyle: {
+            fontSize: 12, 
+            fill: '#ccc', 
+            }
+        }
+        });
+        this.chart.legend(false);
+        this.chart.tooltip({
+        title: 'country'
+        });
+        this.chart.point().position('group*ratio')
+        .size('value', [8, 25])
+        .label('value', {
+        offset: 0, // 文本距离图形的距离
+        textStyle: {
+            fill:'white'
+        }
+        }).opacity(0.3).shape('circle').tooltip('group*value').style({
+        lineWidth: 1,
+        stroke: '#1890ff'
+        });
+
+        this.chart.render();
         }
 
-    }
+    },
+    // mounted: {
+    //     createChart() {
+    //         initChart(sourceData,bubblechartSet)
+    //     }
+    // }
 }
 </script>
 

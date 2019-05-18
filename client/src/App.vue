@@ -14,7 +14,9 @@
               <div>drag chart store</div>
               <chartStore></chartStore>
           </el-aside>
-          <el-main>Main</el-main>
+          <el-main>Main
+            <dashboard></dashboard>
+          </el-main>
           <el-aside width="200px">
             <SettingSide></SettingSide>
           </el-aside>
@@ -29,13 +31,15 @@ import NavMenu from "./components/NavMenu/NavMenu"
 import Upload from "./components/ChartSide/upload"
 import chartStore from "./components/ChartSide/chartStore"
 import SettingSide from "./components/SettingSide/SettingSide"
+import dashboard from "./components/dashboard/dashboard.vue"
 export default {
   name: 'App',
   components: {
     NavMenu,
     Upload,
     chartStore,
-    SettingSide
+    SettingSide,
+    dashboard
   }
 }
 </script>

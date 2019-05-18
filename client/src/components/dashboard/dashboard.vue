@@ -1,54 +1,47 @@
 <template>
 <div class="line">
-    <v-header :name="name" :legendArr="legendArr" :myChart="myChart"></v-header>
-    <v-filter :myChart="myChart" v-if="myChart._dom"></v-filter>
-    <div class="main"></div>
+    <button id="btn"  @click="function1"></button>
+    <bubble ref="bubblechart" @click="click"></bubble>
 </div>
 
 </template>
 
 <script>
-import {mapState,mapAction} from vuex
+//import {mapState,mapAction} from vuex
+import bubble from "../categoriesCharts/bubblechart.vue"
 
 export default {
     data() {
     return {
-        dashboard: this.$store.chartCategory //获取Chart数组
+        //dashboard: this.$store.chartCategory //获取Chart数组
     }
     },
     computed: {
-        ...mapState([
-            'chartCategory'
-        ]),
-        chartCategory () {
-            return store.state.lineChart;
-        },
-        ...mapAction({
+        // ...mapState([
+        //     'chartCategory'
+        // ]),
+        // ...mapAction({
+        //     addChart: 'createAction'
+        // }),
 
-        })
     },
     methods: {
-        _init() {
-            this.legendArr = this.myChart.getOption().series
-            this.legendArr.forEach((data) => {
-            data.selected = true;
-            })
-            this.$root.charts.push(this.myChart)
-            window.addEventListener('resize', function() {
-            this.myChart.resize()
-            }.bind(this))
-        },
-        getData(data) {
 
+        function1(){
+            //this.$refs.bub.initChart();
+            console.log('hello');
+            this.$refs.bubblechart.initTest();
         },
-        getstate(){
-
+        click() {
+            //this.$refs.bub.initChart();
+            //this.$refs.bubblechart.initTest();
         }
     },
     components: {
+        bubble,
     },
     mounted() {
-
+        
     }
 }
 

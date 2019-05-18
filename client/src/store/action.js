@@ -9,5 +9,9 @@ export default {
                 step: 10
             })
         }
+    },
+    createAction(context, chart) {
+        context.commit('createChartComponet',chart);
     }
+
 }
