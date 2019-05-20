@@ -1,4 +1,4 @@
-export default {
+const action = {
     increment(context, param) {
         context.state.count += param.step;
         context.commit('increment', context.state.count)//提交改变后的state.count值
@@ -15,3 +15,5 @@ export default {
     }
 
 }
+
+export default action

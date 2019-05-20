@@ -3,15 +3,27 @@ import Vuex from 'vuex'
 //import cart from './modules/cart'
 //import products from './modules/products'
 //import createLogger from '../../../src/plugins/logger'
-import actions from "./action"
-import getters from "./getter"
-import mutations from "./mutation"
-
+import action from "./action"
+import getter from "./getter"
+import mutation from "./mutation"
 Vue.use(Vuex)
 
 const state = {
-  toDrawChart:'', //待绘制的图表
-  chartComponentArray: [], //图表组件数组
+    toDrawChart:'', //待绘制的图表
+    chartLayer:"",
+    chartX:"",
+    chartY:"",
+    chartComponentArray: [], //图表组件数组
+    chartCategory: ['bubblechart','bubbleFrequencyChart','gaugechart','groupBarChart','groupPieChart','lineChart','mapBoxView','pieChart','radarChart','ratiochart'] //图表中类数组
+}
+
+export default new Vuex.Store({
+    state: state,
+    mutations: mutation,
+    actions: action,
+    getters: getter
+})
+
 // //bubblechart
 //   bubblechart: {
 //     "id": "001",
@@ -360,17 +372,3 @@ option = {
   ...
 }
  */
-
-chartCategory: ['bubblechart','bubbleFrequencyChart','gaugechart','groupBarChart','groupPieChart','lineChart','mapBoxView','pieChart','radarChart','ratiochart'], //图表中类数组
-}
-
-export default new Vuex.Store({
-  modules: {
-    state,
-    mutations,
-    actions,
-    getters,
-    //cart,
-    //products
-  }
-}) 

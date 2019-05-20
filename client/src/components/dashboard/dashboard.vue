@@ -1,11 +1,13 @@
 <template>
 <div>
-    <div id='preview' style="background:rgba(0,0,0,0.05)"><svg id ='editorborad'></svg></div>
-    
-        <div class="line">
-        <button id="btn"  @click="function1"></button>
-        <bubble ref="bubblechart" @click="click"></bubble>
+    <button id="btn" @click="function1"></button>
+    <div id='preview' style="background:rgba(0,0,0,0.05)">
+        <div style="position:absolute">
+            <svg id ='editorborad'></svg>
+        </div>
+        <!--add chart to here -->
     </div>
+    <bubble></bubble>
 </div>
 </template>
 
@@ -17,7 +19,9 @@ export default {
     data() {
     return {
         container: "", //canvas to drawing blueprint
-        grid_layer: "grid_layer",
+        gridLayer: "gridLayer",
+        chartLayer: "preview",
+        componentContainer: "componentContainer"
         //dashboard: this.$store.chartCategory //获取Chart数组
     }
     },
@@ -33,18 +37,20 @@ export default {
         function1(){
             //this.$refs.bub.initChart();
             console.log('hello');
-            
-            this.$refs.bubblechart.initTest();
+            this.$store.commit("setChartXY", {"x": 100, "y": 100})
+            this.$store.commit("toDrawChart", {"toDrawChart": "bubbleChart"})
+            //this.$refs.bubblechart.initTest();
         },
         click() {
             //this.$refs.bub.initChart();
             //this.$refs.bubblechart.initTest();
         },
         chartInit(container){
+            let that = this
             this.container = d3.select("#editorborad")
-            this.container.append("g").attr("id", "grid_layer")
+            this.container.append("g").attr("id", that.gridLayer)
+            this.$store.commit("setChartLayer", {"chartLayer": that.chartLayer})
             this.chartResize(window.innerWidth * 0.77, window.innerHeight * 0.92)
-
         },
         chartResize(width, height){
             let that = this
@@ -58,12 +64,12 @@ export default {
                 }
                 if(that.container != ""){
                     that.container
-                        .select("#grid_layer")
+                        .select("#gridLayer")
                         .selectAll("*")
                         .remove();
                     
                     that.container
-                        .select("#grid_layer")
+                        .select("#gridLayer")
                         .selectAll(".grid_lines")
                         .data(lineData)
                         .enter()
