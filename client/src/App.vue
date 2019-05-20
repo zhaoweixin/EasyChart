@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header>
+      <el-header height="30">
         <NavMenu></NavMenu>
       </el-header>
       <el-container>
@@ -14,7 +14,7 @@
               <div>drag chart store</div>
               <chartStore></chartStore>
           </el-aside>
-          <el-main>Main
+          <el-main>
             <dashboard></dashboard>
           </el-main>
           <el-aside width="200px">
@@ -56,13 +56,12 @@ export default {
   .el-aside {
     color: #333;
     text-align: center;
-    height: 1080px;
+    height: 1020px;
   }
   
   .el-main {
     color: #333;
     text-align: center;
-    line-height: 160px;
   }
   
   body > .el-container {

@@ -1,6 +1,5 @@
 <template>
-    <div id="bubblechart"> 
-    </div>
+    <div id="bubblechart"></div>
 </template>
 <!--<script src="https://d3js.org/d3.v4.min.js"></script>-->
 <script>

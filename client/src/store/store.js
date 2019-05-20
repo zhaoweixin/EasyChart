@@ -10,7 +10,7 @@ import mutations from "./mutation"
 Vue.use(Vuex)
 
 const state = {
-  
+  toDrawChart:'', //待绘制的图表
   chartComponentArray: [], //图表组件数组
 // //bubblechart
 //   bubblechart: {

@@ -4,5 +4,9 @@ export default {
     },
     createChartComponet(state,chartobj){
         state.chartComponetArray.push(chartobj);
+    },
+    changeToDrawChart(state, payload){
+        console.log(payload);
+        state.toDrawChart = payload;
     }
 }
