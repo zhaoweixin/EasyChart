@@ -120,58 +120,6 @@ export default {
         initTest() {
         const that = this
         let divId = this.getContainer()
-        
-        var sourceData= [{
-            item: '高血压',
-            group: 1,
-            value: 34,
-            ratio: 100
-            },  {
-            item: '高血压',
-            group: 2,
-            value: 50,
-            ratio: 100
-            }, {
-            item: '高血压',
-            group: 3,
-            value: 40,
-            ratio: 100
-            },  {
-            item: '高血压',
-            group: 4,
-            value: 20,
-            ratio: 100
-            }, {
-            item: '高血压',
-            group: 5,
-            value: 70,
-            ratio: 100
-            }, {
-            item: '高血压',
-            group: 6,
-            value: 55,
-            ratio: 100
-            }, {
-            item: '高血压',
-            group: 7,
-            value: 55,
-            ratio: 100
-            }, {
-            item: '高血压',
-            group: 8,
-            value: 55,
-            ratio: 100
-            }, {
-            item: '高血压',
-            group: 9,
-            value: 55,
-            ratio: 100
-            }, {
-            item: '高血压',
-            group: 10,
-            value: 55,
-            ratio: 40
-        }];
 
         this.chart = new G2.Chart({
             container: divId,
@@ -180,7 +128,7 @@ export default {
             padding: [50, 20, 50, 80],
         });
 
-        this.chart.source(sourceData, {
+        this.chart.source(this.sourceData, {
             group: {
                 tickInterval: 1, // 自定义刻度间距
                 nice: false, // 不对最大最小值优化
@@ -262,8 +210,20 @@ export default {
             div.style.postion = "absolute"
             document.getElementById(that.chartLayer).appendChild(div);
             return divId
+        },
+        getDataWithURL() {
+            var api = '';
+            
+            this.$http.get(api).then((response)=>{
+                console.log(response);
+            },function(err){
+                console.log(err);
+            })
         }
 
+    },
+    mounted() {
+        //this.initTest();
     }
 }
 </script>

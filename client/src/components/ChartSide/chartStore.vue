@@ -178,6 +178,7 @@ export default {
            * type:tool type
            */
           console.log(top + "," + left);
+          console.log('cba');
         }
       });
     },

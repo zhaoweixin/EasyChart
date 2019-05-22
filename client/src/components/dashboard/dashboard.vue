@@ -1,6 +1,6 @@
 <template>
 <div>
-    <button id="btn" @click="function1"></button>
+    <button id="btn" @click="function1">生成图表</button>
     <div id='preview' style="background:rgba(0,0,0,0.05)">
         <div style="position:absolute">
             <svg id ='editorborad'></svg>

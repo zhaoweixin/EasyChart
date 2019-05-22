@@ -6,7 +6,31 @@
 export default {
     data() {
         return {
-        sourceData: [],
+        sourceData: [{
+            value: 251,
+            type: '大事例一',
+            name: '子事例一'
+        }, {
+            value: 1048,
+            type: '大事例一',
+            name: '子事例二'
+        }, {
+            value: 610,
+            type: '大事例二',
+            name: '子事例三'
+        }, {
+            value: 434,
+            type: '大事例二',
+            name: '子事例四'
+        }, {
+            value: 335,
+            type: '大事例三',
+            name: '子事例五'
+        }, {
+            value: 250,
+            type: '大事例三',
+            name: '子事例六'
+        }],
         //this.$store.data,
 
         bubblechart: {
@@ -40,7 +64,26 @@ export default {
         }
     },
     computed: {
-
+        toDrawChart(){
+            console.log(this.$store.state.toDrawChart)
+            return this.$store.state.toDrawChart
+        },
+        getChartXY(){
+            return this.$store.getters.getChartXY
+        },
+        chartLayer(){
+            return this.$store.state.chartLayer
+        }
+    },
+    watch:{
+        toDrawChart: function(curVal, oldVal){
+            console.log(this.toDrawChart, this.getChartXY, this.chartLayer)
+            console.log(curVal, oldVal)
+            if(curVal != oldVal && curVal == "bubbleChart"){
+                console.log(this.toDrawChart, this.getChartXY, this.chartLayer)
+                this.initTest()
+            }
+        }
     },
     methods: {
         initChart(sourceData,bubblechart) {
@@ -130,7 +173,81 @@ export default {
             chart.guide(); //设置辅助元素
             chart.render(); //生成图像
         },
+        initTest() {
+            var dv = new DataView();
+            dv.source(this.sourceData).transform({
+                type: 'percent',
+                field: 'value',
+                dimension: 'type',
+                as: 'percent'
+            });
+            var chart = new G2.Chart({
+                container: 'mountNode',
+                forceFit: true,
+                height: window.innerHeight,
+                padding: 0
+            });
+            chart.source(dv, {
+                percent: {
+                formatter: function formatter(val) {
+                    val = (val * 100).toFixed(2) + '%';
+                    return val;
+                }
+                }
+            });
+            chart.coord('theta', {
+                radius: 0.5
+            });
+            chart.tooltip({
+                showTitle: false
+            });
+            chart.legend(false);
+            chart.intervalStack().position('percent').color('type').label('type', {
+                offset: -10
+            }).tooltip('name*percent', function(item, percent) {
+                percent = (percent * 100).toFixed(2) + '%';
+                return {
+                name: item,
+                value: percent
+                };
+            }).select(false).style({
+                lineWidth: 1,
+                stroke: '#fff'
+            });
 
+            var outterView = chart.view();
+            var dv1 = new DataView();
+            dv1.source(data).transform({
+                type: 'percent',
+                field: 'value',
+                dimension: 'name',
+                as: 'percent'
+            });
+            outterView.source(dv1, {
+                percent: {
+                formatter: function formatter(val) {
+                    val = (val * 100).toFixed(2) + '%';
+                    return val;
+                }
+                }
+            });
+            outterView.coord('theta', {
+                innerRadius: 0.5 / 0.75,
+                radius: 0.75
+            });
+            outterView.intervalStack().position('percent').color('name', ['#BAE7FF', '#7FC9FE', '#71E3E3', '#ABF5F5', '#8EE0A1', '#BAF5C4']).label('name').tooltip('name*percent', function(item, percent) {
+                percent = (percent * 100).toFixed(2) + '%';
+                return {
+                name: item,
+                value: percent
+                };
+            }).select(false).style({
+                lineWidth: 1,
+                stroke: '#fff'
+            });
+
+            chart.render();
+        }
 
     }
 }

@@ -6,7 +6,25 @@
 export default {
     data() {
         return {
-        sourceData: [],
+        sourceData: [{
+            location: '三亚',
+            value: 44.9
+        }, {
+            location: '千岛湖',
+            value: 19.7
+        }, {
+            location: '柬埔寨',
+            value: 17.3
+        }, {
+            location: '呼伦贝尔',
+            value: 14.4
+        }, {
+            location: '苏梅岛',
+            value: 2.5
+        }, {
+            location: '塞班岛',
+            value: 2.5
+        }],
         //this.$store.data,
 
         bubblechart: {
@@ -39,8 +57,28 @@ export default {
         }
         }
     },
+    
     computed: {
-
+        toDrawChart(){
+            console.log(this.$store.state.toDrawChart)
+            return this.$store.state.toDrawChart
+        },
+        getChartXY(){
+            return this.$store.getters.getChartXY
+        },
+        chartLayer(){
+            return this.$store.state.chartLayer
+        }
+    },
+    watch:{
+        toDrawChart: function(curVal, oldVal){
+            console.log(this.toDrawChart, this.getChartXY, this.chartLayer)
+            console.log(curVal, oldVal)
+            if(curVal != oldVal && curVal == "pieChart"){
+                console.log(this.toDrawChart, this.getChartXY, this.chartLayer)
+                this.initTest()
+            }
+        }
     },
     methods: {
         initChart(sourceData,bubblechart) {
@@ -130,6 +168,44 @@ export default {
             chart.guide(); //设置辅助元素
             chart.render(); //生成图像
         },
+        initTest() {
+            var chart = new G2.Chart({
+            container: 'pieChart',
+            forceFit: true,
+            height: window.innerHeight,
+            padding: 'auto'
+        });
+        chart.source(this.sourceData);
+        chart.legend({
+            position: 'right-center',
+            offsetX: -100
+        });
+        chart.coord('theta', {
+            radius: 0.75
+        });
+        chart.intervalStack().position('value').color('location', ['#1890ff', '#37c661', '#fbce1e', '#2b3b79', '#8a4be2', '#1dc5c5']).style({
+            stroke: 'white',
+            lineWidth: 1
+        }).label('value', function(val) {
+            if (val < 3) {
+            return null;
+            } else {
+            return {
+                offset: -30,
+                textStyle: {
+                fill: 'white',
+                fontSize: 14,
+                shadowBlur: 2,
+                shadowColor: 'rgba(0, 0, 0, .45)'
+                },
+                formatter: function formatter(text) {
+                return text + '%';
+                }
+            };
+            }
+        });
+        chart.render();
+        }
 
 
     }
