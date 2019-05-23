@@ -68,15 +68,62 @@ export default {
             "container": {  //布局
             "height": "100",
             "width": "100",
-            "padding": [0,0,0,0]
+            "padding": [0,0,0,0],
+            "backgournd": {
+                "fill": '#feeeed', //背景颜色 (给定数组)
+                "fillOpacity": 0.5, // 图表背景透明度
+                "stroke": '#7fb80e', // 图表边框颜色 (给定数组)
+                "strokeOpacity": 0.8, // 图表边框透明度
+                "opacity": 0.6, // 图表整体透明度
+                "lineWidth": 2, // 图表边框粗度
+                "radius": 15 // 图表圆角大小
+            }
+            
             },
             "meta": {
             "title":"bubblechart",
             "legend":false, //图示
-            "tooltip": "", //提示
-            "X_axis": {},
-            "Y_axis": {},
-            "value": {
+            "tooltip": {//提示
+                'triggerOn': "click", //触发方式'mousemove'、'click'、'none'
+                'title': "country", //提示标题
+                'crosshairs': {}, //辅助线和辅助框(暂时先不加)
+                'offset': 0,//设置 tooltip 距离鼠标的偏移量。
+                'inPlot': true,//设置是否将 tooltip 限定在绘图区域内，默认为 true，即限定在绘图区域内。
+                'follow': true,//设置 tooltip 是否跟随鼠标移动。默认为 true，即跟随。
+                'shared': true,//设置 tooltip 只展示单条数据。
+                'enterable': true,//用于控制是否允许鼠标进入 tooltip，默认为 false，即不允许进入。
+                'position': 'top',//该属性设置之后，就会在固定位置展示 tooltip，可设置的值为：left、right、top、bottom。
+                'hideMarkers': true//对于 line、area、path 这三种几何图形，我们在渲染 tooltip 时会自动渲染 tooltipMarker ，通过声明该属性值为 true 来关闭 tooltipMarker。
+
+            }, 
+            "X_axis": { //x轴
+                'name': "group",
+                'position': "bottom", //设置坐标轴位置
+                'line': {    //设置坐标轴样式
+                    'stroke': "#c63c26", // 坐标轴线的颜色
+                    'strokeOpacity': 0.8, // 坐标轴线的透明度，数值范围为 0 - 1
+                    'lineDash': [3,4], // 设置虚线的样式，如 [2, 3]第一个用来表示实线的像素，第二个用来表示空白的像素。如果提供了奇数个值，则这个值的数列重复一次，从而变成偶数个值
+                    'lineWidth': 2 // 设置坐标轴线的粗细
+                },
+                'label': {
+                    'textStyle': {
+                        'textAlign': 'center', // 文本对齐方向，可取值为： start center end
+                        'fill': '#404040', // 文本的颜色
+                        'fontSize': '12', // 文本大小
+                        'fontWeight': 'bold', // 文本粗细
+                        'textBaseline': 'top' // 文本基准线，可取 top middle bottom，默认为middle
+                    }
+                }
+            },
+            "Y_axis": { //y轴
+                'name': "ratio",
+                'label': {
+                    'text': "组",
+                    'textFontSize': "12",
+                    'fill': "#ccc"
+                }
+            },
+            "value": { //数据标记
                 "size": [],
                 "color": "red",
                 "label": {},
@@ -104,7 +151,8 @@ export default {
         },
         chartLayer(){
             return this.$store.state.chartLayer
-        }
+        },
+
     },
     watch:{
         toDrawChart: function(curVal, oldVal){
@@ -114,7 +162,8 @@ export default {
                 console.log(this.toDrawChart, this.getChartXY, this.chartLayer)
                 this.initTest()
             }
-        }
+        },
+        
     },
     methods: {
         initTest() {
@@ -126,34 +175,72 @@ export default {
             height: 350,
             width: 600,
             padding: [50, 20, 50, 80],
+            background: {
+                fill: '#feeeed', //背景颜色 (给定数组)
+                fillOpacity: 0.5, // 图表背景透明度
+                stroke: '#7fb80e', // 图表边框颜色 (给定数组)
+                strokeOpacity: 0.8, // 图表边框透明度
+                opacity: 0.6, // 图表整体透明度
+                lineWidth: 2, // 图表边框粗度
+                radius: 15 // 图表圆角大小
+            },
+            data:this.sourceData,
         });
 
-        this.chart.source(this.sourceData, {
-            group: {
+        // this.chart.source(this.sourceData, {
+        //     'group': {
+        //         tickInterval: 1, // 自定义刻度间距
+        //         nice: false, // 不对最大最小值优化
+            
+        //     },
+        //     'ratio': {
+        //         tickInterval: 20,
+        //         nice: false,
+        //         max: 100,
+        //         min: 0
+        //     },
+
+        // });
+        this.chart.scale({
+            'group': {
                 tickInterval: 1, // 自定义刻度间距
                 nice: false, // 不对最大最小值优化
             
             },
-            ratio: {
+            'ratio': {
                 tickInterval: 20,
                 nice: false,
                 max: 100,
                 min: 0
-            }
-        });
+            },
+        })
         // 开始配置坐标轴
         this.chart.axis('group', {
+            position: 'bottom', //设置横坐标位置
+            line: {
+                stroke: "#c63c26", // 坐标轴线的颜色
+                strokeOpacity: 0.7, // 坐标轴线的透明度，数值范围为 0 - 1
+                //lineDash: [3,4,4,7], // 设置虚线的样式，如 [2, 3]第一个用来表示实线的像素，第二个用来表示空白的像素。如果提供了奇数个值，则这个值的数列重复一次，从而变成偶数个值
+                lineWidth: 2 // 设置坐标轴线的粗细
+            },
             label: {
                 formatter: function formatter(val) {
                 return val + ' 组'; // 格式化坐标轴显示文本
                 },
                 textStyle: {
-                fontSize: 12, 
-                textAlign: 'center', 
-                fill: '#ccc', 
+                    fontSize: 12, 
+                    textAlign: 'center', 
+                    fill: '#404040', 
                 }
             },
-            grid: {
+            tickLine: {  // 坐标轴刻度线
+                lineWidth: 1, // 刻度线宽
+                stroke: '#ccc', // 刻度线的颜色
+                strokeOpacity: 0.5, // 刻度线颜色的透明度
+                length: 5, // 刻度线的长度，可以为负值（表示反方向渲染）
+                alignWithLabel:true//设为负值则显示为category数据类型特有的样式
+            },
+            grid: { //设置网格线的样式
                 lineStyle: {
                 stroke: '#d9d9d9',
                 lineWidth: 1,
@@ -177,11 +264,14 @@ export default {
                 }
             }
         });
-        this.chart.legend(false);
+        this.chart.legend('gender',{
+
+        });
         this.chart.tooltip({
+            triggerOn: 'click',
             title: 'country'
         });
-        this.chart.point().position('group*ratio')
+        this.chart.point().position('group'+'*'+'ratio')
             .size('value', [8, 25])
             .label('value', {
                 offset: 0, // 文本距离图形的距离
@@ -198,6 +288,9 @@ export default {
             });
         this.chart.render();
         //this.$store.state.chartComponetArray.push(bubbleChart);
+        this.$store.commit('pushDataSetToState', {
+                dataset: this.bubblechartSet
+            });
         },
         getContainer(){
             let that = this
@@ -212,7 +305,7 @@ export default {
             return divId
         },
         pushToState() {
-            this.$store.commit('pushDataSetToState', this.bubblechartSet);
+            this.$store.commit('pushDataSetToState', this.name);
         }
 
     },
