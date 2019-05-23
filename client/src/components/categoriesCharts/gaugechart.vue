@@ -262,8 +262,10 @@ export default {
 
             chart.render();
         }
-
-
+    },
+    mounted() {
+        // 获取配置
     }
+
 }
 </script>

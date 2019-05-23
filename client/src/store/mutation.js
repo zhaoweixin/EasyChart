@@ -14,6 +14,9 @@ const mutation = {
     setChartXY(state, payload){
         state.chartX = payload.x;
         state.chartY = payload.y;
+    },
+    pushDataSetToState(state, dataset) {
+        state.chartComponetArray.push(dataset);
     }
 }
 

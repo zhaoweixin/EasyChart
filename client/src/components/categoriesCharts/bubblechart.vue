@@ -211,19 +211,14 @@ export default {
             document.getElementById(that.chartLayer).appendChild(div);
             return divId
         },
-        getDataWithURL() {
-            var api = '';
-            
-            this.$http.get(api).then((response)=>{
-                console.log(response);
-            },function(err){
-                console.log(err);
-            })
+        pushToState() {
+            this.$store.commit('pushDataSetToState', this.bubblechartSet);
         }
 
     },
     mounted() {
         //this.initTest();
+        //this.pushToState();
     }
 }
 </script>

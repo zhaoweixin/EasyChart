@@ -247,8 +247,14 @@ export default {
             });
 
             chart.render();
+        },
+        getDataWithURL(){
+
         }
 
+    },
+    mounted() {
+        
     }
 }
 </script>
