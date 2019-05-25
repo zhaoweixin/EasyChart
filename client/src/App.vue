@@ -16,6 +16,7 @@
           </el-aside>
           <el-main>
             <dashboard></dashboard>
+            <dragResize/>
           </el-main>
           <el-aside width="200px">
             <SettingSide></SettingSide>
@@ -32,6 +33,7 @@ import Upload from "./components/ChartSide/upload"
 import chartStore from "./components/ChartSide/chartStore"
 import SettingSide from "./components/SettingSide/SettingSide"
 import dashboard from "./components/dashboard/dashboard.vue"
+import dragResize from "./components/dragResize/dragResize"
 export default {
   name: 'App',
   components: {
@@ -39,7 +41,8 @@ export default {
     Upload,
     chartStore,
     SettingSide,
-    dashboard
+    dashboard,
+    dragResize
   }
 }
 </script>
