@@ -178,13 +178,21 @@ export default {
            * type:tool type
            */
           console.log(top + "," + left);
+          // this.$store.commit('addIdToArray', {
+          //   id: "001"
+          // });
+          // this.$store.commit('pushDataSetToState', {
+          //       dataset: this.bubblechartSet
+          //   });
+          //console.log(this.$store.state.chartCategory[0])
+
           console.log('cba');
         }
       });
     },
     deletClone: function(e) {
       $("#clone").remove();
-    }
+    },
     // clickImg: function(id) {
     //   var ChartJson = JsonArry[id];
     //   ChartJson = AnalysisJson(ChartJson);
@@ -285,7 +293,10 @@ export default {
     //       this.y0 = this.y1;
     //     }
     // }
-  }
+  },
+  // mounted(){
+  //   this.show();
+  // }
 };
 // function AnalysisJson(ChartJson) {
 //   if (ChartJson == null) {

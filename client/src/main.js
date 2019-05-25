@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import App from './App'
 import 'es6-promise/auto'
 import store from "./store/store"
+// Vue.use(Vuex);
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 

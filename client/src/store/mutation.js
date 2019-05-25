@@ -19,6 +19,9 @@ const mutation = {
         //state.chartComponetArray.push(dataset);
         //state.charttest = dataset;
         state.chartComponentArray.push(dataset);
+    },
+    addIdToArray(state, id) {
+        state.chartIdArray.push(id);
     }
 }
 

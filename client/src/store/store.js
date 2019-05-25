@@ -14,6 +14,7 @@ const state = {
     chartX:"",
     chartY:"",
     chartComponentArray: [], //图表组件数组
+    chartIdArray:[],
     charttest: "ww",
     chartCategory: ['bubblechart','bubbleFrequencyChart','gaugechart','groupBarChart','groupPieChart','lineChart','mapBoxView','pieChart','radarChart','ratiochart'] //图表中类数组
 }

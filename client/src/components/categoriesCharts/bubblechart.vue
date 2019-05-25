@@ -143,7 +143,6 @@ export default {
     },
     computed: {
         toDrawChart(){
-            console.log(this.$store.state.toDrawChart)
             return this.$store.state.toDrawChart
         },
         getChartXY(){
@@ -160,6 +159,7 @@ export default {
             console.log(curVal, oldVal)
             if(curVal != oldVal && curVal == "bubbleChart"){
                 console.log(this.toDrawChart, this.getChartXY, this.chartLayer)
+                console.log("监听toDrawChart")
                 this.initTest()
             }
         },
@@ -291,6 +291,7 @@ export default {
         this.$store.commit('pushDataSetToState', {
                 dataset: this.bubblechartSet
             });
+        console.log(this.$store.state.chartComponentArray[0].dataset)
         },
         getContainer(){
             let that = this
@@ -303,9 +304,6 @@ export default {
             div.style.postion = "absolute"
             document.getElementById(that.chartLayer).appendChild(div);
             return divId
-        },
-        pushToState() {
-            this.$store.commit('pushDataSetToState', this.name);
         }
 
     },
