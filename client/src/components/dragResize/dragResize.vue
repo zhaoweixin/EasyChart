@@ -70,16 +70,7 @@ export default {
     }
   },
 
-  methods: {
-    
-    _getCenter: function() {
-      var rect = this.$el.getBoundingClientRect()
-      return {
-        x: (rect.left + rect.right) / 2,
-        y: (rect.bottom + rect.top) / 2
-      }
-    },
-    
+  methods: {  
     resizeStart: function(e) {
       this.resizeStartX = e.clientX
       this.resizeStartY = e.clientY
@@ -103,7 +94,6 @@ export default {
     handleUp: function(e) {
       this.dragging = false
       this.resizing = false
-      this.rotating = false
       this.$emit('handleUp', {
         x: this.localx,
         y: this.localy,

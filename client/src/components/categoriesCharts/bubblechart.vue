@@ -381,13 +381,6 @@ export default {
       document.getElementById(that.chartLayer).appendChild(div);
       return divId;
     },
-    _getCenter: function() {
-      var rect = this.$el.getBoundingClientRect()
-      return {
-        x: (rect.left + rect.right) / 2,
-        y: (rect.bottom + rect.top) / 2
-      }
-    },
     
     resizeStart: function(e) {
       this.resizeStartX = e.clientX
@@ -412,7 +405,6 @@ export default {
     handleUp: function(e) {
       this.dragging = false
       this.resizing = false
-      this.rotating = false
       this.$emit('handleUp', {
         x: this.localx,
         y: this.localy,
