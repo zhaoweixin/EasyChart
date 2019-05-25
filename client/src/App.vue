@@ -15,8 +15,10 @@
               <chartStore></chartStore>
           </el-aside>
           <el-main>
-            <dashboard></dashboard>
-            <dragResize/>
+            <dashboard>
+                          <dragResize/>
+            </dashboard>
+
           </el-main>
           <el-aside width="200px">
             <SettingSide></SettingSide>

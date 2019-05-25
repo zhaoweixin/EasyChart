@@ -1,72 +1,72 @@
 <template>
-  <div class="layout">
-    <div class="dragable" @mousedown="handleDown" @mouseup="handleUp" :style="boxStyle">
-      <slot></slot>
+  <!-- <div class="layout"> -->
+    <!-- <div class="dragable" @mousedown="handleDown" @mouseup="handleUp" :style="boxStyle">
+      <slot></slot> -->
       <div id="bubblechart"></div>
-      <div class="scale" @mousedown.stop="resizeStart"></div>
-    </div>
-  </div>
+      <!-- <div class="scale" @mousedown.stop="resizeStart"></div>
+    </div> -->
+  <!-- </div> -->
 </template>
 <!--<script src="https://d3js.org/d3.v4.min.js"></script>-->
 <script>
 import G2 from "@antv/g2";
-//import {mapMutations} from vuex;
+import { mapState } from 'vuex';
 export default {
   name: "bubbleChart",
-  props: {
-    w: {
-      type: Number,
-      default: 200
-    },
-    h: {
-      type: Number,
-      default: 200
-    },
-    x: {
-      type: Number,
-      default: 0
-    },
-    y: {
-      type: Number,
-      default: 0
-    },
-    r: {
-      type: Number,
-      default: 0
-    },
-    axis: {
-      type: String,
-      default: 'both'
-    },
-    handle: {
-      type: String,
-      default: ''
-    },
-    cancel: {
-      type: String,
-      default: ''
-    },
-    grid: {
-      type: Array,
-      default: function() {
-        return [0, 0]
-      }
-    },
-  },
+  // props: {
+  //   w: {
+  //     type: Number,
+  //     default: 200
+  //   },
+  //   h: {
+  //     type: Number,
+  //     default: 200
+  //   },
+  //   x: {
+  //     type: Number,
+  //     default: 0
+  //   },
+  //   y: {
+  //     type: Number,
+  //     default: 0
+  //   },
+  //   r: {
+  //     type: Number,
+  //     default: 0
+  //   },
+  //   axis: {
+  //     type: String,
+  //     default: 'both'
+  //   },
+  //   handle: {
+  //     type: String,
+  //     default: ''
+  //   },
+  //   cancel: {
+  //     type: String,
+  //     default: ''
+  //   },
+  //   grid: {
+  //     type: Array,
+  //     default: function() {
+  //       return [0, 0]
+  //     }
+  //   },
+  // },
   data() {
     return {
       name: "bubbleChart",
-      localx: this.x,
-      localy: this.y,
-      localw: this.w,
-      localh: this.h,
-      localr: this.r,
-      lastX: 0,
-      lastY: 0,
-      dragging: false,
-      resizeStartX: 0,
-      resizeStartY: 0,
-      resizing: false,
+      // localx: this.x,
+      // localy: this.y,
+      // localw: this.w,
+      // localh: this.h,
+      // localr: this.r,
+      // lastX: 0,
+      // lastY: 0,
+      // dragging: false,
+      // resizeStartX: 0,
+      // resizeStartY: 0,
+      // resizing: false,
       sourceData: [
         {
           item: "高血压",
@@ -135,10 +135,10 @@ export default {
         category: "bubblechart", //种类
         container: {
           //布局
-          height: "100",
-          width: "100",
-          padding: [0, 0, 0, 0],
-          backgournd: {
+          height: "300",
+          width: "500",
+          padding: [30, 30, 30, 30],
+          background: {
             fill: "#feeeed", //背景颜色 (给定数组)
             fillOpacity: 0.5, // 图表背景透明度
             stroke: "#7fb80e", // 图表边框颜色 (给定数组)
@@ -153,7 +153,7 @@ export default {
           legend: false, //图示
           tooltip: {
             //提示
-            triggerOn: "click", //触发方式'mousemove'、'click'、'none'
+            triggerOn: "mousemove", //触发方式'mousemove'、'click'、'none'
             title: "country", //提示标题
             crosshairs: {}, //辅助线和辅助框(暂时先不加)
             offset: 0, //设置 tooltip 距离鼠标的偏移量。
@@ -176,6 +176,7 @@ export default {
               lineWidth: 2 // 设置坐标轴线的粗细
             },
             label: {
+              text: "组",
               textStyle: {
                 textAlign: "center", // 文本对齐方向，可取值为： start center end
                 fill: "#404040", // 文本的颜色
@@ -199,7 +200,7 @@ export default {
             size: [],
             color: "red",
             label: {},
-            opacity: "0.3",
+            opacity: 0.3,
             shape: "circle",
             style: {}
           }
@@ -227,7 +228,10 @@ export default {
         height: this.localh + 'px',
         transform: 'translate(' + this.localx + 'px,' + this.localy + 'px) '
       }
-    }
+    },
+    ...mapState({
+      chartArray: state => state.chartIdArray,
+    })
   },
   watch: {
     toDrawChart: function(curVal, oldVal) {
@@ -238,44 +242,37 @@ export default {
         console.log("监听toDrawChart");
         this.initTest();
       }
-    }
+    },
+    'chartArray': {
+      deep: true,
+      handler() {
+        this.initTest();
+        console.log("x:"+this.$store.state.chartX);
+        console.log("y:"+this.$store.state.chartY);
+      }
+    },
   },
   methods: {
     initTest() {
       const that = this;
       let divId = this.getContainer();
-
+      console.log(this.bubblechartSet.meta.X_axis.label.text);
       this.chart = new G2.Chart({
         container: divId,
-        height: 350,
-        width: 600,
-        padding: [50, 20, 50, 80],
+        height: this.bubblechartSet.container.height,
+        width: this.bubblechartSet.container.width,
+        padding: this.bubblechartSet.container.padding,
         background: {
-          fill: "#feeeed", //背景颜色 (给定数组)
-          fillOpacity: 0.5, // 图表背景透明度
-          stroke: "#7fb80e", // 图表边框颜色 (给定数组)
-          strokeOpacity: 0.8, // 图表边框透明度
-          opacity: 0.6, // 图表整体透明度
-          lineWidth: 2, // 图表边框粗度
-          radius: 15 // 图表圆角大小
+          fill: this.bubblechartSet.container.background.fill, //背景颜色 (给定数组)
+          fillOpacity: this.bubblechartSet.container.background.fillOpacity, // 图表背景透明度
+          stroke: this.bubblechartSet.container.background.stroke, // 图表边框颜色 (给定数组)
+          strokeOpacity: this.bubblechartSet.container.background.strokeOpacity, // 图表边框透明度
+          opacity: this.bubblechartSet.container.background.opacity, // 图表整体透明度
+          lineWidth: this.bubblechartSet.container.background.lineWidth, // 图表边框粗度
+          radius: this.bubblechartSet.container.background.radius // 图表圆角大小
         },
         data: this.sourceData
       });
-
-      // this.chart.source(this.sourceData, {
-      //     'group': {
-      //         tickInterval: 1, // 自定义刻度间距
-      //         nice: false, // 不对最大最小值优化
-
-      //     },
-      //     'ratio': {
-      //         tickInterval: 20,
-      //         nice: false,
-      //         max: 100,
-      //         min: 0
-      //     },
-
-      // });
       this.chart.scale({
         group: {
           tickInterval: 1, // 自定义刻度间距
@@ -289,22 +286,23 @@ export default {
         }
       });
       // 开始配置坐标轴
-      this.chart.axis("group", {
-        position: "bottom", //设置横坐标位置
+      this.chart.axis(this.bubblechartSet.meta.X_axis.name, {
+        position: this.bubblechartSet.meta.X_axis.postion, //设置横坐标位置
         line: {
-          stroke: "#c63c26", // 坐标轴线的颜色
-          strokeOpacity: 0.7, // 坐标轴线的透明度，数值范围为 0 - 1
+          stroke: this.bubblechartSet.meta.X_axis.line.stroke, // 坐标轴线的颜色
+          strokeOpacity: this.bubblechartSet.meta.X_axis.line.strokeOpacity, // 坐标轴线的透明度，数值范围为 0 - 1
           //lineDash: [3,4,4,7], // 设置虚线的样式，如 [2, 3]第一个用来表示实线的像素，第二个用来表示空白的像素。如果提供了奇数个值，则这个值的数列重复一次，从而变成偶数个值
-          lineWidth: 2 // 设置坐标轴线的粗细
+          lineWidth: this.bubblechartSet.meta.X_axis.line.lineWidth // 设置坐标轴线的粗细
         },
         label: {
           formatter: function formatter(val) {
-            return val + " 组"; // 格式化坐标轴显示文本
+            //var labeltext = this.bubblechartSet.meta.X_axis.label.text;
+            return val + '组'; // 格式化坐标轴显示文本
           },
           textStyle: {
-            fontSize: 12,
-            textAlign: "center",
-            fill: "#404040"
+            fontSize: this.bubblechartSet.meta.X_axis.label.textStyle.fontSize,
+            textAlign: this.bubblechartSet.meta.X_axis.label.textStyle.textAlign,
+            fill: this.bubblechartSet.meta.X_axis.label.textStyle.fill,
           }
         },
         tickLine: {
@@ -340,23 +338,24 @@ export default {
           }
         }
       });
-      this.chart.legend("gender", {});
+      this.chart.legend(false);
       this.chart.tooltip({
-        triggerOn: "click",
-        title: "country"
+        //triggerOn: this.bubblechartSet.meta.tooltip.triggerOn,
+        triggerOn: 'click',
+        title: this.bubblechartSet.meta.tooltip.title,
       });
       this.chart
         .point()
-        .position("group" + "*" + "ratio")
-        .size("value", [8, 25])
+        .position(this.bubblechartSet.meta.X_axis.name + "*" + this.bubblechartSet.meta.Y_axis.name)
+        .size("value", [5, 20])
         .label("value", {
           offset: 0, // 文本距离图形的距离
           textStyle: {
             fill: "white"
           }
         })
-        .opacity(0.3)
-        .shape("circle")
+        .opacity(this.bubblechartSet.meta.value.opacity)
+        .shape(this.bubblechartSet.meta.value.shape)
         .tooltip("group*value")
         .style({
           lineWidth: 1,
@@ -382,79 +381,79 @@ export default {
       return divId;
     },
     
-    resizeStart: function(e) {
-      this.resizeStartX = e.clientX
-      this.resizeStartY = e.clientY
-      this.resizing = true
-      this.lastW = this.localw
-      this.lastH = this.localh
-    },
-    handleDown: function(e) {
-      if (this.handle && !matchesSelector(e.target, this.handle)) {
-        return
-      }
-      if (this.cancel && matchesSelector(e.target, this.cancel)) {
-        return
-      }
-      if (!this.lastX) {
-        this.lastX = e.clientX
-        this.lastY = e.clientY
-      }
-      this.dragging = true
-    },
-    handleUp: function(e) {
-      this.dragging = false
-      this.resizing = false
-      this.$emit('handleUp', {
-        x: this.localx,
-        y: this.localy,
-        w: this.localw,
-        h: this.localh,
-        r: this.localr
-      })
-    },
-    handleMove: function(e) {
-      if (e.stopPropagation) e.stopPropagation()
-      if (e.preventDefault) e.preventDefault()
+    // resizeStart: function(e) {
+    //   this.resizeStartX = e.clientX
+    //   this.resizeStartY = e.clientY
+    //   this.resizing = true
+    //   this.lastW = this.localw
+    //   this.lastH = this.localh
+    // },
+    // handleDown: function(e) {
+    //   if (this.handle && !matchesSelector(e.target, this.handle)) {
+    //     return
+    //   }
+    //   if (this.cancel && matchesSelector(e.target, this.cancel)) {
+    //     return
+    //   }
+    //   if (!this.lastX) {
+    //     this.lastX = e.clientX
+    //     this.lastY = e.clientY
+    //   }
+    //   this.dragging = true
+    // },
+    // handleUp: function(e) {
+    //   this.dragging = false
+    //   this.resizing = false
+    //   this.$emit('handleUp', {
+    //     x: this.localx,
+    //     y: this.localy,
+    //     w: this.localw,
+    //     h: this.localh,
+    //     r: this.localr
+    //   })
+    // },
+    // handleMove: function(e) {
+    //   if (e.stopPropagation) e.stopPropagation()
+    //   if (e.preventDefault) e.preventDefault()
 
-      if (this.dragging) {
-        let deltax = e.clientX - this.lastX
-        let deltay = e.clientY - this.lastY
+    //   if (this.dragging) {
+    //     let deltax = e.clientX - this.lastX
+    //     let deltay = e.clientY - this.lastY
 
-        let deltaxround = Math.round(deltax / this.grid[0]) * this.grid[0]
-        let deltayround = Math.round(deltay / this.grid[1]) * this.grid[1]
+    //     let deltaxround = Math.round(deltax / this.grid[0]) * this.grid[0]
+    //     let deltayround = Math.round(deltay / this.grid[1]) * this.grid[1]
 
-        let thisx = this.localx
-        let thisy = this.localy
+    //     let thisx = this.localx
+    //     let thisy = this.localy
 
-        if (this.grid[0] > 0 && this.grid[1] > 0) {
-          if (this.axis === 'both') {
-            thisx = deltaxround
-            thisy = deltayround
-          } else if (this.axis === 'x') {
-            thisx = deltaxround
-          } else if (this.axis === 'y') {
-            thisy = deltayround
-          }
-        } else {
-          if (this.axis === 'both') {
-            thisx = e.clientX - this.lastX
-            thisy = e.clientY - this.lastY
-          } else if (this.axis === 'x') {
-            thisx = e.clientX - this.lastX
-          } else if (this.axis === 'y') {
-            thisy = e.clientY - this.lastY
-          }
-        }
+    //     if (this.grid[0] > 0 && this.grid[1] > 0) {
+    //       if (this.axis === 'both') {
+    //         thisx = deltaxround
+    //         thisy = deltayround
+    //       } else if (this.axis === 'x') {
+    //         thisx = deltaxround
+    //       } else if (this.axis === 'y') {
+    //         thisy = deltayround
+    //       }
+    //     } else {
+    //       if (this.axis === 'both') {
+    //         thisx = e.clientX - this.lastX
+    //         thisy = e.clientY - this.lastY
+    //       } else if (this.axis === 'x') {
+    //         thisx = e.clientX - this.lastX
+    //       } else if (this.axis === 'y') {
+    //         thisy = e.clientY - this.lastY
+    //       }
+    //     }
 
-        this.localx = thisx
-        this.localy = thisy
-      }
-      if (this.resizing) {
-        this.localw = parseInt(this.lastW) + parseInt(e.clientX) - parseInt(this.resizeStartX)
-        this.localh = parseInt(this.lastH) + parseInt(e.clientY) - parseInt(this.resizeStartY)
-      }
-    }
+    //     this.localx = thisx
+    //     this.localy = thisy
+    //   }
+    //   if (this.resizing) {
+    //     this.localw = parseInt(this.lastW) + parseInt(e.clientX) - parseInt(this.resizeStartX)
+    //     this.localh = parseInt(this.lastH) + parseInt(e.clientY) - parseInt(this.resizeStartY)
+    //   }
+    // }
   },
   mounted() {
     //this.initTest();
@@ -473,5 +472,10 @@ export default {
   }
 };
 </script>
+
+
+
+
+
 
     

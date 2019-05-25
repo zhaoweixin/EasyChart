@@ -3,7 +3,7 @@
   
   <div class='dragable' @mousedown='handleDown' @mouseup='handleUp' :style='boxStyle'>
   <slot></slot>
-  <div>
+  <div id="chart">
     drag me
   </div>
   <div class='scale' @mousedown.stop='resizeStart'></div>
@@ -68,6 +68,7 @@ export default {
     } else {
       el['on' + event] = handler
     }
+    this.initchart();
   },
 
   methods: {  
@@ -168,6 +169,44 @@ export default {
         height: this.localh + 'px',
         transform: 'translate(' + this.localx + 'px,' + this.localy + 'px) '
       }
+    },
+    initchart() {
+      var data = [{
+      year: '1951 年',
+      sales: 38
+    }, {
+      year: '1952 年',
+      sales: 52
+    }, {
+      year: '1956 年',
+      sales: 61
+    }, {
+      year: '1957 年',
+      sales: 145
+    }, {
+      year: '1958 年',
+      sales: 48
+    }, {
+      year: '1959 年',
+      sales: 38
+    }, {
+      year: '1960 年',
+      sales: 38
+    }, {
+      year: '1962 年',
+      sales: 38
+    }];
+    var chart = new G2.Chart({
+      container: 'chart',
+      forceFit: true,
+      height: window.innerHeight
+    });
+    chart.source(data);
+    chart.scale('sales', {
+      tickInterval: 20
+    });
+    chart.interval().position('year*sales');
+    chart.render();
     }
   }
 }

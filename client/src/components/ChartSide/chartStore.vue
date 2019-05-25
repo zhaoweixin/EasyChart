@@ -37,12 +37,12 @@
   </div>
 </template>
 <script>
-import $ from "jquery";
 import stores from "../../store/store.js";
-import mutatios from "../../store/mutation.js";
+import mutations from "../../store/mutation.js";
+import $ from "jquery";
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
-console.log(stores.state.chartCategory);
+// console.log(stores.state.chartCategory);
 // var DefaultJson = {
 //   ParentId: "container",
 //   data: [120, 200, 150, 80, 70, 110, 130],
@@ -176,32 +176,26 @@ export default {
           var data = {
             id: "001"
           };
-          mutatios.addIdToArray(stores.state, data);
-          console.log(stores.state.chartIdArray);
-
+          mutations.addIdToArray(stores.state, data);
+          mutations.setChartXY(stores.state,{
+            x:top,y:left
+          })
+          console.log(stores.state.chartIdArray[0].id);
           //there use state function
           /**
            * function state (top,left,chartType,type)
            *
            * top and left is chart position
            * type:tool type
-           */
-          //console.log(top + "," + left);
-          // this.$store.commit('addIdToArray', {
-          //   id: "001"
-          // });
-          // this.$store.commit('pushDataSetToState', {
-          //       dataset: this.bubblechartSet
-          //   });
-          //console.log(this.$store.state.chartCategory[0])
-
-          // console.log("cba");
+           */ 
+          
+          console.log(top + "," + left);
         }
       });
     },
     deletClone: function(e) {
       $("#clone").remove();
-    }
+    },
     // clickImg: function(id) {
     //   var ChartJson = JsonArry[id];
     //   ChartJson = AnalysisJson(ChartJson);
@@ -302,7 +296,7 @@ export default {
     //       this.y0 = this.y1;
     //     }
     // }
-  }
+  },
   // mounted(){
   //   this.show();
   // }

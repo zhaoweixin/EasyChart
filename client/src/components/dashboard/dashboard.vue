@@ -1,19 +1,23 @@
 <template>
 <div>
-    <button id="btn" @click="function1">生成图表</button>
-    <button id="vtn" @click="function2">添加数据</button>
+    <!-- <button id="btn" @click="function1">生成图表</button> -->
+    <!-- <button id="vtn" @click="function2">添加数据</button> -->
     <div id='preview' style="background:rgba(0,0,0,0.05)">
         <div style="position:absolute">
-            <svg id ='editorborad'></svg>
+            <svg id ='editorborad'>
+            
+            </svg>
+
         </div>
         <!--add chart to here -->
-        <div v-if="show" v-bind="function1"></div>
     </div>
-    <bubble></bubble>
+    <bubble id="bub" style="color:black"></bubble>
+    <dragResize />
 </div>
 </template>
 
 <script>
+import dragResize from "../dragResize/dragResize.vue"
 import { mapState } from 'vuex'
 import bubble from "../categoriesCharts/bubblechart.vue"
 import * as d3 from "d3";
@@ -41,7 +45,7 @@ export default {
         'chartArray': {
             deep: true,
             handler: function() {
-                this.show = true
+                console.log("可以添加视图了");
             }
         }
     },
@@ -116,3 +120,9 @@ export default {
 
 </script>
     
+
+<style>
+#bub {
+    background-color: black
+} 
+</style>
