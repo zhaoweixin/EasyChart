@@ -1,30 +1,41 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 //import cart from './modules/cart'
 //import products from './modules/products'
 //import createLogger from '../../../src/plugins/logger'
-import action from "./action"
-import getter from "./getter"
-import mutation from "./mutation"
-Vue.use(Vuex)
+import action from "./action";
+import getter from "./getter";
+import mutation from "./mutation";
+Vue.use(Vuex);
 
 const state = {
-    toDrawChart:'', //待绘制的图表
-    chartLayer:"",
-    chartX:"",
-    chartY:"",
-    chartComponentArray: [], //图表组件数组
-    chartIdArray:[],
-    charttest: "ww",
-    chartCategory: ['bubblechart','bubbleFrequencyChart','gaugechart','groupBarChart','groupPieChart','lineChart','mapBoxView','pieChart','radarChart','ratiochart'] //图表中类数组
-}
+  toDrawChart: "", //待绘制的图表
+  chartLayer: "",
+  chartX: "",
+  chartY: "",
+  chartComponentArray: [], //图表组件数组
+  chartIdArray: [],
+  charttest: "ww",
+  chartCategory: [
+    "bubblechart",
+    "bubbleFrequencyChart",
+    "gaugechart",
+    "groupBarChart",
+    "groupPieChart",
+    "lineChart",
+    "mapBoxView",
+    "pieChart",
+    "radarChart",
+    "ratiochart"
+  ] //图表中类数组
+};
 
 export default new Vuex.Store({
-    state: state,
-    mutations: mutation,
-    actions: action,
-    getters: getter
-})
+  state: state,
+  mutations: mutation,
+  actions: action,
+  getters: getter
+});
 
 // //bubblechart
 //   bubblechart: {
@@ -78,7 +89,7 @@ export default new Vuex.Store({
 //         "shape": "circle",
 //         "style": {},
 //       },
-      
+
 //     } ,
 //     "data": [],
 //     "interaction": {}
@@ -117,7 +128,7 @@ export default new Vuex.Store({
 //       "height": "100",
 //       "width": "100",
 //       "padding": [0,0,0,0],
-      
+
 //     },
 //     "meta": {
 //       "title": "groupBarChart",
@@ -127,7 +138,7 @@ export default new Vuex.Store({
 //         "label": {
 
 //         },
-        
+
 //       },
 //       "coor": {
 //         "startAngle": "0",
@@ -150,7 +161,7 @@ export default new Vuex.Store({
 //       "width": "100",
 //       "padding": [0,0,0,0],
 //       "forceFit": true,
-      
+
 //     },
 //     "meta": {
 //       "title": "groupPieChart",
@@ -160,7 +171,7 @@ export default new Vuex.Store({
 //         "label": {
 
 //         },
-        
+
 //       },
 //       "facet": {
 //         "fields": [],
@@ -179,7 +190,7 @@ export default new Vuex.Store({
 //     },
 //     "data": [],
 //     "intercation": {
-      
+
 //     }
 //   },
 // //LineChart
@@ -249,7 +260,7 @@ export default new Vuex.Store({
 //       "height": "100",
 //       "width": "100",
 //       "padding": [0,0,0,0],
-      
+
 //     },
 //     "meta": {
 //       "title": "pieChart",
@@ -277,7 +288,7 @@ export default new Vuex.Store({
 //       "height": "100",
 //       "width": "100",
 //       "padding": [0,0,0,0],
-      
+
 //     },
 //     "meta": {
 //       "title": "radarChart",
@@ -301,14 +312,14 @@ export default new Vuex.Store({
 //           "line": "",
 //           "tickline": "",
 //           "grid": {
-          
+
 //           }
 //         },
 //         "y_axis":{
 //           "line": "",
 //           "tickline": "",
 //           "grid": {
-          
+
 //           }
 //         }
 //       },

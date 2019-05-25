@@ -38,8 +38,11 @@
 </template>
 <script>
 import $ from "jquery";
+import stores from "../../store/store.js";
+import mutatios from "../../store/mutation.js";
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
+console.log(stores.state.chartCategory);
 // var DefaultJson = {
 //   ParentId: "container",
 //   data: [120, 200, 150, 80, 70, 110, 130],
@@ -170,6 +173,12 @@ export default {
           var left =
             $(".el-main .ui-draggable-dragging").position().left -
             $(".el-aside").width();
+          var data = {
+            id: "001"
+          };
+          mutatios.addIdToArray(stores.state, data);
+          console.log(stores.state.chartIdArray);
+
           //there use state function
           /**
            * function state (top,left,chartType,type)
@@ -177,7 +186,7 @@ export default {
            * top and left is chart position
            * type:tool type
            */
-          console.log(top + "," + left);
+          //console.log(top + "," + left);
           // this.$store.commit('addIdToArray', {
           //   id: "001"
           // });
@@ -186,13 +195,13 @@ export default {
           //   });
           //console.log(this.$store.state.chartCategory[0])
 
-          console.log('cba');
+          // console.log("cba");
         }
       });
     },
     deletClone: function(e) {
       $("#clone").remove();
-    },
+    }
     // clickImg: function(id) {
     //   var ChartJson = JsonArry[id];
     //   ChartJson = AnalysisJson(ChartJson);
@@ -293,7 +302,7 @@ export default {
     //       this.y0 = this.y1;
     //     }
     // }
-  },
+  }
   // mounted(){
   //   this.show();
   // }
