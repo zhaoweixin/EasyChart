@@ -4,20 +4,16 @@
     <!-- <button id="vtn" @click="function2">添加数据</button> -->
     <div id='preview' style="background:rgba(0,0,0,0.05)">
         <div style="position:absolute">
-            <svg id ='editorborad'>
-            
-            </svg>
-
+            <svg id ='editorborad'></svg>
         </div>
         <!--add chart to here -->
     </div>
-    <bubble id="bub" style="color:black"></bubble>
-    <dragResize />
+    <bubble></bubble>  
 </div>
 </template>
 
 <script>
-import dragResize from "../dragResize/dragResize.vue"
+// import dragResize from "../dragResize/dragResize.vue"
 import { mapState } from 'vuex'
 import bubble from "../categoriesCharts/bubblechart.vue"
 import * as d3 from "d3";
@@ -120,9 +116,8 @@ export default {
 
 </script>
     
-
-<style>
-#bub {
-    background-color: black
-} 
+<style scoped="scoped">
+    .moves{      
+    z-index: 999; 
+    }
 </style>

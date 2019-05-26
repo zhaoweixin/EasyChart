@@ -1,11 +1,7 @@
 <template>
-  <!-- <div class="layout"> -->
-    <!-- <div class="dragable" @mousedown="handleDown" @mouseup="handleUp" :style="boxStyle">
-      <slot></slot> -->
-      <div id="bubblechart"></div>
-      <!-- <div class="scale" @mousedown.stop="resizeStart"></div>
-    </div> -->
-  <!-- </div> -->
+      <div @mousedown="move" id="lig" class="ligclass" v-bind:class="{'lg-bg': isInit}">
+    </div>
+      
 </template>
 <!--<script src="https://d3js.org/d3.v4.min.js"></script>-->
 <script>
@@ -13,60 +9,10 @@ import G2 from "@antv/g2";
 import { mapState } from 'vuex';
 export default {
   name: "bubbleChart",
-  // props: {
-  //   w: {
-  //     type: Number,
-  //     default: 200
-  //   },
-  //   h: {
-  //     type: Number,
-  //     default: 200
-  //   },
-  //   x: {
-  //     type: Number,
-  //     default: 0
-  //   },
-  //   y: {
-  //     type: Number,
-  //     default: 0
-  //   },
-  //   r: {
-  //     type: Number,
-  //     default: 0
-  //   },
-  //   axis: {
-  //     type: String,
-  //     default: 'both'
-  //   },
-  //   handle: {
-  //     type: String,
-  //     default: ''
-  //   },
-  //   cancel: {
-  //     type: String,
-  //     default: ''
-  //   },
-  //   grid: {
-  //     type: Array,
-  //     default: function() {
-  //       return [0, 0]
-  //     }
-  //   },
-  // },
   data() {
     return {
+      isInit:false,
       name: "bubbleChart",
-      // localx: this.x,
-      // localy: this.y,
-      // localw: this.w,
-      // localh: this.h,
-      // localr: this.r,
-      // lastX: 0,
-      // lastY: 0,
-      // dragging: false,
-      // resizeStartX: 0,
-      // resizeStartY: 0,
-      // resizing: false,
       sourceData: [
         {
           item: "高血压",
@@ -241,18 +187,44 @@ export default {
         console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
         console.log("监听toDrawChart");
         this.initTest();
+        
+      
       }
     },
     'chartArray': {
       deep: true,
       handler() {
         this.initTest();
+        this.isInit = true
         console.log("x:"+this.$store.state.chartX);
         console.log("y:"+this.$store.state.chartY);
       }
     },
   },
   methods: {
+     move (e) {
+          let odiv = e.target;    //获取目标元素
+          //算出鼠标相对元素的位置
+          let disX = e.clientX - odiv.offsetLeft;
+          let disY = e.clientY - odiv.offsetTop;
+          document.onmousemove = (e)=>{    //鼠标按下并移动的事件
+            //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
+            let left = e.clientX - disX;  
+            let top = e.clientY - disY;
+             
+            //绑定元素位置到positionX和positionY上面
+            this.positionX = top;
+            this.positionY = left;
+             
+            //移动当前元素
+            odiv.style.left = left + 'px';
+            odiv.style.top = top + 'px';
+          };
+          document.onmouseup = (e) => {
+            document.onmousemove = null;
+            document.onmouseup = null;
+          };
+     },
     initTest() {
       const that = this;
       let divId = this.getContainer();
@@ -378,101 +350,41 @@ export default {
       div.setAttribute("style", "position: absolute");
       div.style.postion = "absolute";
       document.getElementById(that.chartLayer).appendChild(div);
+      document.getElementById('lig').appendChild(div);
       return divId;
     },
-    
-    // resizeStart: function(e) {
-    //   this.resizeStartX = e.clientX
-    //   this.resizeStartY = e.clientY
-    //   this.resizing = true
-    //   this.lastW = this.localw
-    //   this.lastH = this.localh
-    // },
-    // handleDown: function(e) {
-    //   if (this.handle && !matchesSelector(e.target, this.handle)) {
-    //     return
-    //   }
-    //   if (this.cancel && matchesSelector(e.target, this.cancel)) {
-    //     return
-    //   }
-    //   if (!this.lastX) {
-    //     this.lastX = e.clientX
-    //     this.lastY = e.clientY
-    //   }
-    //   this.dragging = true
-    // },
-    // handleUp: function(e) {
-    //   this.dragging = false
-    //   this.resizing = false
-    //   this.$emit('handleUp', {
-    //     x: this.localx,
-    //     y: this.localy,
-    //     w: this.localw,
-    //     h: this.localh,
-    //     r: this.localr
-    //   })
-    // },
-    // handleMove: function(e) {
-    //   if (e.stopPropagation) e.stopPropagation()
-    //   if (e.preventDefault) e.preventDefault()
-
-    //   if (this.dragging) {
-    //     let deltax = e.clientX - this.lastX
-    //     let deltay = e.clientY - this.lastY
-
-    //     let deltaxround = Math.round(deltax / this.grid[0]) * this.grid[0]
-    //     let deltayround = Math.round(deltay / this.grid[1]) * this.grid[1]
-
-    //     let thisx = this.localx
-    //     let thisy = this.localy
-
-    //     if (this.grid[0] > 0 && this.grid[1] > 0) {
-    //       if (this.axis === 'both') {
-    //         thisx = deltaxround
-    //         thisy = deltayround
-    //       } else if (this.axis === 'x') {
-    //         thisx = deltaxround
-    //       } else if (this.axis === 'y') {
-    //         thisy = deltayround
-    //       }
-    //     } else {
-    //       if (this.axis === 'both') {
-    //         thisx = e.clientX - this.lastX
-    //         thisy = e.clientY - this.lastY
-    //       } else if (this.axis === 'x') {
-    //         thisx = e.clientX - this.lastX
-    //       } else if (this.axis === 'y') {
-    //         thisy = e.clientY - this.lastY
-    //       }
-    //     }
-
-    //     this.localx = thisx
-    //     this.localy = thisy
-    //   }
-    //   if (this.resizing) {
-    //     this.localw = parseInt(this.lastW) + parseInt(e.clientX) - parseInt(this.resizeStartX)
-    //     this.localh = parseInt(this.lastH) + parseInt(e.clientY) - parseInt(this.resizeStartY)
-    //   }
-    // }
   },
   mounted() {
     //this.initTest();
     //this.pushToState();
-     var el = document.documentElement
-    var event = 'mousemove'
-    var handler = this.handleMove
+    //  var el = document.documentElement
+    // var event = 'mousemove'
+    // var handler = this.handleMove
 
-    if (el.attachEvent) {
-      el.attachEvent('on' + event, handler)
-    } else if (el.addEventListener) {
-      el.addEventListener(event, handler, true)
-    } else {
-      el['on' + event] = handler
-    }
+    // if (el.attachEvent) {
+    //   el.attachEvent('on' + event, handler)
+    // } else if (el.addEventListener) {
+    //   el.addEventListener(event, handler, true)
+    // } else {
+    //   el['on' + event] = handler
+    // }
   }
 };
 </script>
-
+<style scoped="scoped">
+    .ligclass{
+        width: 520px;
+        height: 320px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        position: absolute; 
+    }
+    .lg-bg{
+        background-color: #f3f3f3;
+    }
+</style>
 
 
 
