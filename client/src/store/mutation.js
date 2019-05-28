@@ -22,6 +22,15 @@ const mutation = {
     },
     addIdToArray(state, id) {
         state.chartIdArray.push(id);
+    },
+    reChartData(state, payload) {
+        for (var i = 0, len = state.chartComponentArray.length; i < len; i++) {
+            if (state.chartComponentArray[i].dataset.id === payload.id) {
+              state.chartComponentArray[i].dataset = payload.dataset
+              break;
+            }
+        }
+            console.log("修改成功")
     }
 }
 
