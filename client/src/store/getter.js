@@ -4,6 +4,9 @@ const getter = {
     },
     getChartXY: state => {
         return {"x": state.chartX, "y": state.chartY}
+    },
+    chartArray:state => {
+        return state.chartIdArray
     }
 }
 

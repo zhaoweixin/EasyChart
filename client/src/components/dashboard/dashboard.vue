@@ -6,7 +6,14 @@
         </div>
         <!--add chart to here --> 
     </div>
-    <bubble></bubble>
+    <grid-layout :layout="chartArray" :col-num="12" :row-height="30" :is-draggable="true" :is-resizable="true"
+        :vertical-compact="true" :use-css-transforms="true">
+        <grid-item v-for="(item,index) in chartArray" :key='index' :x="item.x" :y="item.y" :w="item.wd" :h="item.hg" :i="item.i" :id="index">
+          <!--span >{{item.i}}</span-->
+          <component :is="item.chartname" :props="item.props"> </component>
+        </grid-item>
+      </grid-layout>
+    <!--bubblechart></bubblechart-->
     <!-- <bubbleFre></bubbleFre> -->
     <!-- <gauge></gauge>
     <groupBar></groupBar>
@@ -20,18 +27,19 @@
 </template>
 
 <script>
-// import dragResize from "../dragResize/dragResize.vue"
-import { mapState } from 'vuex'
-import bubble from "../categoriesCharts/bubblechart.vue";
-import bubbleFre from "../categoriesCharts/bubbleFrequencyChart.vue";
-import gauge from "../categoriesCharts/gaugechart.vue";
-import groupBar from "../categoriesCharts/groupBarChart.vue";
-import groupPie from "../categoriesCharts/groupPieChart.vue";
-import lineC from "../categoriesCharts/linechart.vue";
-import mapBox from "../categoriesCharts/mapBoxView.vue";
-import pie from "../categoriesCharts/piechart.vue";
-import radar from "../categoriesCharts/radarChart.vue";
-import ratio from "../categoriesCharts/ratiochart.vue";
+
+import { mapState,mapGetters } from 'vuex';
+import VueGridLayout from 'vue-grid-layout';
+import bubblechart from "../categoriesCharts/bubblechart.vue";
+import bubbleFrequencyChar from "../categoriesCharts/bubbleFrequencyChart.vue";
+import gaugechart from "../categoriesCharts/gaugechart.vue";
+import groupBarChart from "../categoriesCharts/groupBarChart.vue";
+import groupPieChart from "../categoriesCharts/groupPieChart.vue";
+import lineChart from "../categoriesCharts/linechart.vue";
+import mapBoxView from "../categoriesCharts/mapBoxView.vue";
+import piechart from "../categoriesCharts/piechart.vue";
+import radarChart from "../categoriesCharts/radarChart.vue";
+import ratiochart from "../categoriesCharts/ratiochart.vue";
 
 import * as d3 from "d3";
 export default {
@@ -41,24 +49,34 @@ export default {
         gridLayer: "gridLayer",
         chartLayer: "preview",
         componentContainer: "componentContainer",
-        //dashboard: this.$store.chartCategory //获取Chart数组
-        //chartArray: [],
-        show: false
+        show: false,
+        // chartArray:this.chartArray
+        // chartArray:[]
     }
     },
+    mounted() {
+        this.chartInit("#preview")
+    },
     computed: {
-        ...mapState({
-            chartArray: state => state.chartIdArray
-    }),
+    //     ...mapState({
+    //         chartArray: state => state.chartIdArray
+    // }),
         // ...mapAction({
         //     addChart: 'createAction'
         // }),
+        ...mapGetters(['chartArray'])
+        // chartArray(){
+        //     return this.$store.state.chartIdArray;
+        //     }
+    
+
     },
     watch: {
         'chartArray': {
             deep: true,
             handler: function() {
                 console.log("可以添加视图了");
+                console.log("wandh2"+ this.$store.state.chartIdArray[0].hg)
             }
         }
     },
@@ -124,19 +142,18 @@ export default {
         }
     },
     components: {
-        bubble,
-        bubbleFre,
-        gauge,
-        groupBar,
-        groupPie,
-        lineC,
-        mapBox,
-        pie,
-        radar,
-        ratio
-    },
-    mounted() {
-        this.chartInit("#preview")
+        bubblechart,
+        bubbleFrequencyChar,
+        gaugechart,
+        groupBarChart,
+        groupPieChart,
+        lineChart,
+        mapBoxView,
+        piechart,
+        radarChart,
+        ratiochart,
+        GridLayout : VueGridLayout.GridLayout,
+        GridItem : VueGridLayout.GridItem,
     }
 }
 

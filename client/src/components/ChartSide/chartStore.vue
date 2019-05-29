@@ -47,6 +47,7 @@ import stores from "../../store/store.js";
 import mutations from "../../store/mutation.js";
 import $ from "jquery";
 import * as d3 from "d3";
+import store from '../../store/store.js';
 
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
@@ -116,7 +117,7 @@ var imgArray = [
   {
     id: 0,
     idView: require("../../../static/Image/barchart.png"),
-    chartType: "barchart"
+    chartType: "groupBarChart"
   },
   {
     id: 1,
@@ -188,14 +189,17 @@ export default {
           var left =
             $(".el-main .ui-draggable-dragging").position().left -
             $(".el-aside").width();
-          var data = {
-            id: "001"
+          var item = {
+            chartname:chartType,
+             x: top,
+            y: left,
+            wd: top,
+            hg: left,
           };
-          mutations.addIdToArray(stores.state, data);
-          mutations.setChartXY(stores.state, {
-            x: top,
-            y: left
-          });
+          mutations.addIdToArray(stores.state, item);
+          console.log('item'+item.w);
+
+          console.log('wandh'+stores.state.chartIdArray[0].hg);
         }
       });
     },
