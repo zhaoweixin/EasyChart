@@ -1,21 +1,38 @@
 <template>
 <div>
-    <!-- <button id="btn" @click="function1">生成图表</button> -->
-    <!-- <button id="vtn" @click="function2">添加数据</button> -->
     <div id='preview' style="background:rgba(0,0,0,0.05)">
         <div style="position:absolute">
             <svg id ='editorborad'></svg>
         </div>
-        <!--add chart to here -->
+        <!--add chart to here --> 
     </div>
-    <bubble></bubble>  
+    <bubble></bubble>
+    <!-- <bubbleFre></bubbleFre> -->
+    <!-- <gauge></gauge>
+    <groupBar></groupBar>
+    <groupPie></groupPie>
+    <lineC></lineC>
+    <map></map>
+    <pie></pie>
+    <radar></radar>
+    <ratio></ratio> -->
 </div>
 </template>
 
 <script>
 // import dragResize from "../dragResize/dragResize.vue"
 import { mapState } from 'vuex'
-import bubble from "../categoriesCharts/bubblechart.vue"
+import bubble from "../categoriesCharts/bubblechart.vue";
+import bubbleFre from "../categoriesCharts/bubbleFrequencyChart.vue";
+import gauge from "../categoriesCharts/gaugechart.vue";
+import groupBar from "../categoriesCharts/groupBarChart.vue";
+import groupPie from "../categoriesCharts/groupPieChart.vue";
+import lineC from "../categoriesCharts/linechart.vue";
+import mapBox from "../categoriesCharts/mapBoxView.vue";
+import pie from "../categoriesCharts/piechart.vue";
+import radar from "../categoriesCharts/radarChart.vue";
+import ratio from "../categoriesCharts/ratiochart.vue";
+
 import * as d3 from "d3";
 export default {
     data() {
@@ -46,21 +63,21 @@ export default {
         }
     },
     methods: {
-        function1(){
-            //this.$refs.bub.initChart();
-            console.log('hello');
-            this.$store.commit("setChartXY", {"x": 100, "y": 100})
-            console.log("x坐标"+ this.$store.state.chartX + 'y轴' + this.$store.state.chartY);
-            this.$store.commit("toDrawChart", {"toDrawChart": "bubbleChart"})
-            //this.$refs.bubblechart.initTest(); 
-        },
-        function2() {
-            this.chartArray.push('001')
-        },
-        click() {
-            //this.$refs.bub.initChart();
-            //this.$refs.bubblechart.initTest();
-        },
+        // function1(){
+        //     //this.$refs.bub.initChart();
+        //     console.log('hello');
+        //     this.$store.commit("setChartXY", {"x": 100, "y": 100})
+        //     console.log("x坐标"+ this.$store.state.chartX + 'y轴' + this.$store.state.chartY);
+        //     this.$store.commit("toDrawChart", {"toDrawChart": "bubbleChart"})
+        //     //this.$refs.bubblechart.initTest(); 
+        // },
+        // function2() {
+        //     this.chartArray.push('001')
+        // },
+        // click() {
+        //     //this.$refs.bub.initChart();
+        //     //this.$refs.bubblechart.initTest();
+        // },
         chartInit(container){
             let that = this
             this.container = d3.select("#editorborad")
@@ -108,6 +125,15 @@ export default {
     },
     components: {
         bubble,
+        bubbleFre,
+        gauge,
+        groupBar,
+        groupPie,
+        lineC,
+        mapBox,
+        pie,
+        radar,
+        ratio
     },
     mounted() {
         this.chartInit("#preview")

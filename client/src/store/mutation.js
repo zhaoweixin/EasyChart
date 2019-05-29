@@ -23,14 +23,20 @@ const mutation = {
     addIdToArray(state, id) {
         state.chartIdArray.push(id);
     },
+    // 右侧栏提交改变的数据
     reChartData(state, payload) {
-        for (var i = 0, len = state.chartComponentArray.length; i < len; i++) {
-            if (state.chartComponentArray[i].dataset.id === payload.id) {
-              state.chartComponentArray[i].dataset = payload.dataset
-              break;
-            }
-        }
+        // for (var i = 0, len = state.chartComponentArray.length; i < len; i++) {
+        //     if (state.chartComponentArray[i].dataset.id === payload.id) {
+        //       state.chartComponentArray[i].dataset = payload.dataset
+        //       break;
+        //     }
+        // }
+        state.chartComponentArray[parseInt(payload.id)-1] = payload;
             console.log("修改成功")
+    },
+    // 提交更改视图的类型
+    commitChange(state, payload){
+        state.chartChange = payload;
     }
 }
 

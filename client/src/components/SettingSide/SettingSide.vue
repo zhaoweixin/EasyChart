@@ -4,7 +4,8 @@
     <el-collapse-item
       title="container"
       name="container"
-      v-if="id!=='null'"
+      v-if="id!=='null' && chart.id!==undefined"
+
     >
 
       <div class="item">
@@ -14,6 +15,7 @@
           size="mini"
         >
         </el-input>
+        <!-- <el-input type="input" v-bind:value="chart.container.height" v-on:input="chart.container.height=$event.target.value" size="mini"></el-input> -->
       </div>
       <div class="item">
         <span class="itemName">width: </span>
@@ -61,7 +63,7 @@
     <el-collapse-item
       title="backgroud"
       name="background"
-      v-if="id!=='null'"
+      v-if="id!=='null' && chart.id!==undefined"
     >
       <div class="item">
         <span class="itemName">fill: </span>
@@ -123,7 +125,7 @@
     <el-collapse-item
       title="meta"
       name="meta"
-      v-if="id!=='null'"
+      v-if="id!=='null' && chart.id!==undefined"
     >
       <div class="item">
         <span class="itemName">title: </span>
@@ -153,7 +155,7 @@
     <el-collapse-item
       title="tooltip"
       name="tooltip"
-      v-if="id!=='null'"
+      v-if="id!=='null' && chart.id!==undefined"
     >
       <div class="item">
         <span class="itemName">triggerOn: </span>
@@ -279,7 +281,7 @@
     <el-collapse-item
       title="xAxis"
       name="xAxis"
-      v-if="id!=='null'"
+      v-if="id!=='null' && chart.id!==undefined"
     >
       <div class="item">
         <span class="itemName">name: </span>
@@ -397,7 +399,7 @@
     <el-collapse-item
       title="yAaxis"
       name="yAaxis"
-      v-if="id!=='null'"
+      v-if="id!=='null' && chart.id!==undefined"
     >
       <div class="item">
         <span class="itemName">name: </span>
@@ -500,6 +502,9 @@
       <div>
         <button @click="foo">id=001</button>
       </div>
+      <div>
+        <button @click="commitChange">commit</button>
+      </div>
     </el-collapse-item>
   </el-collapse>
 </template>
@@ -536,22 +541,38 @@ export default {
       ]
     };
   },
-  computer: {},
+  computed: {
+    
+  },
   watch: {
     //id变化时从state读取chart数据
-    id: function() {
+    'id': function(){
       this.chart = this.$store.state.chartComponentArray[0].dataset;
+      console.log(this.chart);
+      console.log(this.$store.state.chartComponentArray[0].dataset);
     },
     //chart变化时修改state
-    chart: function(val) {
-      this.$store.commit("reChartData", { id: this.id, dataset: val });
-    }
+    // 'chart': {
+    //   //this.$store.commit("reChartData", { id: this.id, dataset: val });
+    //   deep: true,
+    //   handler() {
+    //     console.log("获取的宽度数据"+this.chart.container.width);
+    //   }
+
+    // }
   },
   methods: {
     //临时修改id的方法
     foo: function() {
-      this.id = "001";
-      // console.log(this.id)
+      this.id = "002";
+      console.log("id"+parseInt(this.id));
+    },
+    commitChange() {
+      console.log("提交数据");
+      this.$store.commit("reChartData", { id: this.id, dataset: this.chart }, parseInt(this.id));
+      console.log(this.$store.state.chartComponentArray[0].dataset);
+      this.$store.commit("commitChange", "bubble");
+      
     }
   }
 };

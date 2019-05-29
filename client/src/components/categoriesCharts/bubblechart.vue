@@ -7,12 +7,14 @@
 <script>
 import G2 from "@antv/g2";
 import { mapState } from 'vuex';
+import $ from "jquery";
 export default {
   name: "bubbleChart",
   data() {
     return {
       isInit:false,
       name: "bubbleChart",
+      chart:{},
       sourceData: [
         {
           item: "高血压",
@@ -54,7 +56,7 @@ export default {
           item: "高血压",
           group: 7,
           value: 55,
-          ratio: 100
+          //ratio: 100
         },
         {
           item: "高血压",
@@ -81,34 +83,34 @@ export default {
         category: "bubblechart", //种类
         container: {
           //布局
-          height: "300",
-          width: "500",
+          height: '300',
+          width: '500',
           padding: [30, 30, 30, 30],
           background: {
             fill: "#feeeed", //背景颜色 (给定数组)
-            fillOpacity: 0.5, // 图表背景透明度
+            fillOpacity: '0.5', // 图表背景透明度
             stroke: "#7fb80e", // 图表边框颜色 (给定数组)
-            strokeOpacity: 0.8, // 图表边框透明度
-            opacity: 0.6, // 图表整体透明度
-            lineWidth: 2, // 图表边框粗度
-            radius: 15 // 图表圆角大小
+            strokeOpacity: '0.8', // 图表边框透明度
+            opacity: '0.6', // 图表整体透明度
+            lineWidth: '2', // 图表边框粗度
+            radius: '15' // 图表圆角大小
           }
         },
         meta: {
           title: "bubblechart",
-          legend: false, //图示
+          legend: 'false', //图示
           tooltip: {
             //提示
             triggerOn: "mousemove", //触发方式'mousemove'、'click'、'none'
             title: "country", //提示标题
             crosshairs: {}, //辅助线和辅助框(暂时先不加)
             offset: 0, //设置 tooltip 距离鼠标的偏移量。
-            inPlot: true, //设置是否将 tooltip 限定在绘图区域内，默认为 true，即限定在绘图区域内。
-            follow: true, //设置 tooltip 是否跟随鼠标移动。默认为 true，即跟随。
-            shared: true, //设置 tooltip 只展示单条数据。
-            enterable: true, //用于控制是否允许鼠标进入 tooltip，默认为 false，即不允许进入。
+            inPlot: 'true', //设置是否将 tooltip 限定在绘图区域内，默认为 true，即限定在绘图区域内。
+            follow: 'true', //设置 tooltip 是否跟随鼠标移动。默认为 true，即跟随。
+            shared: 'true', //设置 tooltip 只展示单条数据。
+            enterable: 'true', //用于控制是否允许鼠标进入 tooltip，默认为 false，即不允许进入。
             position: "top", //该属性设置之后，就会在固定位置展示 tooltip，可设置的值为：left、right、top、bottom。
-            hideMarkers: true //对于 line、area、path 这三种几何图形，我们在渲染 tooltip 时会自动渲染 tooltipMarker ，通过声明该属性值为 true 来关闭 tooltipMarker。
+            hideMarkers: 'true' //对于 line、area、path 这三种几何图形，我们在渲染 tooltip 时会自动渲染 tooltipMarker ，通过声明该属性值为 true 来关闭 tooltipMarker。
           },
           X_axis: {
             //x轴
@@ -117,16 +119,16 @@ export default {
             line: {
               //设置坐标轴样式
               stroke: "#c63c26", // 坐标轴线的颜色
-              strokeOpacity: 0.8, // 坐标轴线的透明度，数值范围为 0 - 1
+              strokeOpacity: '0.8', // 坐标轴线的透明度，数值范围为 0 - 1
               lineDash: [3, 4], // 设置虚线的样式，如 [2, 3]第一个用来表示实线的像素，第二个用来表示空白的像素。如果提供了奇数个值，则这个值的数列重复一次，从而变成偶数个值
-              lineWidth: 2 // 设置坐标轴线的粗细
+              lineWidth: '2' // 设置坐标轴线的粗细
             },
             label: {
               text: "组",
               textStyle: {
                 textAlign: "center", // 文本对齐方向，可取值为： start center end
                 fill: "#404040", // 文本的颜色
-                fontSize: "12", // 文本大小
+                fontSize: '12', // 文本大小
                 fontWeight: "bold", // 文本粗细
                 textBaseline: "top" // 文本基准线，可取 top middle bottom，默认为middle
               }
@@ -137,7 +139,7 @@ export default {
             name: "ratio",
             label: {
               text: "组",
-              textFontSize: "12",
+              textFontSize: '12',
               fill: "#ccc"
             }
           },
@@ -146,7 +148,7 @@ export default {
             size: [],
             color: "red",
             label: {},
-            opacity: 0.3,
+            opacity: '0.3',
             shape: "circle",
             style: {}
           }
@@ -159,9 +161,9 @@ export default {
     };
   },
   computed: {
-    toDrawChart() {
-      return this.$store.state.toDrawChart;
-    },
+    // toDrawChart() {
+    //   return this.$store.state.toDrawChart;
+    // },
     getChartXY() {
       return this.$store.getters.getChartXY;
     },
@@ -177,29 +179,43 @@ export default {
     },
     ...mapState({
       chartArray: state => state.chartIdArray,
+      refreshData: state => state.chartChange,
     })
   },
   watch: {
-    toDrawChart: function(curVal, oldVal) {
-      console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
-      console.log(curVal, oldVal);
-      if (curVal != oldVal && curVal == "bubbleChart") {
-        console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
-        console.log("监听toDrawChart");
-        this.initTest();
-        
-      
-      }
-    },
+    // toDrawChart: function(curVal, oldVal) {
+    //   console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
+    //   console.log(curVal, oldVal);
+    //   if (curVal != oldVal && curVal == "bubbleChart") {
+    //     // console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
+    //     // console.log("监听toDrawChart");
+    //     this.initTest();
+    //   }
+    // },
     'chartArray': {
       deep: true,
       handler() {
-        this.initTest();
-        this.isInit = true
-        console.log("x:"+this.$store.state.chartX);
-        console.log("y:"+this.$store.state.chartY);
+        if (this.isInit) {
+          this.chart = null;
+          //this.chart.destroy();
+          console.log("zhixingle")
+        }
+        this.initTest(this.bubblechartSet);
+        this.isInit = !this.isInit
+        // console.log("x:"+this.$store.state.chartX);
+        // console.log("y:"+this.$store.state.chartY);
       }
     },
+    'refreshData': {
+      deep: true,
+      handler() {
+        if (this.$store.state.chartChange == "bubble") {
+          console.log("收到数据更改了");
+          this.chart.destroy();
+          this.initTest(this.$store.state.chartComponentArray[0].dataset);
+        }
+      }
+    }
   },
   methods: {
      move (e) {
@@ -225,23 +241,23 @@ export default {
             document.onmouseup = null;
           };
      },
-    initTest() {
+    initTest(val) {
       const that = this;
       let divId = this.getContainer();
-      console.log(this.bubblechartSet.meta.X_axis.label.text);
+      //console.log(val.meta.X_axis.label.text);
       this.chart = new G2.Chart({
         container: divId,
-        height: this.bubblechartSet.container.height,
-        width: this.bubblechartSet.container.width,
-        padding: this.bubblechartSet.container.padding,
+        height: parseInt(val.container.height),
+        width: parseInt(val.container.width),
+        padding: val.container.padding,
         background: {
-          fill: this.bubblechartSet.container.background.fill, //背景颜色 (给定数组)
-          fillOpacity: this.bubblechartSet.container.background.fillOpacity, // 图表背景透明度
-          stroke: this.bubblechartSet.container.background.stroke, // 图表边框颜色 (给定数组)
-          strokeOpacity: this.bubblechartSet.container.background.strokeOpacity, // 图表边框透明度
-          opacity: this.bubblechartSet.container.background.opacity, // 图表整体透明度
-          lineWidth: this.bubblechartSet.container.background.lineWidth, // 图表边框粗度
-          radius: this.bubblechartSet.container.background.radius // 图表圆角大小
+          fill: val.container.background.fill, //背景颜色 (给定数组)
+          fillOpacity: parseFloat(val.container.background.fillOpacity), // 图表背景透明度
+          stroke: val.container.background.stroke, // 图表边框颜色 (给定数组)
+          strokeOpacity: parseFloat(val.container.background.strokeOpacity), // 图表边框透明度
+          opacity: parseFloat(val.container.background.opacity), // 图表整体透明度
+          lineWidth: parseFloat(val.container.background.lineWidth), // 图表边框粗度
+          radius: parseFloat(val.container.background.radius) // 图表圆角大小
         },
         data: this.sourceData
       });
@@ -258,23 +274,23 @@ export default {
         }
       });
       // 开始配置坐标轴
-      this.chart.axis(this.bubblechartSet.meta.X_axis.name, {
-        position: this.bubblechartSet.meta.X_axis.postion, //设置横坐标位置
+      this.chart.axis(val.meta.X_axis.name, {
+        position: val.meta.X_axis.postion, //设置横坐标位置
         line: {
-          stroke: this.bubblechartSet.meta.X_axis.line.stroke, // 坐标轴线的颜色
-          strokeOpacity: this.bubblechartSet.meta.X_axis.line.strokeOpacity, // 坐标轴线的透明度，数值范围为 0 - 1
+          stroke: val.meta.X_axis.line.stroke, // 坐标轴线的颜色
+          strokeOpacity: val.meta.X_axis.line.strokeOpacity, // 坐标轴线的透明度，数值范围为 0 - 1
           //lineDash: [3,4,4,7], // 设置虚线的样式，如 [2, 3]第一个用来表示实线的像素，第二个用来表示空白的像素。如果提供了奇数个值，则这个值的数列重复一次，从而变成偶数个值
-          lineWidth: this.bubblechartSet.meta.X_axis.line.lineWidth // 设置坐标轴线的粗细
+          lineWidth: val.meta.X_axis.line.lineWidth // 设置坐标轴线的粗细
         },
         label: {
           formatter: function formatter(val) {
-            //var labeltext = this.bubblechartSet.meta.X_axis.label.text;
+            //var labeltext = val.meta.X_axis.label.text;
             return val + '组'; // 格式化坐标轴显示文本
           },
           textStyle: {
-            fontSize: this.bubblechartSet.meta.X_axis.label.textStyle.fontSize,
-            textAlign: this.bubblechartSet.meta.X_axis.label.textStyle.textAlign,
-            fill: this.bubblechartSet.meta.X_axis.label.textStyle.fill,
+            fontSize: parseInt(val.meta.X_axis.label.textStyle.fontSize),
+            textAlign: val.meta.X_axis.label.textStyle.textAlign,
+            fill: val.meta.X_axis.label.textStyle.fill,
           }
         },
         tickLine: {
@@ -312,13 +328,13 @@ export default {
       });
       this.chart.legend(false);
       this.chart.tooltip({
-        //triggerOn: this.bubblechartSet.meta.tooltip.triggerOn,
+        //triggerOn: val.meta.tooltip.triggerOn,
         triggerOn: 'click',
-        title: this.bubblechartSet.meta.tooltip.title,
+        title: val.meta.tooltip.title,
       });
       this.chart
         .point()
-        .position(this.bubblechartSet.meta.X_axis.name + "*" + this.bubblechartSet.meta.Y_axis.name)
+        .position(val.meta.X_axis.name + "*" + val.meta.Y_axis.name)
         .size("value", [5, 20])
         .label("value", {
           offset: 0, // 文本距离图形的距离
@@ -326,19 +342,26 @@ export default {
             fill: "white"
           }
         })
-        .opacity(this.bubblechartSet.meta.value.opacity)
-        .shape(this.bubblechartSet.meta.value.shape)
+        .opacity(parseFloat(val.meta.value.opacity))
+        .shape(val.meta.value.shape)
         .tooltip("group*value")
         .style({
           lineWidth: 1,
           stroke: "#1890ff"
         });
       this.chart.render();
+      // this.chart.destory();
+      // this.chart.changeData(this.sourceData2);
+      // this.chart.render();
       //this.$store.state.chartComponetArray.push(bubbleChart);
       this.$store.commit("pushDataSetToState", {
-        dataset: this.bubblechartSet
+        dataset: $.extend(true,{},val)
+        //dataset: val
       });
-      console.log(this.$store.state.chartComponentArray[0].dataset);
+      console.log("state中的宽"+this.$store.state.chartComponentArray[0].dataset.container.width);
+      console.log("state中的高"+this.$store.state.chartComponentArray[0].dataset.container.height);
+      console.log("bub中的宽"+val.container.width);
+      console.log("bub中的宽"+val.container.height);
     },
     getContainer() {
       let that = this;
