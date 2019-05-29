@@ -1,6 +1,6 @@
 <template>
-      <div @mousedown="move" id="lig" class="ligclass" v-bind:class="{'lg-bg': isInit}">
-    </div>
+      <div id="bubble">
+    </div> 
       
 </template>
 <!--<script src="https://d3js.org/d3.v4.min.js"></script>-->
@@ -182,82 +182,62 @@ export default {
       refreshData: state => state.chartChange,
     })
   },
-  watch: {
-    // toDrawChart: function(curVal, oldVal) {
-    //   console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
-    //   console.log(curVal, oldVal);
-    //   if (curVal != oldVal && curVal == "bubbleChart") {
-    //     // console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
-    //     // console.log("监听toDrawChart");
-    //     this.initTest();
-    //   }
-    // },
-    'chartArray': {
-      deep: true,
-      handler() {
-        if (this.isInit) {
-          this.chart = null;
-          //this.chart.destroy();
-          console.log("zhixingle")
-        }
-        this.initTest(this.bubblechartSet);
-        this.isInit = !this.isInit
-        // console.log("x:"+this.$store.state.chartX);
-        // console.log("y:"+this.$store.state.chartY);
-      }
-    },
-    'refreshData': {
-      deep: true,
-      handler() {
-        if (this.$store.state.chartChange == "bubble") {
-          console.log("收到数据更改了");
-          this.chart.destroy();
-          this.initTest(this.$store.state.chartComponentArray[0].dataset);
-        }
-      }
-    }
+  // watch: {
+  //   // toDrawChart: function(curVal, oldVal) {
+  //   //   console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
+  //   //   console.log(curVal, oldVal);
+  //   //   if (curVal != oldVal && curVal == "bubbleChart") {
+  //   //     // console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
+  //   //     // console.log("监听toDrawChart");
+  //   //     this.initTest();
+  //   //   }
+  //   // },
+  //   'chartArray': {
+  //     deep: true,
+  //     handler() {
+  //       if (this.isInit) {
+  //         this.chart = null;
+  //         //this.chart.destroy();
+  //         console.log("zhixingle")
+  //       }
+  //       this.initTest(this.bubblechartSet);
+  //       this.isInit = !this.isInit
+  //       // console.log("x:"+this.$store.state.chartX);
+  //       // console.log("y:"+this.$store.state.chartY);
+  //     }
+  //   },
+  //   'refreshData': {
+  //     deep: true,
+  //     handler() {
+  //       if (this.$store.state.chartChange == "bubble") {
+  //         console.log("收到数据更改了");
+  //         this.chart.destroy();
+  //         this.initTest(this.$store.state.chartComponentArray[0]);
+  //       }
+  //     }
+  //   }
+  // },
+  mounted() {
+    this.initTest();
+    //this.chartInit();
   },
   methods: {
-     move (e) {
-          let odiv = e.target;    //获取目标元素
-          //算出鼠标相对元素的位置
-          let disX = e.clientX - odiv.offsetLeft;
-          let disY = e.clientY - odiv.offsetTop;
-          document.onmousemove = (e)=>{    //鼠标按下并移动的事件
-            //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
-            let left = e.clientX - disX;  
-            let top = e.clientY - disY;
-             
-            //绑定元素位置到positionX和positionY上面
-            this.positionX = top;
-            this.positionY = left;
-             
-            //移动当前元素
-            odiv.style.left = left + 'px';
-            odiv.style.top = top + 'px';
-          };
-          document.onmouseup = (e) => {
-            document.onmousemove = null;
-            document.onmouseup = null;
-          };
-     },
-    initTest(val) {
-      const that = this;
-      let divId = this.getContainer();
-      //console.log(val.meta.X_axis.label.text);
+    initTest() {
+      //const that = this;
+      //console.log(this.bubblechartSet.meta.X_axis.label.text);
       this.chart = new G2.Chart({
-        container: divId,
-        height: parseInt(val.container.height),
-        width: parseInt(val.container.width),
-        padding: val.container.padding,
+        container: "bubble",
+        height: parseInt(this.bubblechartSet.container.height),
+        width: parseInt(this.bubblechartSet.container.width),
+        padding: this.bubblechartSet.container.padding,
         background: {
-          fill: val.container.background.fill, //背景颜色 (给定数组)
-          fillOpacity: parseFloat(val.container.background.fillOpacity), // 图表背景透明度
-          stroke: val.container.background.stroke, // 图表边框颜色 (给定数组)
-          strokeOpacity: parseFloat(val.container.background.strokeOpacity), // 图表边框透明度
-          opacity: parseFloat(val.container.background.opacity), // 图表整体透明度
-          lineWidth: parseFloat(val.container.background.lineWidth), // 图表边框粗度
-          radius: parseFloat(val.container.background.radius) // 图表圆角大小
+          fill: this.bubblechartSet.container.background.fill, //背景颜色 (给定数组)
+          fillOpacity: parseFloat(this.bubblechartSet.container.background.fillOpacity), // 图表背景透明度
+          stroke: this.bubblechartSet.container.background.stroke, // 图表边框颜色 (给定数组)
+          strokeOpacity: parseFloat(this.bubblechartSet.container.background.strokeOpacity), // 图表边框透明度
+          opacity: parseFloat(this.bubblechartSet.container.background.opacity), // 图表整体透明度
+          lineWidth: parseFloat(this.bubblechartSet.container.background.lineWidth), // 图表边框粗度
+          radius: parseFloat(this.bubblechartSet.container.background.radius) // 图表圆角大小
         },
         data: this.sourceData
       });
@@ -274,23 +254,23 @@ export default {
         }
       });
       // 开始配置坐标轴
-      this.chart.axis(val.meta.X_axis.name, {
-        position: val.meta.X_axis.postion, //设置横坐标位置
+      this.chart.axis(this.bubblechartSet.meta.X_axis.name, {
+        position: this.bubblechartSet.meta.X_axis.postion, //设置横坐标位置
         line: {
-          stroke: val.meta.X_axis.line.stroke, // 坐标轴线的颜色
-          strokeOpacity: val.meta.X_axis.line.strokeOpacity, // 坐标轴线的透明度，数值范围为 0 - 1
+          stroke: this.bubblechartSet.meta.X_axis.line.stroke, // 坐标轴线的颜色
+          strokeOpacity: this.bubblechartSet.meta.X_axis.line.strokeOpacity, // 坐标轴线的透明度，数值范围为 0 - 1
           //lineDash: [3,4,4,7], // 设置虚线的样式，如 [2, 3]第一个用来表示实线的像素，第二个用来表示空白的像素。如果提供了奇数个值，则这个值的数列重复一次，从而变成偶数个值
-          lineWidth: val.meta.X_axis.line.lineWidth // 设置坐标轴线的粗细
+          lineWidth: this.bubblechartSet.meta.X_axis.line.lineWidth // 设置坐标轴线的粗细
         },
         label: {
           formatter: function formatter(val) {
-            //var labeltext = val.meta.X_axis.label.text;
+            //var labeltext = this.bubblechartSet.meta.X_axis.label.text;
             return val + '组'; // 格式化坐标轴显示文本
           },
           textStyle: {
-            fontSize: parseInt(val.meta.X_axis.label.textStyle.fontSize),
-            textAlign: val.meta.X_axis.label.textStyle.textAlign,
-            fill: val.meta.X_axis.label.textStyle.fill,
+            fontSize: parseInt(this.bubblechartSet.meta.X_axis.label.textStyle.fontSize),
+            textAlign: this.bubblechartSet.meta.X_axis.label.textStyle.textAlign,
+            fill: this.bubblechartSet.meta.X_axis.label.textStyle.fill,
           }
         },
         tickLine: {
@@ -328,13 +308,13 @@ export default {
       });
       this.chart.legend(false);
       this.chart.tooltip({
-        //triggerOn: val.meta.tooltip.triggerOn,
+        //triggerOn: this.bubblechartSet.meta.tooltip.triggerOn,
         triggerOn: 'click',
-        title: val.meta.tooltip.title,
+        title: this.bubblechartSet.meta.tooltip.title,
       });
       this.chart
         .point()
-        .position(val.meta.X_axis.name + "*" + val.meta.Y_axis.name)
+        .position(this.bubblechartSet.meta.X_axis.name + "*" + this.bubblechartSet.meta.Y_axis.name)
         .size("value", [5, 20])
         .label("value", {
           offset: 0, // 文本距离图形的距离
@@ -342,72 +322,29 @@ export default {
             fill: "white"
           }
         })
-        .opacity(parseFloat(val.meta.value.opacity))
-        .shape(val.meta.value.shape)
+        .opacity(parseFloat(this.bubblechartSet.meta.value.opacity))
+        .shape(this.bubblechartSet.meta.value.shape)
         .tooltip("group*value")
         .style({
           lineWidth: 1,
           stroke: "#1890ff"
         });
       this.chart.render();
-      // this.chart.destory();
-      // this.chart.changeData(this.sourceData2);
-      // this.chart.render();
-      //this.$store.state.chartComponetArray.push(bubbleChart);
-      this.$store.commit("pushDataSetToState", {
-        dataset: $.extend(true,{},val)
-        //dataset: val
-      });
-      console.log("state中的宽"+this.$store.state.chartComponentArray[0].dataset.container.width);
-      console.log("state中的高"+this.$store.state.chartComponentArray[0].dataset.container.height);
-      console.log("bub中的宽"+val.container.width);
-      console.log("bub中的宽"+val.container.height);
+      console.log("生成了一个bubbleChart");
+      // this.$store.commit("pushDataSetToState", {
+      //   dataset: $.extend(true,{},val)
+      // });
+      // console.log("state中的宽"+this.$store.state.chartComponentArray[0].container.width);
+      // console.log("state中的高"+this.$store.state.chartComponentArray[0].container.height);
+      // console.log("bub中的宽"+this.bubblechartSet.container.width);
+      // console.log("bub中的宽"+this.bubblechartSet.container.height);
     },
-    getContainer() {
-      let that = this;
-      let divId = this.name + "-" + this.chartCount;
-      this.container.push(divId);
-      this.chartCount++;
-      let div = document.createElement("div");
-      div.setAttribute("id", divId);
-      div.setAttribute("style", "position: absolute");
-      div.style.postion = "absolute";
-      document.getElementById(that.chartLayer).appendChild(div);
-      document.getElementById('lig').appendChild(div);
-      return divId;
-    },
-  },
-  mounted() {
-    //this.initTest();
-    //this.pushToState();
-    //  var el = document.documentElement
-    // var event = 'mousemove'
-    // var handler = this.handleMove
 
-    // if (el.attachEvent) {
-    //   el.attachEvent('on' + event, handler)
-    // } else if (el.addEventListener) {
-    //   el.addEventListener(event, handler, true)
-    // } else {
-    //   el['on' + event] = handler
-    // }
   }
+  
 };
 </script>
-<style scoped="scoped">
-    .ligclass{
-        width: 520px;
-        height: 320px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 999;
-        position: absolute; 
-    }
-    .lg-bg{
-        background-color: #f3f3f3;
-    }
-</style>
+
 
 
 

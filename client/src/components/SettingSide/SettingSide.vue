@@ -548,8 +548,8 @@ export default {
     //id变化时从state读取chart数据
     'id': function(){
       this.chart = this.$store.state.chartComponentArray[0].dataset;
-      console.log(this.chart);
-      console.log(this.$store.state.chartComponentArray[0].dataset);
+      //console.log(this.chart);
+      //console.log(this.$store.state.chartComponentArray[0].dataset);
     },
     //chart变化时修改state
     // 'chart': {
@@ -569,7 +569,7 @@ export default {
     },
     commitChange() {
       console.log("提交数据");
-      this.$store.commit("reChartData", { id: this.id, dataset: this.chart }, parseInt(this.id));
+      this.$store.commit("reChartData", { id: this.id, dataset: this.chart });
       console.log(this.$store.state.chartComponentArray[0].dataset);
       this.$store.commit("commitChange", "bubble");
       

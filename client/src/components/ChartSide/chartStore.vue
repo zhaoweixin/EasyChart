@@ -190,16 +190,17 @@ export default {
             $(".el-main .ui-draggable-dragging").position().left -
             $(".el-aside").width();
           var item = {
-            chartname:chartType,
+            //chartname:chartType,
+            chartname: "bubblechart",
              x: top,
             y: left,
-            wd: top,
-            hg: left,
+            width: top,
+            height: left,
           };
           mutations.addIdToArray(stores.state, item);
-          console.log('item'+item.w);
+          console.log('item'+item.width);
 
-          console.log('wandh'+stores.state.chartIdArray[0].hg);
+          console.log('wandh'+stores.state.chartIdArray[0].height);
         }
       });
     },

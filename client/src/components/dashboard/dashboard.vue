@@ -8,9 +8,10 @@
     </div>
     <grid-layout :layout="chartArray" :col-num="12" :row-height="30" :is-draggable="true" :is-resizable="true"
         :vertical-compact="true" :use-css-transforms="true">
-        <grid-item v-for="(item,index) in chartArray" :key='index' :x="item.x" :y="item.y" :w="item.wd" :h="item.hg" :i="item.i" :id="index">
-          <!--span >{{item.i}}</span-->
-          <component :is="item.chartname" :props="item.props"> </component>
+        <grid-item v-for="(item,index) in chartArray" :key='index' :x="item.x" :y="item.y" :w="item.width" :h="item.height" :i="item.i" :id="index">
+            <!--span >{{item.i}}</span-->
+            <component :is="item.chartname" :props="item.props"> </component>
+
         </grid-item>
       </grid-layout>
     <!--bubblechart></bubblechart-->
@@ -76,7 +77,7 @@ export default {
             deep: true,
             handler: function() {
                 console.log("可以添加视图了");
-                console.log("wandh2"+ this.$store.state.chartIdArray[0].hg)
+                console.log("wandh2"+ this.$store.state.chartIdArray[0].height)
             }
         }
     },
