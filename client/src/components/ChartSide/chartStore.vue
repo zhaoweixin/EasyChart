@@ -47,25 +47,42 @@ import stores from "../../store/store.js";
 import mutations from "../../store/mutation.js";
 import $ from "jquery";
 import * as d3 from "d3";
-import store from '../../store/store.js';
+import store from "../../store/store.js";
 
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
+
+var dataurlMap = d3.map();
 $.extend({
   //读取指定csv文件的字段名
   csvtitle: function(url, f) {
     $.get(url, function(record) {
       record = record.split(/\n/);
       var title = record[0].split(",");
-      f.call(this, title);
+      record.shift();
+      var data = [];
+      for (var i = 0; i < record.length; i++) {
+        var t = record[i].split(",");
+        for (var y = 0; y < t.length; y++) {
+          if (!data[i]) data[i] = {};
+          data[i][title[y]] = t[y];
+        }
+      }
+      var datas = {
+        title: title,
+        data: data
+      };
+      f.call(this, datas);
     });
   }
 });
 $.csvtitle("../../../static/data/testdata.csv", function(datas) {
-  add(datas, "data1");
+  add(datas.title, "data1");
+  dataurlMap.set("data1", datas);
 });
 $.csvtitle("../../../static/data/ctestdata.csv", function(datas) {
   add(datas, "data2");
+  dataurlMap.set("data2", datas);
 });
 //name为表名，或者state存储的data数据昵称
 function add(data, name) {
@@ -107,7 +124,11 @@ function add(data, name) {
         console.log(left + "," + top);
         if (left > 0 && top > 0) {
           //判断是否在合法区域
-          console.log($(this).children()[0].text); //设置state中data的数据
+          var statedata = {
+            dataname: $(this).children()[0].text,
+            titleAnddata: dataurlMap.get($(this).children()[0].text)
+          };
+          mutations.pushDataSetToState(stores.state, statedata);
         }
       }
     });
@@ -192,11 +213,11 @@ export default {
           var item = {
             //chartname:chartType,
             chartname: chartType,
-             x: top,
+            x: top,
             y: left,
             w: 2,
-            h:2,
-            i: store.state.chartIdArray.length+1
+            h: 2,
+            i: store.state.chartIdArray.length + 1
           };
           mutations.addIdToArray(stores.state, item);
           //console.log(item.chartname);
