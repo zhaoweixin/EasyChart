@@ -1,15 +1,16 @@
 <template>
-      <div id="bubble">
-    </div> 
-      
+      <div v-bind:id='contain'>
+    </div>     
 </template>
+
 <!--<script src="https://d3js.org/d3.v4.min.js"></script>-->
 <script>
 import G2 from "@antv/g2";
 import { mapState } from 'vuex';
 import $ from "jquery";
+
 export default {
-  name: "bubbleChart",
+  
   data() {
     return {
       isInit:false,
@@ -80,6 +81,7 @@ export default {
 
       bubblechartSet: {
         id: "001",
+
         category: "bubblechart", //种类
         container: {
           //布局
@@ -156,9 +158,13 @@ export default {
         data: [],
         interaction: {}
       },
-      container: [],
+      //container: [],
       chartCount: 0
-    };
+      }
+
+  },
+  props: {
+    'contain':String
   },
   computed: {
     // toDrawChart() {
@@ -217,6 +223,7 @@ export default {
   //     }
   //   }
   // },
+
   mounted() {
     this.initTest();
     //this.chartInit();
@@ -226,7 +233,7 @@ export default {
       //const that = this;
       //console.log(this.bubblechartSet.meta.X_axis.label.text);
       this.chart = new G2.Chart({
-        container: "bubble",
+        container: this.contain,
         height: parseInt(this.bubblechartSet.container.height),
         width: parseInt(this.bubblechartSet.container.width),
         padding: this.bubblechartSet.container.padding,
@@ -331,6 +338,7 @@ export default {
         });
       this.chart.render();
       console.log("生成了一个bubbleChart");
+      console.log(this.contain)
       // this.$store.commit("pushDataSetToState", {
       //   dataset: $.extend(true,{},val)
       // });

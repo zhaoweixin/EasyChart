@@ -1,29 +1,13 @@
 <template>
 <div>
-    <div id='preview' style="background:rgba(0,0,0,0.05)">
-        <div style="position:absolute">
-            <svg id ='editorborad'></svg>
-        </div>
-        <!--add chart to here --> 
-    </div>
-    <grid-layout :layout="chartArray" :col-num="12" :row-height="30" :is-draggable="true" :is-resizable="true"
+    <grid-layout :layout="chartArray" :col-num="1" :row-height="1" :is-draggable="true" :is-resizable="true"
         :vertical-compact="true" :use-css-transforms="true">
-        <grid-item v-for="(item,index) in chartArray" :key='index' :x="item.x" :y="item.y" :w="item.width" :h="item.height" :i="item.i" :id="index">
-            <!--span >{{item.i}}</span-->
-            <component :is="item.chartname" :props="item.props"> </component>
-
+        <grid-item v-for="item in chartArray"  :key='item.i' :x="item.x" :y="item.y" :w="1.5" :h="3" :i="item.i" >
+            <!-- <span >{{ item.i }}{{item.chartname}}{{item.props}}</span> -->
+            <component :is="item.chartname" :props="item.props" :contain= "item.chartname"> </component>
         </grid-item>
       </grid-layout>
-    <!--bubblechart></bubblechart-->
-    <!-- <bubbleFre></bubbleFre> -->
-    <!-- <gauge></gauge>
-    <groupBar></groupBar>
-    <groupPie></groupPie>
-    <lineC></lineC>
-    <map></map>
-    <pie></pie>
-    <radar></radar>
-    <ratio></ratio> -->
+
 </div>
 </template>
 
@@ -38,7 +22,7 @@ import groupBarChart from "../categoriesCharts/groupBarChart.vue";
 import groupPieChart from "../categoriesCharts/groupPieChart.vue";
 import lineChart from "../categoriesCharts/linechart.vue";
 import mapBoxView from "../categoriesCharts/mapBoxView.vue";
-import piechart from "../categoriesCharts/piechart.vue";
+import pieChart from "../categoriesCharts/piechart.vue";
 import radarChart from "../categoriesCharts/radarChart.vue";
 import ratiochart from "../categoriesCharts/ratiochart.vue";
 
@@ -53,6 +37,7 @@ export default {
         show: false,
         // chartArray:this.chartArray
         // chartArray:[]
+        item: [],
     }
     },
     mounted() {
@@ -72,15 +57,15 @@ export default {
     
 
     },
-    watch: {
-        'chartArray': {
-            deep: true,
-            handler: function() {
-                console.log("可以添加视图了");
-                console.log("wandh2"+ this.$store.state.chartIdArray[0].height)
-            }
-        }
-    },
+    // watch: {
+    //     'chartArray': {
+    //         deep: true,
+    //         handler: function() {
+    //             console.log("可以添加视图了");
+    //             console.log("wandh2"+ this.$store.state.chartIdArray[0].chartname)
+    //         }
+    //     }
+    // },
     methods: {
         // function1(){
         //     //this.$refs.bub.initChart();
@@ -140,6 +125,9 @@ export default {
 
             drawGrids(width, height);
             
+        },
+        additem() {
+            this.item.push("nihao");
         }
     },
     components: {
@@ -150,7 +138,7 @@ export default {
         groupPieChart,
         lineChart,
         mapBoxView,
-        piechart,
+        pieChart,
         radarChart,
         ratiochart,
         GridLayout : VueGridLayout.GridLayout,

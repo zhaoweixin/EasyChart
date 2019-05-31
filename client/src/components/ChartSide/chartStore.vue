@@ -191,16 +191,15 @@ export default {
             $(".el-aside").width();
           var item = {
             //chartname:chartType,
-            chartname: "bubblechart",
+            chartname: chartType,
              x: top,
             y: left,
-            width: top,
-            height: left,
+            w: 2,
+            h:2,
+            i: store.state.chartIdArray.length+1
           };
           mutations.addIdToArray(stores.state, item);
-          console.log('item'+item.width);
-
-          console.log('wandh'+stores.state.chartIdArray[0].height);
+          //console.log(item.chartname);
         }
       });
     },

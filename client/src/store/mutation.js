@@ -21,7 +21,11 @@ const mutation = {
         state.chartComponentArray.push(dataset);
     },
     addIdToArray(state, id) {
+        id.x = id.x + 2 * state.chartIdArray.length;
+        id.i = state.chartIdArray.length;
         state.chartIdArray.push(id);
+        console.log(state.chartIdArray)
+        console.log("000")
     },
     // 右侧栏提交改变的数据
     reChartData(state, payload) {

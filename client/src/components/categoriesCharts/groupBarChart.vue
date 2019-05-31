@@ -1,18 +1,20 @@
 <template>
-      <div @mousedown="move" id="lig" class="ligclass" v-bind:class="{'lg-bg': isInit}">
-    </div>
-      
+      <div v-bind:id='contain'>
+    </div>     
 </template>
+
 <!--<script src="https://d3js.org/d3.v4.min.js"></script>-->
 <script>
 import G2 from "@antv/g2";
 import { mapState } from 'vuex';
+import $ from "jquery";
+
 export default {
-  name: "groupBarChart",
+  
   data() {
     return {
       isInit:false,
-      name: "groupBarChart",
+      name: "bubbleChart",
       chart:{},
       sourceData: [
         {
@@ -78,8 +80,9 @@ export default {
       ],
 
       bubblechartSet: {
-        id: "004",
-        category: "groupBarChart", //种类
+        id: "001",
+
+        category: "groupBarchart", //种类
         container: {
           //布局
           height: '300',
@@ -155,14 +158,18 @@ export default {
         data: [],
         interaction: {}
       },
-      container: [],
+      //container: [],
       chartCount: 0
-    };
+      }
+
+  },
+  props: {
+    'contain':String
   },
   computed: {
-    toDrawChart() {
-      return this.$store.state.toDrawChart;
-    },
+    // toDrawChart() {
+    //   return this.$store.state.toDrawChart;
+    // },
     getChartXY() {
       return this.$store.getters.getChartXY;
     },
@@ -181,66 +188,52 @@ export default {
       refreshData: state => state.chartChange,
     })
   },
-  watch: {
-    toDrawChart: function(curVal, oldVal) {
-      console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
-      console.log(curVal, oldVal);
-      if (curVal != oldVal && curVal == "bubbleChart") {
-        // console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
-        // console.log("监听toDrawChart");
-        this.initTest();
-      }
-    },
-    'chartArray': {
-      deep: true,
-      handler() {
-        this.initTest();
-        this.isInit = !this.isInit
-        // console.log("x:"+this.$store.state.chartX);
-        // console.log("y:"+this.$store.state.chartY);
-      }
-    },
-    'refreshData': {
-      deep: true,
-      handler() {
-        if (this.$store.state.chartChange == "groupbar") {
-          console.log("收到数据更改了");
-          this.chart.destroy();
-          this.initTest();
-        }
-      }
-    }
+  // watch: {
+  //   // toDrawChart: function(curVal, oldVal) {
+  //   //   console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
+  //   //   console.log(curVal, oldVal);
+  //   //   if (curVal != oldVal && curVal == "bubbleChart") {
+  //   //     // console.log(this.toDrawChart, this.getChartXY, this.chartLayer);
+  //   //     // console.log("监听toDrawChart");
+  //   //     this.initTest();
+  //   //   }
+  //   // },
+  //   'chartArray': {
+  //     deep: true,
+  //     handler() {
+  //       if (this.isInit) {
+  //         this.chart = null;
+  //         //this.chart.destroy();
+  //         console.log("zhixingle")
+  //       }
+  //       this.initTest(this.bubblechartSet);
+  //       this.isInit = !this.isInit
+  //       // console.log("x:"+this.$store.state.chartX);
+  //       // console.log("y:"+this.$store.state.chartY);
+  //     }
+  //   },
+  //   'refreshData': {
+  //     deep: true,
+  //     handler() {
+  //       if (this.$store.state.chartChange == "bubble") {
+  //         console.log("收到数据更改了");
+  //         this.chart.destroy();
+  //         this.initTest(this.$store.state.chartComponentArray[0]);
+  //       }
+  //     }
+  //   }
+  // },
+
+  mounted() {
+    this.initTest();
+    //this.chartInit();
   },
   methods: {
-     move (e) {
-          let odiv = e.target;    //获取目标元素
-          //算出鼠标相对元素的位置
-          let disX = e.clientX - odiv.offsetLeft;
-          let disY = e.clientY - odiv.offsetTop;
-          document.onmousemove = (e)=>{    //鼠标按下并移动的事件
-            //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
-            let left = e.clientX - disX;  
-            let top = e.clientY - disY;
-             
-            //绑定元素位置到positionX和positionY上面
-            this.positionX = top;
-            this.positionY = left;
-             
-            //移动当前元素
-            odiv.style.left = left + 'px';
-            odiv.style.top = top + 'px';
-          };
-          document.onmouseup = (e) => {
-            document.onmousemove = null;
-            document.onmouseup = null;
-          };
-     },
     initTest() {
-      const that = this;
-      let divId = this.getContainer();
+      //const that = this;
       //console.log(this.bubblechartSet.meta.X_axis.label.text);
       this.chart = new G2.Chart({
-        container: divId,
+        container: this.contain,
         height: parseInt(this.bubblechartSet.container.height),
         width: parseInt(this.bubblechartSet.container.width),
         padding: this.bubblechartSet.container.padding,
@@ -344,55 +337,22 @@ export default {
           stroke: "#1890ff"
         });
       this.chart.render();
-      this.$store.commit("pushDataSetToState", {
-        dataset: this.bubblechartSet
-      });
+      console.log("生成了一个bubbleChart");
+      console.log(this.contain)
+      // this.$store.commit("pushDataSetToState", {
+      //   dataset: $.extend(true,{},val)
+      // });
+      // console.log("state中的宽"+this.$store.state.chartComponentArray[0].container.width);
+      // console.log("state中的高"+this.$store.state.chartComponentArray[0].container.height);
+      // console.log("bub中的宽"+this.bubblechartSet.container.width);
+      // console.log("bub中的宽"+this.bubblechartSet.container.height);
     },
-    getContainer() {
-      let that = this;
-      let divId = this.name + "-" + this.chartCount;
-      this.container.push(divId);
-      this.chartCount++;
-      let div = document.createElement("div");
-      div.setAttribute("id", divId);
-      div.setAttribute("style", "position: absolute");
-      div.style.postion = "absolute";
-      document.getElementById(that.chartLayer).appendChild(div);
-      document.getElementById('lig').appendChild(div);
-      return divId;
-    },
-  },
-  mounted() {
-    //this.initTest();
-    //this.pushToState();
-    //  var el = document.documentElement
-    // var event = 'mousemove'
-    // var handler = this.handleMove
 
-    // if (el.attachEvent) {
-    //   el.attachEvent('on' + event, handler)
-    // } else if (el.addEventListener) {
-    //   el.addEventListener(event, handler, true)
-    // } else {
-    //   el['on' + event] = handler
-    // }
   }
+  
 };
 </script>
-<style scoped="scoped">
-    .ligclass{
-        width: 520px;
-        height: 320px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 999;
-        position: absolute; 
-    }
-    .lg-bg{
-        background-color: #f3f3f3;
-    }
-</style>
+
 
 
 

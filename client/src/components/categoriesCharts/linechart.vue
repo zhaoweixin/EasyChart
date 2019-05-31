@@ -1,5 +1,5 @@
 <template>
-      <div id="bubble">
+      <div v-bind:id='contain'>
     </div> 
       
 </template>
@@ -49,8 +49,8 @@ export default {
         category: "linechart", //种类
         container: {
           //布局
-          height: '300',
-          width: '500',
+          height: '150',
+          width: '300',
           padding: [30, 30, 30, 30],
           background: {
             fill: "#feeeed", //背景颜色 (给定数组)
@@ -126,6 +126,9 @@ export default {
       chartCount: 0
     };
   },
+  props: {
+    'contain':String
+  },
   computed: {
     // toDrawChart() {
     //   return this.$store.state.toDrawChart;
@@ -192,7 +195,7 @@ export default {
       //const that = this;
       //console.log(this.bubblechartSet.meta.X_axis.label.text);
       this.chart = new G2.Chart({
-        container: "bubble",
+        container: this.contain,
         height: parseInt(this.bubblechartSet.container.height),
         width: parseInt(this.bubblechartSet.container.width),
         padding: this.bubblechartSet.container.padding,
@@ -297,6 +300,7 @@ export default {
         });
       this.chart.render();
       console.log("生成了一个bubbleChart");
+      console.log()
       // this.$store.commit("pushDataSetToState", {
       //   dataset: $.extend(true,{},val)
       // });
