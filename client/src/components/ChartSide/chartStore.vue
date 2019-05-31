@@ -53,6 +53,8 @@ require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
 
 var dataurlMap = d3.map();
+var top = 0;
+var left = 0;
 $.extend({
   //读取指定csv文件的字段名
   csvtitle: function(url, f) {
@@ -138,7 +140,7 @@ var imgArray = [
   {
     id: 0,
     idView: require("../../../static/Image/barchart.png"),
-    chartType: "groupBarChart"
+    chartType: "test"
   },
   {
     id: 1,
@@ -204,19 +206,19 @@ export default {
         helper: "clone",
         scope: "ss",
         stop: function(e) {
-          var top =
-            $(".el-main .ui-draggable-dragging").position().top -
-            $(".el-menu-demo").height();
-          var left =
-            $(".el-main .ui-draggable-dragging").position().left -
-            $(".el-aside").width();
+          // var top =
+          //   $(".el-main .ui-draggable-dragging").position().top -
+          //   $(".el-menu-demo").height();
+          // var left =
+          //   $(".el-main .ui-draggable-dragging").position().left -
+          //   $(".el-aside").width();
           var item = {
             //chartname:chartType,
             chartname: chartType,
             x: top,
             y: left,
-            w: 2,
-            h: 2,
+            w: 1,
+            h: 1,
             i: store.state.chartIdArray.length + 1
           };
           mutations.addIdToArray(stores.state, item);

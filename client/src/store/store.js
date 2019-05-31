@@ -16,7 +16,7 @@ const state = {
   chartComponentArray: [], //图表组件数组
   chartIdArray: [],
   charttest: "ww",
-  chartChange: "",
+  chartWandHChange: {},
   chartCategory: [
     "bubblechart",
     "bubbleFrequencyChart",

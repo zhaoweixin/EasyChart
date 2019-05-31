@@ -38,9 +38,10 @@ const mutation = {
         state.chartComponentArray[parseInt(payload.id)-1] = payload;
             console.log("修改成功")
     },
-    // 提交更改视图的类型
+    // 提交更改视图的长宽
     commitChange(state, payload){
-        state.chartChange = payload;
+        state.chartWandHChange = payload;
+        // console.log("tijiaozhixingle ")
     }
 }
 

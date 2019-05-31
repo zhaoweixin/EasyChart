@@ -6,14 +6,20 @@
       </div>
       <!--add chart to here -->
     </div>
+    
     <grid-layout
       :layout="chartArray"
-      :col-num="12"
-      :row-height="30"
+      :col-num="10"
+      :row-height="200"
       :is-draggable="true"
       :is-resizable="true"
       :vertical-compact="true"
       :use-css-transforms="true"
+      @layout-created="layoutCreatedEvent"
+      @layout-before-mount="layoutBeforeMountEvent"
+      @layout-mounted="layoutMountedEvent"
+      @layout-ready="layoutReadyEvent"
+      @layout-updated="layoutUpdatedEvent"
     >
       <grid-item
         class="ix"
@@ -24,6 +30,7 @@
         :w="item.w"
         :h="item.h"
         :i="item.i"
+        @resize="resizeEvent"
         :id="index"
         :style="{backgroundColor:item.color}"
       >
@@ -42,6 +49,7 @@
     <radar></radar>
     <ratio></ratio>-->
   </div>
+  
 </template>
 
 <script>
@@ -57,6 +65,8 @@ import mapBoxView from "../categoriesCharts/mapBoxView.vue";
 import piechart from "../categoriesCharts/piechart.vue";
 import radarChart from "../categoriesCharts/radarChart.vue";
 import ratiochart from "../categoriesCharts/ratiochart.vue";
+import test from "../categoriesCharts/test.vue";
+import VueEvent from '../../store/vueEvent.js';
 
 import * as d3 from "d3";
 export default {
@@ -72,16 +82,16 @@ export default {
           chartname: "bubblechart",
           x: 0,
           y: 0,
-          w: 7,
-          h: 7,
+          w: 3, //该乘以colWidth的数字为初始宽度 ,colWidth是总长/colnum
+          h: 1, //初始高度为该值与rowHeight相乘的数字。
           i: 0,
           color: "#AED581"
-        }
+        },
         // {chartname: "lineChart",x: 0,y:0,w:2,h:2,i:1},
         // {chartname: "groupBarChart",x: 0,y:0,w:2,h:2,i:1}
-      ]
-      // chartArray:this.chartArray
-      // chartArray:[]
+      ],
+      gwidth: 200,
+      gheight: 150,
     };
   },
   mounted() {
@@ -124,6 +134,28 @@ export default {
     //     //this.$refs.bub.initChart();
     //     //this.$refs.bubblechart.initTest();
     // },
+    layoutCreatedEvent: function(newLayout){
+      console.log("Created layout: ", newLayout)
+    },
+    layoutBeforeMountEvent: function(newLayout){
+      console.log("beforeMount layout: ", newLayout)
+    },
+    layoutMountedEvent:function(newLayout){
+       console.log('Mounted layout:',newLayout)
+    },
+    layoutReadyEvent: function(newLayout){
+      console.log("Ready layout: ", newLayout)
+    },
+    layoutUpdatedEvent: function(newLayout){
+      console.log("Updated layout: ", newLayout)
+    },
+    resizeEvent: function(i, newH, newW, newHPx, newWPx){
+        console.log("RESIZE i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx);
+        this.gwidth = newWPx;
+        this.gheight = newHPx;
+        this.$store.commit('commitChange', {width:newWPx,height:newHPx})
+        console.log('duide'+this.$store.state.chartWandHChange)
+    },
     chartInit(container) {
       let that = this;
       this.container = d3.select("#editorborad");
@@ -180,7 +212,8 @@ export default {
     radarChart,
     ratiochart,
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem
+    GridItem: VueGridLayout.GridItem,
+    test
   }
 };
 </script>

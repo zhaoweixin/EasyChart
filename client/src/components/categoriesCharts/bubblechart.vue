@@ -1,15 +1,17 @@
 <template>
-      <div id="bubble">
-    </div> 
+    <div id="bubble">
+    </div>  
       
 </template>
 <!--<script src="https://d3js.org/d3.v4.min.js"></script>-->
 <script>
 import G2 from "@antv/g2";
 import { mapState } from 'vuex';
+import VueEvent from '../../store/vueEvent.js'
 import $ from "jquery";
 export default {
   name: "bubbleChart",
+  props:['gwidth','gheight'],
   data() {
     return {
       isInit:false,
@@ -157,7 +159,11 @@ export default {
         interaction: {}
       },
       container: [],
-      chartCount: 0
+      chartCount: 0,
+      wandH: {
+        width: 0,
+        height: 0,
+      }
     };
   },
   computed: {
@@ -180,6 +186,7 @@ export default {
     ...mapState({
       chartArray: state => state.chartIdArray,
       refreshData: state => state.chartChange,
+      chartWandHChange: state => state.chartWandHChange,
     })
   },
   // watch: {
@@ -217,19 +224,32 @@ export default {
   //     }
   //   }
   // },
+  watch: {
+    'chartWandHChange': {
+      deep: true,
+      handler() {
+        // this.chart.destroy();
+        console.log("执行了");
+        // this.chart.initTest(this.$store.state.chartWandHChange)
+      }
+    }
+  },
   mounted() {
-    this.initTest();
-    //this.chartInit();
+    this.initTest(this.wandH);
   },
   methods: {
-    initTest() {
+    initTest(val) {
       //const that = this;
-      //console.log(this.bubblechartSet.meta.X_axis.label.text);
+      // this.bheight = $('svg').children("canvas_1").style;
+      console.log("获得bwidth"+ this.bwidth);
+      // console.log("获得bheight"+ this.bheight);
       this.chart = new G2.Chart({
         container: "bubble",
-        height: parseInt(this.bubblechartSet.container.height),
-        width: parseInt(this.bubblechartSet.container.width),
+        height: val.height,
+        width: val.width,
         padding: this.bubblechartSet.container.padding,
+        //padding: auto,
+        renderer: 'svg',
         background: {
           fill: this.bubblechartSet.container.background.fill, //背景颜色 (给定数组)
           fillOpacity: parseFloat(this.bubblechartSet.container.background.fillOpacity), // 图表背景透明度
@@ -239,7 +259,8 @@ export default {
           lineWidth: parseFloat(this.bubblechartSet.container.background.lineWidth), // 图表边框粗度
           radius: parseFloat(this.bubblechartSet.container.background.radius) // 图表圆角大小
         },
-        data: this.sourceData
+        data: this.sourceData,
+        renderer: 'svg',
       });
       this.chart.scale({
         group: {
@@ -259,7 +280,7 @@ export default {
         line: {
           stroke: this.bubblechartSet.meta.X_axis.line.stroke, // 坐标轴线的颜色
           strokeOpacity: this.bubblechartSet.meta.X_axis.line.strokeOpacity, // 坐标轴线的透明度，数值范围为 0 - 1
-          //lineDash: [3,4,4,7], // 设置虚线的样式，如 [2, 3]第一个用来表示实线的像素，第二个用来表示空白的像素。如果提供了奇数个值，则这个值的数列重复一次，从而变成偶数个值
+          lineDash: [3,4,4,7], // 设置虚线的样式，如 [2, 3]第一个用来表示实线的像素，第二个用来表示空白的像素。如果提供了奇数个值，则这个值的数列重复一次，从而变成偶数个值
           lineWidth: this.bubblechartSet.meta.X_axis.line.lineWidth // 设置坐标轴线的粗细
         },
         label: {
@@ -316,12 +337,12 @@ export default {
         .point()
         .position(this.bubblechartSet.meta.X_axis.name + "*" + this.bubblechartSet.meta.Y_axis.name)
         .size("value", [5, 20])
-        .label("value", {
-          offset: 0, // 文本距离图形的距离
-          textStyle: {
-            fill: "white"
-          }
-        })
+        // .label("value", {
+        //   // offset: 0, // 文本距离图形的距离
+        //   // textStyle: {
+        //   //   fill: "white"
+        //   // }
+        // })
         .opacity(parseFloat(this.bubblechartSet.meta.value.opacity))
         .shape(this.bubblechartSet.meta.value.shape)
         .tooltip("group*value")
@@ -345,12 +366,23 @@ export default {
 };
 </script>
 
+
 <style>
-.bubble{
-     /* border: 1px solid green; */
-		 height: 100%;
-     width:100%;
-     margin:10%; 
+#bubble{
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  vertical-align: middle; 
+  overflow: hidden; 
+}
+#canvas_1{
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  vertical-align: middle; 
+  overflow: hidden;
 }
 </style>
 
