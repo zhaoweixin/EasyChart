@@ -7,6 +7,12 @@ const getter = {
     },
     chartArray:state => {
         return state.chartIdArray
+    },
+    layout:state =>{
+        return state.rects
+    },
+    dashboardId: state=>{
+        return state.dashboardId
     }
 }
 

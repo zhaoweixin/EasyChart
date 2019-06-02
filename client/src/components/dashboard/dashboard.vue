@@ -1,55 +1,41 @@
 <template>
   <div>
-    <div id="preview" style="background:rgba(0,0,0,0.05)">
+    <div id="preview" style="background:rgba(0,255,0,0.05)">
       <div style="position:absolute">
-        <svg id="editorborad"></svg>
+        <svg id="editorborad" v-on:click="getId"></svg>
       </div>
       <!--add chart to here -->
     </div>
-    
-    <grid-layout
-      :layout="chartArray"
-      :col-num="10"
-      :row-height="200"
-      :is-draggable="true"
-      :is-resizable="true"
-      :vertical-compact="true"
-      :use-css-transforms="true"
-      @layout-created="layoutCreatedEvent"
-      @layout-before-mount="layoutBeforeMountEvent"
-      @layout-mounted="layoutMountedEvent"
-      @layout-ready="layoutReadyEvent"
-      @layout-updated="layoutUpdatedEvent"
-    >
-      <grid-item
-        class="ix"
-        v-for="(item,index) in chartArray"
-        :key="index"
-        :x="item.x"
-        :y="item.y"
-        :w="item.w"
-        :h="item.h"
-        :i="item.i"
-        @resize="resizeEvent"
-        :id="index"
-        :style="{backgroundColor:item.color}"
+    <div class="test" v-on:click="getId" >
+      <grid-layout
+        class="gridLayout"
+        :layout="chartArray"
+        :col-num="12"
+        :row-height="30"
+        :is-draggable="true"
+        :is-resizable="true"
+        :vertical-compact="true"
+        :use-css-transforms="true"
+        
       >
-        <!--span >{{item.i}}</span-->
-        <component :is="item.chartname" :props="item.props"></component>
-      </grid-item>
-    </grid-layout>
-    <!--bubblechart></bubblechart-->
-    <!-- <bubbleFre></bubbleFre> -->
-    <!-- <gauge></gauge>
-    <groupBar></groupBar>
-    <groupPie></groupPie>
-    <lineC></lineC>
-    <map></map>
-    <pie></pie>
-    <radar></radar>
-    <ratio></ratio>-->
+      <div @click.stop>
+        <grid-item
+          v-for="(item,index) in chartArray"
+          :key="index"
+          :x="item.x"
+          :y="item.y"
+          :w="item.w"
+          :h="item.h"
+          :i="item.i"
+          :id="index"
+          :style="{backgroundColor:item.color}"
+        >
+          <component :is="item.chartname" :id="item.i" :props="item.props"></component>
+        </grid-item>
+        </div>
+      </grid-layout>
+    </div>
   </div>
-  
 </template>
 
 <script>
@@ -65,8 +51,7 @@ import mapBoxView from "../categoriesCharts/mapBoxView.vue";
 import piechart from "../categoriesCharts/piechart.vue";
 import radarChart from "../categoriesCharts/radarChart.vue";
 import ratiochart from "../categoriesCharts/ratiochart.vue";
-import test from "../categoriesCharts/test.vue";
-import VueEvent from '../../store/vueEvent.js';
+import testChart from "../categoriesCharts/testChart.vue";
 
 import * as d3 from "d3";
 export default {
@@ -79,19 +64,35 @@ export default {
       show: false,
       chartArray: [
         {
-          chartname: "bubblechart",
+          chartname: "testChart",
           x: 0,
           y: 0,
-          w: 3, //该乘以colWidth的数字为初始宽度 ,colWidth是总长/colnum
-          h: 1, //初始高度为该值与rowHeight相乘的数字。
-          i: 0,
+          w: 2,
+          h: 7,
+          i: "1",
           color: "#AED581"
         },
-        // {chartname: "lineChart",x: 0,y:0,w:2,h:2,i:1},
-        // {chartname: "groupBarChart",x: 0,y:0,w:2,h:2,i:1}
-      ],
-      gwidth: 200,
-      gheight: 150,
+        {
+          chartname: "testChart",
+          x: 0,
+          y: 0,
+          w: 2,
+          h: 7,
+          i: "2",
+          color: "#AED581"
+        },
+        {
+          chartname: "testChart",
+          x: 0,
+          y: 0,
+          w: 2,
+          h: 7,
+          i: "3",
+          color: "#AED581"
+        }
+      ]
+      // chartArray:this.chartArray
+      // chartArray:[]
     };
   },
   mounted() {
@@ -105,6 +106,7 @@ export default {
     //     addChart: 'createAction'
     // }),
     // ...mapGetters(['chartArray'])
+    //  ...mapGetters(['dashboard'])
     // chartArray(){
     //     return this.$store.state.chartIdArray;
     //     }
@@ -119,49 +121,18 @@ export default {
     // }
   },
   methods: {
-    // function1(){
-    //     //this.$refs.bub.initChart();
-    //     console.log('hello');
-    //     this.$store.commit("setChartXY", {"x": 100, "y": 100})
-    //     console.log("x坐标"+ this.$store.state.chartX + 'y轴' + this.$store.state.chartY);
-    //     this.$store.commit("toDrawChart", {"toDrawChart": "bubbleChart"})
-    //     //this.$refs.bubblechart.initTest();
-    // },
-    // function2() {
-    //     this.chartArray.push('001')
-    // },
-    // click() {
-    //     //this.$refs.bub.initChart();
-    //     //this.$refs.bubblechart.initTest();
-    // },
-    layoutCreatedEvent: function(newLayout){
-      console.log("Created layout: ", newLayout)
+      getId(e) {
+      // this.$store.commit("commitDashboardId","dashboard")
+      // console.log(this.$store.state.dashboardId),
+      alert("parentaaaa");
     },
-    layoutBeforeMountEvent: function(newLayout){
-      console.log("beforeMount layout: ", newLayout)
-    },
-    layoutMountedEvent:function(newLayout){
-       console.log('Mounted layout:',newLayout)
-    },
-    layoutReadyEvent: function(newLayout){
-      console.log("Ready layout: ", newLayout)
-    },
-    layoutUpdatedEvent: function(newLayout){
-      console.log("Updated layout: ", newLayout)
-    },
-    resizeEvent: function(i, newH, newW, newHPx, newWPx){
-        console.log("RESIZE i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx);
-        this.gwidth = newWPx;
-        this.gheight = newHPx;
-        this.$store.commit('commitChange', {width:newWPx,height:newHPx})
-        console.log('duide'+this.$store.state.chartWandHChange)
-    },
+
     chartInit(container) {
       let that = this;
       this.container = d3.select("#editorborad");
       this.container.append("g").attr("id", that.gridLayer);
       this.$store.commit("setChartLayer", { chartLayer: that.chartLayer });
-      this.chartResize(window.innerWidth * 0.77, window.innerHeight * 0.92);
+      this.chartResize(window.innerWidth * 0.77, window.innerHeight);
     },
     chartResize(width, height) {
       let that = this;
@@ -211,16 +182,18 @@ export default {
     piechart,
     radarChart,
     ratiochart,
+    testChart,
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem,
-    test
+    GridItem: VueGridLayout.GridItem
   }
 };
 </script>
-    
-<style scoped="scoped">
-.ix{
-    /* padding:1px */
+<style>
+.gridLayout {
+  /* background: #00f; */
+  height: 100%;
+  width: 100%;
 }
-
 </style>
+  
+

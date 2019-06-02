@@ -9,14 +9,40 @@ import mutation from "./mutation";
 Vue.use(Vuex);
 
 const state = {
+  rsideData : [],
   toDrawChart: "", //待绘制的图表
   chartLayer: "",
   chartX: "",
   chartY: "",
+  dashboardId:"",
   chartComponentArray: [], //图表组件数组
   chartIdArray: [],
   charttest: "ww",
-  chartWandHChange: {},
+  chartChange: '',
+  rects:[
+    {
+      'w': 200,
+      'h': 150,
+      'x': 10,
+      'y': 10,
+      'color': '#EF9A9A',
+      
+  },
+  {
+      'w': 200,
+      'h': 150,
+      'x': 10,
+      'y': 220,
+      'color': '#AED581',
+  },
+  {
+      'w': 200,
+      'h': 150,
+      'x': 170,
+      'y': 10,
+      'color': '#81D4FA',
+  }
+  ],
   chartCategory: [
     "bubblechart",
     "bubbleFrequencyChart",

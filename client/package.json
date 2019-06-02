@@ -12,6 +12,7 @@
   "dependencies": {
     "@antv/g2": "^3.5.4",
     "d3": "^5.9.2",
+    "echarts": "^4.2.1",
     "element-ui": "^2.8.2",
     "es6-promise": "^4.2.6",
     "jquery": "^3.4.1",

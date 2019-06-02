@@ -509,6 +509,7 @@
   </el-collapse>
 </template>
 <script>
+import {mapGetters } from "vuex";
 export default {
   name: "settingside",
   data() {
@@ -516,7 +517,7 @@ export default {
       chart: {},//图表数据
 
       activeNames: ["container", "meta", "tooltip", "xAxis", "yAxis", "data"],//折叠面板
-      id: "null",//图表id，根据id找到state里的图表数据
+      id: "",//图表id，根据id找到state里的图表数据
 
       //这些是一些选项的配置
       optionsTF: [
@@ -542,15 +543,18 @@ export default {
     };
   },
   computed: {
-    
+    ...mapGetters(['dashboardId'])
   },
   watch: {
     //id变化时从state读取chart数据
-    'id': function(){
+    'dashboardId': function(){
+      this.id = this.dashboardId;
       this.chart = this.$store.state.chartComponentArray[0].dataset;
+
       //console.log(this.chart);
       //console.log(this.$store.state.chartComponentArray[0].dataset);
     },
+  
     //chart变化时修改state
     // 'chart': {
     //   //this.$store.commit("reChartData", { id: this.id, dataset: val });
