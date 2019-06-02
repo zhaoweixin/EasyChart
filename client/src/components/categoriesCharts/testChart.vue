@@ -11,19 +11,31 @@
   export default {
     name: "funnel",
     props: {
-      w: Number,
-      h:Number,
-      id: String
+      id: String,
+      baseData:{
+        type:Object,
+        default:function () {
+          let a= {
+            metaConfig: {
+              title:'漏斗'
+            },
+            style:{
+              color:['#0050B3', '#1890FF', '#40A9FF', '#69C0FF']
+            },
+            data :[{"name": "建档居民", "value": "2235030"}, {"name": "体检居民", "value": "1167906"}, {
+              "name": "签约居民",
+              "value": "21039"
+            }, {"name": "个性化签约居民", "value": 10872}]
+          }
+            return a
+          }
+      }
     },
     data(){
       return {
         myChart:"",
         app:{},
-        option:"",
-        funneldata:[{"name": "建档居民", "value": "2235030"}, {"name": "体检居民", "value": "1167906"}, {
-          "name": "签约居民",
-          "value": "21039"
-        }, {"name": "个性化签约居民", "value": 10872}]
+        option:""
       }
     },
     methods: {
@@ -44,19 +56,23 @@
         var width = element.offsetWidth
         var height = element.offsetHeight
         this.$nextTick(function () {
-          console.log("Size: " + width + "x" + height)
           //使echarts尺寸重置
           echarts.init(document.getElementById(this.id)).resize()
         })
       })
+
+      //commit传值
+      this.$store.commit("commitPropsData",this.baseData)
+
+
     },
 
     computed:{
       t(){
         return{
-          color: ['#0050B3', '#1890FF', '#40A9FF', '#69C0FF'],
+          color: this.baseData.style.color,
           title: {
-            text: '漏斗图',
+            text: this.baseData.metaConfig.title,
             // subtext: '纯属虚构'
           },
           tooltip: {
@@ -99,10 +115,7 @@
                   fontSize: 20
                 }
               },
-              data:[{"name": "建档居民", "value": "2235030"}, {"name": "体检居民", "value": "1167906"}, {
-                "name": "签约居民",
-                "value": "21039"
-              }, {"name": "个性化签约居民", "value": 10872}]
+              data:this.baseData.data
             }
           ]
         };

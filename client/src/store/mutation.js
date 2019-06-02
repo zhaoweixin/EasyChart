@@ -41,6 +41,12 @@ const mutation = {
     commitDashboardId(state,payload){
         state.dashboardId = payload;
     }
+    ,
+  commitPropsData(state,payload){
+      state.propsData = payload
+
+    console.log(payload)
+  }
 }
 
 export default mutation

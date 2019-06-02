@@ -19,6 +19,7 @@ const state = {
   chartIdArray: [],
   charttest: "ww",
   chartChange: '',
+  propsData:'',
   rects:[
     {
       'w': 200,
@@ -26,7 +27,7 @@ const state = {
       'x': 10,
       'y': 10,
       'color': '#EF9A9A',
-      
+
   },
   {
       'w': 200,
