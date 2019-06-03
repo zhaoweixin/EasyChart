@@ -13,7 +13,13 @@ const getter = {
     },
     dashboardId: state=>{
         return state.dashboardId
-    }
+    },
+    rSideData: state=>{
+        return state.rSideData
+    },
+  getPropsData: state => {    //野
+    return state.propsData
+  }
 }
 
 export default getter

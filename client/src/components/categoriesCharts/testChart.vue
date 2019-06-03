@@ -6,7 +6,7 @@
 
 <script>
   var elementResizeDetectorMaker = require("element-resize-detector")
-
+  import { mapGetters} from 'vuex'   //野
   import echarts from 'echarts'
   export default {
     name: "funnel",
@@ -50,6 +50,7 @@
     },
 
     mounted(){
+
       this.draw()
       var erd = elementResizeDetectorMaker()
       erd.listenTo(document.getElementById(this.id),  (element)=> {
@@ -68,6 +69,7 @@
     },
 
     computed:{
+      ...mapGetters({'storeBaseData': 'getPropsData'}),    //野
       t(){
         return{
           color: this.baseData.style.color,
@@ -121,14 +123,23 @@
         };
       },
     },
-    // watch:{
-    //   w:function () {
-    //     this.t(this.funneldata)
-    //     window.addEventListener("resize",function () {
-    //       this.myChart.resize();
-    //     })
-    //   }
-    // }
+    watch:{    //野
+      storeBaseData: {
+        handler(newVal){
+          this.myChart.setOption({
+            color:newVal.style.color,
+            title:{
+              text: newVal.metaConfig.title
+            },
+            series:{
+              data:newVal.data
+            }
+          })
+          console.log(newVal)
+        },
+        deep:true
+      }
+    }
 
   }
 </script>
