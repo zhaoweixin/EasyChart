@@ -52,6 +52,8 @@ import piechart from "../categoriesCharts/piechart.vue";
 import radarChart from "../categoriesCharts/radarChart.vue";
 import ratiochart from "../categoriesCharts/ratiochart.vue";
 import testChart from "../categoriesCharts/testChart.vue";
+import barChart from "../categoriesCharts/barChart.vue";
+
 
 import * as d3 from "d3";
 export default {
@@ -73,7 +75,7 @@ export default {
           color: "#AED581"
         },
         {
-          chartname: "testChart",
+          chartname: "barChart",
           x: 0,
           y: 0,
           w: 2,
@@ -183,6 +185,7 @@ export default {
     radarChart,
     ratiochart,
     testChart,
+    barChart,
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem
   }
