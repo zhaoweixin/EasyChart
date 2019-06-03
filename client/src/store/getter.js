@@ -13,6 +13,9 @@ const getter = {
     },
     dashboardId: state=>{
         return state.dashboardId
+    },
+    rSideData: state=>{
+        return state.rSideData
     }
 }
 
