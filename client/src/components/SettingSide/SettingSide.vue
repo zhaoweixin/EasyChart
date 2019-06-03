@@ -24,7 +24,6 @@
         >
       </v-table>
     </el-collapse-item>
-    <button>确认</button>
   </el-collapse>
 </template>
 
@@ -36,17 +35,12 @@ export default {
     return {
       configData: {
         metaConfig: {
-          title: '漏斗',
+          title: '',
         },
         style:{
-          color:['#0050B3', '#1890FF', '#40A9FF', '#69C0FF']
+          color:[]
         },
-        data:[
-          {"name": "建档居民","value": "2235030"},
-          {"name": "体检居民","value": "1167903"},
-          {"name": "签约居民","value": "22103"},
-          {"name": "个性化签约居民","value": "10638"},
-        ]
+        data:[]
       },
 
       activeNames: ["metaConfig", "style", "data"],//折叠面板
@@ -58,17 +52,38 @@ export default {
 
     };
   },
+
+
   computed: {
-    ...mapGetters(['dashboardId','rSideData'])
+    ...mapGetters(['dashboardId','rSideData']),
+    ...mapGetters({'storeBaseData': 'getPropsData'}),
+    // ...mapGetters({'storeBaseData': 'getBarData'}),
+    // ...mapGetters({'storeBaseData':'getBarData'}),
+
   },
   watch: {
     configData:{
       handler(newVal){
-        console.log(newVal)
-        this.$store.commit("commitPropsData",newVal)
+          this.$store.commit("commitPropsData",newVal)
       },
       deep:true
-    }
+    },
+    storeBaseData:{
+      handler(newVal){
+        console.log("base"+newVal)
+        this.configData=newVal
+      },
+      deep:true
+    },
+    // storeBarData:{
+    //   handler(newVal){
+    //
+    //     console.log("bar"+newVal)
+    //     this.configData=newVal
+    //   },
+    //   deep:true
+    // }
+
   },
   methods: {
     commitChange: function() {

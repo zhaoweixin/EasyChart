@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div id="preview" style="background:rgba(0,255,0,0.05)">
-      <div style="position:absolute">
+    <div id="preview" style="background:rgba(0,255,0,0.05)" >
+      <div id="box" style="position:absolute;background-color: #20638f">
         <svg id="editorborad" v-on:click="getId"></svg>
       </div>
       <!--add chart to here -->
@@ -16,7 +16,7 @@
         :is-resizable="true"
         :vertical-compact="true"
         :use-css-transforms="true"
-        
+
       >
       <div @click.stop>
         <grid-item
@@ -126,7 +126,8 @@ export default {
       getId(e) {
       // this.$store.commit("commitDashboardId","dashboard")
       // console.log(this.$store.state.dashboardId),
-      alert("parentaaaa");
+        document.getElementById("box").style.background="red"
+      // alert("parentaaaa");
     },
 
     chartInit(container) {
@@ -198,5 +199,5 @@ export default {
   width: 100%;
 }
 </style>
-  
+
 

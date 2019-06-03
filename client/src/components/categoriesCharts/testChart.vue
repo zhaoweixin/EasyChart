@@ -1,6 +1,6 @@
 <template>
 
-  <div v-bind:id="id" class='container'>
+  <div v-bind:id="id" class='container' @click="aa">
   </div>
 </template>
 
@@ -22,6 +22,7 @@
             style:{
               color:['#0050B3', '#1890FF', '#40A9FF', '#69C0FF']
             },
+            id:this.id,
             data :[{"name": "建档居民", "value": "2235030"}, {"name": "体检居民", "value": "1167906"}, {
               "name": "签约居民",
               "value": "21039"
@@ -45,6 +46,11 @@
         console.log(this.id, container)
         this.myChart = echarts.init(container);
         this.myChart.setOption(this.t)
+      },
+      aa(){
+        //commit传值
+        console.log("dd")
+        this.$store.commit("commitPropsData",this.baseData)
       }
 
     },
@@ -62,8 +68,7 @@
         })
       })
 
-      //commit传值
-      this.$store.commit("commitPropsData",this.baseData)
+
 
 
     },
@@ -126,15 +131,18 @@
     watch:{    //野
       storeBaseData: {
         handler(newVal){
-          this.myChart.setOption({
-            color:newVal.style.color,
-            title:{
-              text: newVal.metaConfig.title
-            },
-            series:{
-              data:newVal.data
-            }
-          })
+          if (newVal.id==1){
+            this.myChart.setOption({
+              color:newVal.style.color,
+              title:{
+                text: newVal.metaConfig.title
+              },
+              series:{
+                data:newVal.data
+              }
+            })
+          }
+
           console.log(newVal)
         },
         deep:true

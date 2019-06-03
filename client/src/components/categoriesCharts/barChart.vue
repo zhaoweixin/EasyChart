@@ -1,11 +1,12 @@
 <template>
 
-  <div v-bind:id="id" class='container'>
+  <div v-bind:id="id" class='container' @click="clickChart">
   </div>
 </template>
 
 <script>
   var elementResizeDetectorMaker = require("element-resize-detector")
+  import { mapGetters} from 'vuex'
   import echarts from 'echarts'
     export default {
         name: "LiZi",
@@ -19,10 +20,14 @@
               metaConfig: {
                 title:'柱图'
               },
+              id:this.id,
               style:{
                 color:['#0050B3', '#1890FF', '#40A9FF', '#69C0FF']
               },
-              data :[]
+              data :[{"name": "Mon", "value": "10"}, {"name": "Tue", "value": "706"}, {
+                "name": "Wed",
+                "value": "239"
+              }, {"name": "Thu", "value": 172}]
             }
             return a
           }
@@ -35,9 +40,30 @@
 
           }
       },
+      computed:{
+        ...mapGetters({'storeBaseData': 'getPropsData'}),
+      },
+      methods:{
+        clickChart(){
+            this.$store.commit("commitPropsData",this.baseData)
+
+        },
+        comArray(data,name){
+          let arr=[]
+          for (let i=0;i<data.length;i++) {
+            // console.log(data.name)
+            arr.push(data[i][name])
+          }
+          return arr
+        }
+      },
       mounted(){
 
-          this.myChart=echarts.init(document.getElementById(this.id))
+
+          console.log(this.comArray(this.baseData.data,"name"))
+
+
+        this.myChart=echarts.init(document.getElementById(this.id))
         this.option = {
           color: ['#3398DB'],
           tooltip : {
@@ -55,7 +81,7 @@
           xAxis : [
             {
               type : 'category',
-              data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+              data : this.comArray(this.baseData.data,"name"),
               axisTick: {
                 alignWithLabel: true
               }
@@ -71,7 +97,7 @@
               name:'直接访问',
               type:'bar',
               barWidth: '60%',
-              data:[10, 52, 200, 334, 390, 330, 220]
+              data:this.comArray(this.baseData.data,"value")
             }
           ]
         };
@@ -86,8 +112,28 @@
             echarts.init(document.getElementById(this.id)).resize()
           })
         })
-      }
+      },
+      watch:{    //野
+        storeBaseData: {
+          handler(newVal){
+            if (newVal.id==2){
+              this.myChart.setOption({
+                xAxis:[
+                  {
+                    data:this.comArray(newVal.data,"name")
+                  }
+                ],
+                series:{
+                  data:this.comArray(newVal.data,"value")
+                }
+              })
+            }
 
+            console.log(newVal)
+          },
+          deep:true
+        }
+      }
     }
 </script>
 

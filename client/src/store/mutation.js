@@ -44,9 +44,12 @@ const mutation = {
     ,
   commitPropsData(state,payload){
       state.propsData = payload
-
     console.log(payload)
-  }
+  },
+  // commitBarData(state,payload){
+  //     state.barData = payload
+  //   console.log(payload)
+  // }
 }
 
 export default mutation

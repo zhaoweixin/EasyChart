@@ -19,7 +19,10 @@ const getter = {
     },
   getPropsData: state => {    //野
     return state.propsData
-  }
+  },
+  // getBarData:state=>{
+  //     return state.barData
+  // }
 }
 
 export default getter
