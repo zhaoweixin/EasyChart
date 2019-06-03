@@ -9,7 +9,7 @@ import mutation from "./mutation";
 Vue.use(Vuex);
 
 const state = {
-  rsideData : [],
+  rSideData : {},
   toDrawChart: "", //待绘制的图表
   chartLayer: "",
   chartX: "",

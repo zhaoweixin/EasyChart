@@ -7,9 +7,13 @@ import 'element-ui/lib/theme-chalk/index.css';
 import App from './App'
 import 'es6-promise/auto'
 import store from "./store/store"
+import 'vue-easytable/libs/themes-base/index.css'
+import {VTable,VPagination} from 'vue-easytable'
 // Vue.use(Vuex);
 Vue.use(ElementUI);
 Vue.config.productionTip = false
+Vue.component(VTable.name, VTable)
+Vue.component(VPagination.name, VPagination)
 
 /* eslint-disable no-new */
 new Vue({
