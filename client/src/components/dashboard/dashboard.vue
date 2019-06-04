@@ -65,15 +65,13 @@ export default {
       componentContainer: "componentContainer",
       baseData:{
         metaConfig:{
-          titie:''
+          title:''
         },
         style:{
-          backgroundColor:['#0050B3'],
-          fontColor:['#ff0']
+          backgroundColor:'#0050B3',
+          fontColor:'#ff0'
         },
-        data:{
-          
-        } 
+        data:[]
       },
       show: false,
       changeColor:false,

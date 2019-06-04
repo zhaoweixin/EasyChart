@@ -20,10 +20,10 @@
               metaConfig: {
                 title:'柱图'
               },
-              id:this.id,
               style:{
                 color:['#0050B3', '#1890FF', '#40A9FF', '#69C0FF']
               },
+              id:this.id,
               data :[{"name": "Mon", "value": "10"}, {"name": "Tue", "value": "706"}, {
                 "name": "Wed",
                 "value": "239"

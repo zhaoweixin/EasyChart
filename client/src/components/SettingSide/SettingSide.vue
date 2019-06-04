@@ -10,23 +10,32 @@
         :key="k">
         <span v-if="key !='data'" >{{k}}</span>
         <el-input v-model="value.title" size="mini" v-if="value.hasOwnProperty('title')"></el-input>
+        <div>
+        <el-input class="colorInput" v-model="value.backgroundColor" size="mini" v-if="k==='backgroundColor'"></el-input>
+        <el-color-picker v-model="value.backgroundColor" size="mini" v-if="k==='backgroundColor'"></el-color-picker>
+        </div>
+        <div>
+        <el-input class="colorInput" v-model="value.fontColor" size="mini" v-if="k==='fontColor'"></el-input>
+        <el-color-picker v-model="value.fontColor" size="mini" v-if="k==='fontColor'"></el-color-picker>
+        </div>
         <div v-for="(v, i, index) in val"
           :key="index">
           <el-input class="colorInput" v-model="val[i]" size="mini" v-if="value.hasOwnProperty('color')"></el-input>
           <el-color-picker v-model="val[i]" size="mini" v-if="value.hasOwnProperty('color')"></el-color-picker>
         </div>
       </div>
-
+      <div v-if="key =='data' && value.length !== 0">
       <v-table
         is-horizontal-resize
         column-width-drag
         :table-data="value"
         :columns="columns"
         :cell-edit-done="cellEditDone"
-        v-if="key ==='data'"
+        
         style="width:100%"
         >
       </v-table>
+      </div>
     </el-collapse-item>
   </el-collapse>
 </template>
@@ -59,7 +68,6 @@ export default {
 
 
   computed: {
-    ...mapGetters(['dashboardId','rSideData']),
     ...mapGetters({'storeBaseData': 'getPropsData'}),
     // ...mapGetters({'storeBaseData': 'getBarData'}),
     // ...mapGetters({'storeBaseData':'getBarData'}),
