@@ -1,12 +1,12 @@
 <template>
   <div>
     <div id="preview" style="background:rgba(0,255,0,0.05)" >
-      <div id="box" style="position:absolute;background-color: #20638f">
-        <svg id="editorborad" v-on:click="getId"></svg>
+      <div id="box" style="position:absolute;backgroundColor:">
+        <svg id="editorborad" v-on:click="getData"></svg>
       </div>
       <!--add chart to here -->
     </div>
-    <div class="test" v-on:click="getId" >
+    <div class="test" v-on:click="getData" >
       <grid-layout
         class="gridLayout"
         :layout="chartArray"
@@ -63,7 +63,20 @@ export default {
       gridLayer: "gridLayer",
       chartLayer: "preview",
       componentContainer: "componentContainer",
+      baseData:{
+        metaConfig:{
+          titie:''
+        },
+        style:{
+          backgroundColor:['#0050B3'],
+          fontColor:['#ff0']
+        },
+        data:{
+          
+        } 
+      },
       show: false,
+      changeColor:false,
       chartArray: [
         {
           chartname: "testChart",
@@ -72,7 +85,7 @@ export default {
           w: 2,
           h: 7,
           i: "1",
-          color: "#AED581"
+          color: "#AED654"
         },
         {
           chartname: "barChart",
@@ -90,7 +103,7 @@ export default {
           w: 2,
           h: 7,
           i: "3",
-          color: "#AED581"
+          color: "#AEDfff"
         }
       ]
       // chartArray:this.chartArray
@@ -123,11 +136,19 @@ export default {
     // }
   },
   methods: {
-      getId(e) {
+      getData() {
       // this.$store.commit("commitDashboardId","dashboard")
       // console.log(this.$store.state.dashboardId),
-        document.getElementById("box").style.background="red"
-      // alert("parentaaaa");
+        // document.getElementById("box").style.background=this.baseData.style.backgroundColor
+        this.$store.commit("commitPropsData",this.baseData);
+        document.getElementById("box").style.backgroundColor=this.baseData.style.backgroundColor;
+        // document.getElementsByTagName("grid-item").style.backgroundColor = this.baseData.style.backgroundColor
+        // console.log('aaaaaaaa' + document.getElementsByTagName("grid-item"))
+        // if(this.changeColor){
+        //   let that = this;
+        //   that.$set(that.chartArray,1)
+
+        // }
     },
 
     chartInit(container) {
@@ -135,7 +156,7 @@ export default {
       this.container = d3.select("#editorborad");
       this.container.append("g").attr("id", that.gridLayer);
       this.$store.commit("setChartLayer", { chartLayer: that.chartLayer });
-      this.chartResize(window.innerWidth * 0.77, window.innerHeight);
+        this.chartResize(window.innerWidth * 0.77, window.innerHeight);
     },
     chartResize(width, height) {
       let that = this;
@@ -170,8 +191,10 @@ export default {
       d3.select("#editorborad")
         .attr("width", width)
         .attr("height", height);
-
+      if(this.show){
       drawGrids(width, height);
+      }
+      
     }
   },
   components: {
@@ -193,9 +216,12 @@ export default {
 };
 </script>
 <style>
+.test1{
+  /* border: 3px solid black; */
+}
 .gridLayout {
   /* background: #00f; */
-  height: 100%;
+  height: 1800px;
   width: 100%;
 }
 </style>
