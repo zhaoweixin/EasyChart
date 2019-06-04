@@ -30,7 +30,7 @@
           :id="index"
           :style="{backgroundColor:item.color}"
         >
-          <component :is="item.chartname" :id="item.i" :props="item.props"></component>
+          <component :is="item.chartname" :id="item.j" :props="item.props"></component>
         </grid-item>
         </div>
       </grid-layout>
@@ -62,7 +62,6 @@ export default {
       container: "", //canvas to drawing blueprint
       gridLayer: "gridLayer",
       chartLayer: "preview",
-      componentContainer: "componentContainer",
       baseData:{
         metaConfig:{
           title:''
@@ -75,35 +74,35 @@ export default {
       },
       show: false,
       changeColor:false,
-      chartArray: [
-        {
-          chartname: "testChart",
-          x: 0,
-          y: 0,
-          w: 2,
-          h: 7,
-          i: "1",
-          color: "#AED654"
-        },
-        {
-          chartname: "barChart",
-          x: 0,
-          y: 0,
-          w: 2,
-          h: 7,
-          i: "2",
-          color: "#AED581"
-        },
-        {
-          chartname: "testChart",
-          x: 0,
-          y: 0,
-          w: 2,
-          h: 7,
-          i: "3",
-          color: "#AEDfff"
-        }
-      ]
+      // chartArray: [
+      //   {
+      //     chartname: "testChart",
+      //     x: 0,
+      //     y: 0,
+      //     w: 2,
+      //     h: 7,
+      //     i: "1",
+      //     color: "#AED654"
+      //   },
+      //   {
+      //     chartname: "barChart",
+      //     x: 0,
+      //     y: 0,
+      //     w: 2,
+      //     h: 7,
+      //     i: "2",
+      //     color: "#AED581"
+      //   },
+      //   {
+      //     chartname: "testChart",
+      //     x: 0,
+      //     y: 0,
+      //     w: 2,
+      //     h: 7,
+      //     i: "3",
+      //     color: "#AEDfff"
+      //   }
+      // ]
       // chartArray:this.chartArray
       // chartArray:[]
     };
@@ -112,41 +111,15 @@ export default {
     this.chartInit("#preview");
   },
   computed: {
-    //     ...mapState({
-    //         chartArray: state => state.chartIdArray
-    // }),
-    // ...mapAction({
-    //     addChart: 'createAction'
-    // }),
-    // ...mapGetters(['chartArray'])
-    //  ...mapGetters(['dashboard'])
-    // chartArray(){
-    //     return this.$store.state.chartIdArray;
-    //     }
+      ...mapGetters(['chartArray'])
+   
   },
   watch: {
-    // 'chartArray': {
-    //     deep: true,
-    //     handler: function() {
-    //         console.log("可以添加视图了");
-    //         console.log("wandh2"+ this.$store.state.chartIdArray[0].height)
-    //     }
-    // }
   },
   methods: {
       getData() {
-      // this.$store.commit("commitDashboardId","dashboard")
-      // console.log(this.$store.state.dashboardId),
-        // document.getElementById("box").style.background=this.baseData.style.backgroundColor
         this.$store.commit("commitPropsData",this.baseData);
         document.getElementById("box").style.backgroundColor=this.baseData.style.backgroundColor;
-        // document.getElementsByTagName("grid-item").style.backgroundColor = this.baseData.style.backgroundColor
-        // console.log('aaaaaaaa' + document.getElementsByTagName("grid-item"))
-        // if(this.changeColor){
-        //   let that = this;
-        //   that.$set(that.chartArray,1)
-
-        // }
     },
 
     chartInit(container) {
@@ -214,9 +187,7 @@ export default {
 };
 </script>
 <style>
-.test1{
-  /* border: 3px solid black; */
-}
+
 .gridLayout {
   /* background: #00f; */
   height: 1800px;

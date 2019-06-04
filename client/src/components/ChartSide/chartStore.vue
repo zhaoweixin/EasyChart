@@ -117,17 +117,17 @@ var imgArray = [
   {
     id: 0,
     idView: require("../../../static/Image/barchart.png"),
-    chartType: "groupBarChart"
+    chartType: "barChart"
   },
   {
     id: 1,
     idView: require("../../../static/Image/linechart.png"),
-    chartType: "lineChart"
+    chartType: "testChart"
   },
   {
     id: 2,
     idView: require("../../../static/Image/piechart.png"),
-    chartType: "pieChart"
+    chartType: "testChart"
   }
 ];
 export default {
@@ -190,21 +190,17 @@ export default {
             $(".el-main .ui-draggable-dragging").position().left -
             $(".el-aside").width();
           var item = {
-            //chartname:chartType,
+            // chartname:chartType,
             chartname: "testChart",
             x: 0,
             y: 0,
-            w: 2,
-            h: 2,
-            i: 1,
-            j:"item"+stores.state.chartIdArray.length ,
-            color: "#AED581"
+            w: 4,
+            h: 8,
+            i: stores.state.chartIdArray.length,
+            j:'item'+stores.state.chartIdArray.length ,
+            color: ""
           };
           mutations.addIdToArray(stores.state, item);
-          console.log('item'+item.width);
-
-
-          console.log('wandh'+stores.state.chartIdArray[0].height);
         }
       });
     },
