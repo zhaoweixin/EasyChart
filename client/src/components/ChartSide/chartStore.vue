@@ -198,7 +198,7 @@ export default {
             h: 8,
             i: stores.state.chartIdArray.length,
             j:'item'+stores.state.chartIdArray.length ,
-            color: ""
+            color: "#828C88"
           };
           mutations.addIdToArray(stores.state, item);
         }

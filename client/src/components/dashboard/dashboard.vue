@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div id="preview" style="background:rgba(0,255,0,0.05)" >
+    <div id="preview" style="background:rgba(0,255,0,0.05)">
       <div id="box" style="position:absolute;backgroundColor:">
         <svg id="editorborad" v-on:click="getData"></svg>
       </div>
       <!--add chart to here -->
     </div>
-    <div class="test" v-on:click="getData" >
+    <div class="test" v-on:click="getData">
       <grid-layout
         class="gridLayout"
         :layout="chartArray"
@@ -16,22 +16,21 @@
         :is-resizable="true"
         :vertical-compact="true"
         :use-css-transforms="true"
-
       >
-      <div @click.stop>
-        <grid-item
-          v-for="(item,index) in chartArray"
-          :key="index"
-          :x="item.x"
-          :y="item.y"
-          :w="item.w"
-          :h="item.h"
-          :i="item.i"
-          :id="index"
-          :style="{backgroundColor:item.color}"
-        >
-          <component :is="item.chartname" :id="item.j" :props="item.props"></component>
-        </grid-item>
+        <div @click.stop>
+          <grid-item
+            v-for="(item,index) in chartArray"
+            :key="index"
+            :x="item.x"
+            :y="item.y"
+            :w="item.w"
+            :h="item.h"
+            :i="item.i"
+            :id="index"
+            :style="{backgroundColor:item.color}"
+          >
+            <component :is="item.chartname" :id="item.j" :props="item.props"></component>
+          </grid-item>
         </div>
       </grid-layout>
     </div>
@@ -54,7 +53,6 @@ import ratiochart from "../categoriesCharts/ratiochart.vue";
 import testChart from "../categoriesCharts/testChart.vue";
 import barChart from "../categoriesCharts/barChart.vue";
 
-
 import * as d3 from "d3";
 export default {
   data() {
@@ -62,19 +60,19 @@ export default {
       container: "", //canvas to drawing blueprint
       gridLayer: "gridLayer",
       chartLayer: "preview",
-      baseData:{
-        metaConfig:{
-          title:''
+      baseData: {
+        metaConfig: {
+          title: ""
         },
-        style:{
-          backgroundColor:'#0050B3',
-          fontColor:'#ff0'
+        style: {
+          backgroundColor: "",
+          fontColor: ""
         },
-        data:[],
-        button:''
+        data: [],
+        button:'apply to all charts'
       },
       show: false,
-      changeColor:false,
+      changeColor: false,
       // chartArray: [
       //   {
       //     chartname: "testChart",
@@ -112,15 +110,39 @@ export default {
     this.chartInit("#preview");
   },
   computed: {
-      ...mapGetters(['chartArray'])
-   
+    ...mapGetters(['getIsActive','chartArray']),
+    ...mapGetters({ 'storeBaseData': "getPropsData" })
   },
   watch: {
+    storeBaseData: {
+      handler(newVal){
+        document.getElementById("box").style.backgroundColor=newVal.style.backgroundColor;
+      },
+      deep:true
+    },
+    'getIsActive':{
+      handler(newVal){
+        if(newVal){
+          this.applyColor()
+        }
+      }
+    }
+  
   },
   methods: {
-      getData() {
-        this.$store.commit("commitPropsData",this.baseData);
-        document.getElementById("box").style.backgroundColor=this.baseData.style.backgroundColor;
+    getData() {
+      this.$store.commit("commitPropsData", this.baseData);
+    },
+    applyColor(){
+      let that = this 
+      that.storeArray = that.chartArray;
+      
+      // for(let item in that.chartArray){
+      //   console.log('fjrljglrkjgmlkdmg'+item)
+      //   console.log(item)
+      //   this.item.color = this.baseData.style.backgroundColor;
+      // }
+
     },
 
     chartInit(container) {
@@ -128,7 +150,7 @@ export default {
       this.container = d3.select("#editorborad");
       this.container.append("g").attr("id", that.gridLayer);
       this.$store.commit("setChartLayer", { chartLayer: that.chartLayer });
-        this.chartResize(window.innerWidth * 0.77, window.innerHeight);
+      this.chartResize(window.innerWidth * 0.77, window.innerHeight);
     },
     chartResize(width, height) {
       let that = this;
@@ -163,10 +185,9 @@ export default {
       d3.select("#editorborad")
         .attr("width", width)
         .attr("height", height);
-      if(this.show){
-      drawGrids(width, height);
+      if (this.show) {
+        drawGrids(width, height);
       }
-      
     }
   },
   components: {
@@ -183,12 +204,11 @@ export default {
     testChart,
     barChart,
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem
+    GridItem: VueGridLayout.GridItem,
   }
 };
 </script>
 <style>
-
 .gridLayout {
   /* background: #00f; */
   height: 1800px;
