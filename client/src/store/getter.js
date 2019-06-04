@@ -17,6 +17,9 @@ const getter = {
     rSideData: state=>{
         return state.rSideData
     },
+    getIsActive: state=>{
+        return state.isActive
+    },
   getPropsData: state => {    //野
     return state.propsData
   },

@@ -70,7 +70,8 @@ export default {
           backgroundColor:'#0050B3',
           fontColor:'#ff0'
         },
-        data:[]
+        data:[],
+        button:''
       },
       show: false,
       changeColor:false,

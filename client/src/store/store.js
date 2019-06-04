@@ -20,6 +20,7 @@ const state = {
   charttest: "ww",
   chartChange: '',
   propsData:'',
+  isActive: false,
   // barData:'',
   rects:[
     {

@@ -35,8 +35,10 @@ const mutation = {
     },
     commitDashboardId(state,payload){
         state.dashboardId = payload;
-    }
-    ,
+    },
+    commitIsActive(state,payload){
+        state.isActive = payload;
+    },
   commitPropsData(state,payload){
       state.propsData = payload
     console.log(payload)
