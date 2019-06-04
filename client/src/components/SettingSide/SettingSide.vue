@@ -9,8 +9,12 @@
         v-for="(val, k) in value"
         :key="k">
         <span v-if="key !='data'" >{{k}}</span>
-        <el-input v-model="value.title" size="mini" v-if="value.hasOwnProperty('title')&&key!='data'"></el-input>
-        <!--el-input v-model="value.color" size="mini" v-if="value.hasOwnProperty('color')&&key!='data'"></el-input-->
+        <el-input v-model="value.title" size="mini" v-if="value.hasOwnProperty('title')"></el-input>
+        <div v-for="(v, i, index) in val"
+          :key="index">
+          <el-input class="colorInput" v-model="val[i]" size="mini" v-if="value.hasOwnProperty('color')"></el-input>
+          <el-color-picker v-model="val[i]" size="mini" v-if="value.hasOwnProperty('color')"></el-color-picker>
+        </div>
       </div>
 
       <v-table
@@ -86,13 +90,13 @@ export default {
 
   },
   methods: {
-    commitChange: function() {
-      console.log("提交数据");
-      // this.$store.commit("reChartData", { id: this.id, dataset: this.chart });
-      // console.log(this.$store.state.chartComponentArray[0].dataset);
-      // this.$store.commit("commitChange", "bubble");
-      console.log(this.configData);
-    },
+    // commitChange: function() {
+    //   console.log("提交数据");
+    //   // this.$store.commit("reChartData", { id: this.id, dataset: this.chart });
+    //   // console.log(this.$store.state.chartComponentArray[0].dataset);
+    //   // this.$store.commit("commitChange", "bubble");
+    //   console.log(this.configData);
+    // },
     cellEditDone(newValue,oldValue,rowIndex,rowData,field){
       this.configData.data[rowIndex][field] = newValue;
     }
@@ -108,5 +112,9 @@ export default {
 }
 .el-input {
   width: 100%;
+}
+.colorInput {
+  width: 110px;
+  float: left;
 }
 </style>
