@@ -157,6 +157,6 @@
   .container {
     height: 100%;
     width: 100%;
-    /*border: 3px solid black;*/
+    border: 3px solid white;
   }
 </style>
