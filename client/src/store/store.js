@@ -21,31 +21,6 @@ const state = {
   chartChange: '',
   propsData:'',
   isActive: false,
-  // barData:'',
-  rects:[
-    {
-      'w': 200,
-      'h': 150,
-      'x': 10,
-      'y': 10,
-      'color': '#EF9A9A',
-
-  },
-  {
-      'w': 200,
-      'h': 150,
-      'x': 10,
-      'y': 220,
-      'color': '#AED581',
-  },
-  {
-      'w': 200,
-      'h': 150,
-      'x': 170,
-      'y': 10,
-      'color': '#81D4FA',
-  }
-  ],
   chartCategory: [
     "bubblechart",
     "bubbleFrequencyChart",

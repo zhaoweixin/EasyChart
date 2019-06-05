@@ -116,7 +116,7 @@
       watch:{    //野
         storeBaseData: {
           handler(newVal){
-            if (newVal.id==2){
+            if (newVal.this.id){
               this.myChart.setOption({
                 xAxis:[
                   {

@@ -73,37 +73,7 @@ export default {
       },
       show: false,
       changeColor: false,
-      // chartArray: [
-      //   {
-      //     chartname: "testChart",
-      //     x: 0,
-      //     y: 0,
-      //     w: 2,
-      //     h: 7,
-      //     i: "1",
-      //     color: "#AED654"
-      //   },
-      //   {
-      //     chartname: "barChart",
-      //     x: 0,
-      //     y: 0,
-      //     w: 2,
-      //     h: 7,
-      //     i: "2",
-      //     color: "#AED581"
-      //   },
-      //   {
-      //     chartname: "testChart",
-      //     x: 0,
-      //     y: 0,
-      //     w: 2,
-      //     h: 7,
-      //     i: "3",
-      //     color: "#AEDfff"
-      //   }
-      // ]
-      // chartArray:this.chartArray
-      // chartArray:[]
+      
     };
   },
   mounted() {
@@ -111,7 +81,7 @@ export default {
   },
   computed: {
     ...mapGetters(['getIsActive','chartArray']),
-    ...mapGetters({ 'storeBaseData': "getPropsData" })
+    ...mapGetters({ 'storeBaseData': "getPropsData" }),
   },
   watch: {
     storeBaseData: {
@@ -123,9 +93,10 @@ export default {
     'getIsActive':{
       handler(newVal){
         if(newVal){
-          this.applyColor()
+          this.applyColor();
+          // this.$store.commit("changeActive",newVal)
         }
-      }
+      },
     }
   
   },
@@ -135,13 +106,12 @@ export default {
     },
     applyColor(){
       let that = this 
-      that.storeArray = that.chartArray;
-      
-      // for(let item in that.chartArray){
-      //   console.log('fjrljglrkjgmlkdmg'+item)
-      //   console.log(item)
-      //   this.item.color = this.baseData.style.backgroundColor;
-      // }
+      var chartArray =that.chartArray.map(
+        function(item,index,array){
+          console.log(that.getIsActive)
+          return item.color = that.baseData.style.backgroundColor
+          
+        });
 
     },
 

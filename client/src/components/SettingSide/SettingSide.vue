@@ -105,7 +105,7 @@ export default {
       this.baseData.data[rowIndex][field] = newValue;
     },
     sendIsActive(){
-      this.$store.commit("commitIsActive", true);
+      this.$store.commit("commitIsActive", !this.isClick);
     }
 }
 };

@@ -43,13 +43,13 @@
       draw(){
         //  console.log(d3.select('#2'))
         const container=document.getElementById(this.id)
-        console.log(this.id, container)
+        // console.log(this.id, container)
         this.myChart = echarts.init(container);
         this.myChart.setOption(this.t)
       },
       aa(){
         //commit传值
-        console.log("dd")
+        // console.log("dd")
         this.$store.commit("commitPropsData",this.baseData)
       }
 
@@ -131,7 +131,7 @@
     watch:{    //野
       storeBaseData: {
         handler(newVal){
-          if (newVal.id==1){
+          if (newVal.id==this.id){
             this.myChart.setOption({
               color:newVal.style.color,
               title:{
@@ -143,7 +143,7 @@
             })
           }
 
-          console.log(newVal)
+          // console.log(newVal)
         },
         deep:true
       }

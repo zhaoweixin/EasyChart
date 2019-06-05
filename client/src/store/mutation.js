@@ -43,10 +43,9 @@ const mutation = {
       state.propsData = payload
     console.log(payload)
   },
-  // commitBarData(state,payload){
-  //     state.barData = payload
-  //   console.log(payload)
-  // }
+//   changeActive(state,payload){
+//       state.isActive = payload
+//   }
 }
 
 export default mutation
