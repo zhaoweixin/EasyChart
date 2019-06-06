@@ -1,10 +1,10 @@
 <template>
-  <div id="screenShot">
+  <div>
     <div id="preview" style="background:rgba(0,255,0,0.05)">
       <div id="box" style="position:absolute;backgroundColor:">
         <svg id="editorborad" v-on:click="getData"></svg>
       </div>
-      <!--add chart to here -->
+      <el-button class='popup' type="text" @click="open">Save As Template</el-button>
     </div>
     <div class="test" v-on:click="getData">
       <grid-layout
@@ -52,6 +52,7 @@ import radarChart from "../categoriesCharts/radarChart.vue";
 import ratiochart from "../categoriesCharts/ratiochart.vue";
 import testChart from "../categoriesCharts/testChart.vue";
 import barChart from "../categoriesCharts/barChart.vue";
+import linechart_vega from "../categoriesCharts/linechart_vega.vue";
 
 import * as d3 from "d3";
 export default {
@@ -60,13 +61,13 @@ export default {
       container: "", //canvas to drawing blueprint
       gridLayer: "gridLayer",
       chartLayer: "preview",
-      baseData: {
+      baseData: {  //基本配置
         metaConfig: {
           title: ""
         },
         style: {
           backgroundColor: "",
-          fontColor: ""
+          fontColor: "" //字体颜色
         },
         data: [],
         button:'apply to all charts'
@@ -79,29 +80,26 @@ export default {
   mounted() {
     this.chartInit("#preview");
   },
-  computed: {
+  computed: {  
     ...mapGetters(['getIsActive','chartArray']),
     ...mapGetters({ 'storeBaseData': "getPropsData" }),
   },
   watch: {
-    storeBaseData: {
+    storeBaseData: {   //将改变的颜色赋值给背景色
       handler(newVal){
         document.getElementById("box").style.backgroundColor=newVal.style.backgroundColor;
       },
       deep:true
     },
-    'getIsActive':{
+    'getIsActive':{  //点击apply to all charts就将改变的颜色赋给所有子图
       handler(newVal){
-        if(newVal){
           this.applyColor();
-          // this.$store.commit("changeActive",newVal)
-        }
       },
     }
   
   },
   methods: {
-    getData() {
+    getData() { //获取baseData里的内容，并传进state里
       this.$store.commit("commitPropsData", this.baseData);
     },
     applyColor(){
@@ -114,6 +112,25 @@ export default {
         });
 
     },
+    open() {
+      // console.log("hhhahahahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+        this.$prompt('请输入模板名称','Save' ,{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+          // inputErrorMessage: '模板名称不正确'
+        }).then(({ value }) => {
+          this.$message({
+            type: 'success',
+            message: '模板名是: ' + value
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          });       
+        });
+      },
 
     chartInit(container) {
       let that = this;
@@ -155,7 +172,7 @@ export default {
       d3.select("#editorborad")
         .attr("width", width)
         .attr("height", height);
-      if (this.show) {
+      if (this.show) { //是否绘制网格
         drawGrids(width, height);
       }
     }
@@ -173,12 +190,20 @@ export default {
     ratiochart,
     testChart,
     barChart,
+    linechart_vega,
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
   }
 };
 </script>
 <style>
+.popup{
+  height: 10px;
+  width: 50px;
+  position: absolute;
+  top:50px;
+  left:1625px;
+}
 .gridLayout {
   /* background: #00f; */
   height: 1800px;

@@ -1,6 +1,6 @@
 <template>
 
-  <div v-bind:id="id" class='container' @click="clickChart">
+  <div v-bind:id="id" class='container' @click="selectChart">
   </div>
 </template>
 
@@ -44,7 +44,7 @@
         ...mapGetters({'storeBaseData': 'getPropsData'}),
       },
       methods:{
-        clickChart(){
+        selectChart(){
             this.$store.commit("commitPropsData",this.baseData)
 
         },
@@ -116,7 +116,7 @@
       watch:{    //野
         storeBaseData: {
           handler(newVal){
-            if (newVal.this.id){
+            if (newVal=this.id){
               this.myChart.setOption({
                 xAxis:[
                   {

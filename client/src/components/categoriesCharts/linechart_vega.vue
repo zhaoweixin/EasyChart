@@ -1,12 +1,13 @@
 <template>
-  <div v-bind:id="id" class='container'>
+  <div v-bind:id="id" class='container' @click="selectChart">
   </div>
 </template>
 
 <script>
-import * as vega from 'vega'
-import {mapGetters} from 'vuex'
+import * as vega from 'vega';
+import {mapGetters} from 'vuex';
 import vegaEmbed from "vega-embed";
+var elementResizeDetectorMaker = require("element-resize-detector")
 export default {
     name: "linechart_vega",
     props:{
@@ -20,8 +21,6 @@ export default {
                     },
                     style:{
                         color:['#ffffff'],
-                        width: 100,
-                        height: 100
                     },
                     id: this.id,
                     data: [
@@ -69,31 +68,45 @@ export default {
         this.draw() 
         //vegaEmbed("#canvas", result, { theme: "default" });
         var erd = elementResizeDetectorMaker()
-        erd.listenTo(document.getElementById(this.Id), (element)=>{
-            const width = element.offsetWidth
-            const height = element.offsetHeight
+        erd.listenTo(document.getElementById(that.id), (element)=>{
+            console.log(this.baseData.style.width)
+            // this.baseData.style.width = element.offsetWidth
+            // this.baseData.style.height = element.offsetHeight
             this.$nextTick(()=>{
                 that.draw()
             })
         })
     },
     methods:{
-        draw(){            
+        draw(){
+            console.log(this.t)         
             vegaEmbed("#"+this.id, this.t, { theme: "default" });
         },
-        aa(){
-            this.$store.commit("commitPropsData", this.baseData)
-        }
+         selectChart(){
+        //commit传值
+        this.$store.commit("commitPropsData",this.baseData)
+      }
+
     },
     watch:{
-        storeBaseData: {
-            handler(newVal){
-                let that = this
-                if (newVal.id == 1){
-                    that.draw()
-                }
-            }
-        }
+    //     storeBaseData: {
+    //     handler(newVal){
+    //       if (newVal.id==this.id){
+    //         this.draw({
+    //           color:newVal.style.color,
+    //           title:{
+    //             text: newVal.metaConfig.title
+    //           },
+    //           series:{
+    //             data:newVal.data
+    //           }
+    //         })
+    //       }
+
+    //       // console.log(newVal)
+    //     },
+    //     deep:true
+    //   }
     }
 }
 </script>
