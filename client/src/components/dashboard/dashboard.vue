@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="screenShot">
     <div id="preview" style="background:rgba(0,255,0,0.05)">
       <div id="box" style="position:absolute;backgroundColor:">
         <svg id="editorborad" v-on:click="getData"></svg>

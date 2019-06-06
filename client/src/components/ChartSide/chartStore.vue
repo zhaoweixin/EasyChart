@@ -40,6 +40,9 @@
         <ul></ul>
       </div>
     </div>
+    <div>
+      <el-button size="small" type="primary" @click="saveOption">click save</el-button>
+    </div>
   </div>
 </template>
 <script>
@@ -48,6 +51,8 @@ import mutations from "../../store/mutation.js";
 import $ from "jquery";
 import * as d3 from "d3";
 import store from '../../store/store.js';
+import axios from "axios"
+var htmlToImage = require('html-to-image');
 
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
@@ -206,6 +211,24 @@ export default {
     },
     deletClone: function(e) {
       $("#clone").remove();
+    },
+    saveOption: function(){
+      htmlToImage.toPng(document.getElementById('screenShot'))
+      .then(function (dataUrl) {
+        var img = dataUrl;
+        var data = img.replace(/^data:image\/\w+;base64,/, "");
+        var buf = new Buffer(data, 'base64');
+        var sendData = {
+          "fileName": "image.png",
+          "data": buf
+        }
+        axios.post("http://localhost:3000/saveOption", sendData ,function(callback){
+          console.log(callback)
+        })
+      })
+      .catch(function (error) {
+        console.error('oops, something went wrong!', error);
+      });
     }
   },
   watch: {}

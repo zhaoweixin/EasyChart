@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import * as vega from vega
+import * as vega from 'vega'
 import {mapGetters} from 'vuex'
 import vegaEmbed from "vega-embed";
 export default {
@@ -79,7 +79,7 @@ export default {
     },
     methods:{
         draw(){            
-            vegaEmbed("#canvas", this.t, { theme: "default" });
+            vegaEmbed("#"+this.id, this.t, { theme: "default" });
         },
         aa(){
             this.$store.commit("commitPropsData", this.baseData)
