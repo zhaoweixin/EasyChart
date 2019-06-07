@@ -213,19 +213,29 @@ export default {
       $("#clone").remove();
     },
     saveOption: function(){
+      let that = this
       htmlToImage.toPng(document.getElementById('screenShot'))
-      .then(function (dataUrl) {
-        var img = dataUrl;
-        var data = img.replace(/^data:image\/\w+;base64,/, "");
-        var buf = new Buffer(data, 'base64');
-        var sendData = {
-          "fileName": "image.png",
-          "data": buf
-        }
-        axios.post("http://localhost:3000/saveOption", sendData ,function(callback){
-          console.log(callback)
+        .then(function (dataUrl) {
+          var img = dataUrl,
+            data = img.replace(/^data:image\/\w+;base64,/, ""),
+            buf = new Buffer(data, 'base64'),
+            random = Math.floor(Math.random() * 100);
+          
+          var sendData = {
+            "image": {
+              "name": "image" + random + ".png",
+              "data": buf
+            },
+            "chartIdArray":{
+              "name": "chartIdArray" + random + ".json",
+              "data": that.$store.state.chartIdArray
+            }
+          }
+
+          axios.post("http://localhost:3000/saveOption", sendData ,function(callback){
+            console.log(callback)
+          })
         })
-      })
       .catch(function (error) {
         console.error('oops, something went wrong!', error);
       });
