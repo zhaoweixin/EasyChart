@@ -41,7 +41,6 @@ const mutation = {
     },
   commitPropsData(state,payload){
       state.propsData = payload
-    console.log(payload)
   },
 //   changeActive(state,payload){
 //       state.isActive = payload

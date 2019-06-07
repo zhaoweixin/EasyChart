@@ -1,14 +1,17 @@
 <template>
-  <div v-bind:id="id" class='container'>
-  </div>
+    <div v-bind:id="id" class='container' @click="selectChart">
+        <div v-bind:id="vegaid" class='container'>
+        </div>
+    </div>
 </template>
 
 <script>
-import * as vega from vega
-import {mapGetters} from 'vuex'
+import * as vega from 'vega';
+import {mapGetters} from 'vuex';
 import vegaEmbed from "vega-embed";
+var elementResizeDetectorMaker = require("element-resize-detector")
 export default {
-    name: "linechart_vega",
+    name: "scatter_vega",
     props:{
         id:String,
         baseData:{
@@ -16,12 +19,10 @@ export default {
             default: function(){
                 let data = {
                     metaConfig: {
-                        title: "linechart_vega"
+                        title: "scatter_vega"
                     },
                     style:{
-                        color:['#ffffff'],
-                        width: 100,
-                        height: 100
+                        color:['#ffffff']
                     },
                     id: this.id,
                     data: [
@@ -30,7 +31,9 @@ export default {
                         {"x": 2010, "y": 0},
                         {"x": 500, "y": 2030},
                         {"x": 2030, "y": 0}
-                    ]
+                    ],
+                    width: 200,
+                    height: 200
                 }
                 return data
             }
@@ -40,7 +43,8 @@ export default {
         return {
             myChart: null,
             app: {},
-            option: ""
+            option: "",
+            vegaid: this.id + "_vega"
         }
     },
     computed:{
@@ -55,8 +59,8 @@ export default {
                     "x": {"field": "x","type": "quantitative"},
                     "y": {"field": "y","type": "quantitative"}
                 },
-                "width": this.baseData.style.width,
-                "height": this.baseData.style.height,
+                "width": this.baseData.width,
+                "height": this.baseData.height,
                 "autosize": {
                     "type": "fit",
                     "contains": "padding"
@@ -67,11 +71,10 @@ export default {
     mounted(){
         let that = this
         this.draw() 
-        //vegaEmbed("#canvas", result, { theme: "default" });
         var erd = elementResizeDetectorMaker()
-        erd.listenTo(document.getElementById(this.Id), (element)=>{
-            const width = element.offsetWidth
-            const height = element.offsetHeight
+        erd.listenTo(document.getElementById(that.id), (element)=>{
+            this.baseData.width = element.offsetWidth
+            this.baseData.height = element.offsetHeight
             this.$nextTick(()=>{
                 that.draw()
             })
@@ -79,21 +82,25 @@ export default {
     },
     methods:{
         draw(){            
-            vegaEmbed("#canvas", this.t, { theme: "default" });
+            vegaEmbed("#"+this.id + "_vega", this.t, { theme: "default" });
         },
-        aa(){
-            this.$store.commit("commitPropsData", this.baseData)
+        selectChart(){
+            this.$store.commit("commitPropsData",this.baseData)
         }
     },
     watch:{
+        /*
         storeBaseData: {
             handler(newVal){
-                let that = this
-                if (newVal.id == 1){
-                    that.draw()
+                if (newVal.id==this.id){
+                    this.baseData.style.color = newVal.style.color,
+                    this.baseData.metaConfig.title = newVal.metaConfig.title
+                    this.baseData.data = newVal.data
+                    this.draw()
                 }
             }
         }
+        */
     }
 }
 </script>
@@ -103,6 +110,5 @@ export default {
   .container {
     height: 100%;
     width: 100%;
-    border: 3px solid white;
   }
 </style>

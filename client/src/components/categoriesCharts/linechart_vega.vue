@@ -1,6 +1,9 @@
 <template>
-  <div v-bind:id="id" class='container' @click="selectChart">
-  </div>
+    <div v-bind:id="id" class='container' @click="selectChart">
+        <div v-bind:id="vegaid" class='container'>
+        </div>
+    </div>
+  
 </template>
 
 <script>
@@ -20,7 +23,7 @@ export default {
                         title: "linechart_vega"
                     },
                     style:{
-                        color:['#ffffff'],
+                        color:['#ffffff']
                     },
                     id: this.id,
                     data: [
@@ -29,7 +32,9 @@ export default {
                         {"x": 2010, "y": 0},
                         {"x": 2020, "y": 2030},
                         {"x": 2030, "y": 0}
-                    ]
+                    ],
+                    width: 200,
+                    height: 200
                 }
                 return data
             }
@@ -39,7 +44,8 @@ export default {
         return {
             myChart: null,
             app: {},
-            option: ""
+            option: "",
+            vegaid: this.id + "_vega"
         }
     },
     computed:{
@@ -54,8 +60,8 @@ export default {
                     "x": {"field": "x", "type": "quantitative"},
                     "y": {"field": "y", "type": "quantitative"}
                 },
-                "width": this.baseData.style.width,
-                "height": this.baseData.style.height,
+                "width": this.baseData.width,
+                "height": this.baseData.height,
                 "autosize": {
                     "type": "fit",
                     "contains": "padding"
@@ -65,13 +71,11 @@ export default {
     },
     mounted(){
         let that = this
-        this.draw() 
-        //vegaEmbed("#canvas", result, { theme: "default" });
+        that.draw()
         var erd = elementResizeDetectorMaker()
         erd.listenTo(document.getElementById(that.id), (element)=>{
-            console.log(this.baseData.style.width)
-            // this.baseData.style.width = element.offsetWidth
-            // this.baseData.style.height = element.offsetHeight
+            this.baseData.width = element.offsetWidth
+            this.baseData.height = element.offsetHeight
             this.$nextTick(()=>{
                 that.draw()
             })
@@ -79,34 +83,25 @@ export default {
     },
     methods:{
         draw(){
-            console.log(this.t)         
-            vegaEmbed("#"+this.id, this.t, { theme: "default" });
+            vegaEmbed("#"+this.id + "_vega", this.t, { theme: "default" });
         },
-         selectChart(){
+        selectChart(){
         //commit传值
         this.$store.commit("commitPropsData",this.baseData)
       }
 
     },
     watch:{
-    //     storeBaseData: {
-    //     handler(newVal){
-    //       if (newVal.id==this.id){
-    //         this.draw({
-    //           color:newVal.style.color,
-    //           title:{
-    //             text: newVal.metaConfig.title
-    //           },
-    //           series:{
-    //             data:newVal.data
-    //           }
-    //         })
-    //       }
-
-    //       // console.log(newVal)
-    //     },
-    //     deep:true
-    //   }
+        storeBaseData: {
+            handler(newVal){
+                if (newVal.id==this.id){
+                    this.baseData.style.color = newVal.style.color,
+                    this.baseData.metaConfig.title = newVal.metaConfig.title
+                    this.baseData.data = newVal.data
+                    this.draw()
+                }
+            }
+        }
     }
 }
 </script>
@@ -116,6 +111,5 @@ export default {
   .container {
     height: 100%;
     width: 100%;
-    border: 3px solid white;
   }
 </style>

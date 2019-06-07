@@ -53,6 +53,7 @@ import ratiochart from "../categoriesCharts/ratiochart.vue";
 import testChart from "../categoriesCharts/testChart.vue";
 import barChart from "../categoriesCharts/barChart.vue";
 import linechart_vega from "../categoriesCharts/linechart_vega.vue";
+import scatter_vega from "../categoriesCharts/scatter_vega.vue"
 
 import * as d3 from "d3";
 export default {
@@ -74,7 +75,6 @@ export default {
       },
       show: false,
       changeColor: false,
-      
     };
   },
   mounted() {
@@ -96,7 +96,6 @@ export default {
           this.applyColor();
       },
     }
-  
   },
   methods: {
     getData() { //获取baseData里的内容，并传进state里
@@ -108,9 +107,7 @@ export default {
         function(item,index,array){
           console.log(that.getIsActive)
           return item.color = that.baseData.style.backgroundColor
-          
         });
-
     },
     open() {
       // console.log("hhhahahahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
@@ -191,6 +188,7 @@ export default {
     testChart,
     barChart,
     linechart_vega,
+    scatter_vega,
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
   }

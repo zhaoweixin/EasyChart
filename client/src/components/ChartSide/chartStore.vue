@@ -196,7 +196,7 @@ export default {
             $(".el-aside").width();
           var item = {
             // chartname:chartType,
-            chartname: "testChart",
+            chartname: "linechart_vega",
             x: 0,
             y: 0,
             w: 4,
