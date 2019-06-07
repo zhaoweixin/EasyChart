@@ -5,25 +5,45 @@
       :key="key"
       :title="key"
       :name="key">
-      <div
-        v-for="(val, k) in value"
-        :key="k">
-        <span v-if="key =='metaConfig'" >{{k}}</span>
-        <el-input v-model="value.title" size="mini" v-if="value.hasOwnProperty('title')"></el-input>
-        <div>
-          <span v-if="key =='style'" >{{k}}</span>
+      <div v-for="(val, k) in value" :key="k">
+        <div v-if="key =='metaConfig'" >
+          <span>{{k}}</span>
+          <el-input v-model="value.title" size="mini" v-if="value.hasOwnProperty('title')"></el-input>
+        </div>
+
+        <div v-if="key =='style'" >
+          <span >{{k}}</span>
           <div>
-            <el-input class="colorInput" v-model="value.backgroundColor" size="mini" v-if="k==='backgroundColor'"></el-input>
-            <el-color-picker v-model="value.backgroundColor" size="mini" v-if="k==='backgroundColor'"></el-color-picker>
-            <el-input class="colorInput" v-model="value.fontColor" size="mini" v-if="k==='fontColor'"></el-input>
-            <el-color-picker v-model="value.fontColor" size="mini" v-if="k==='fontColor'"></el-color-picker>
+            <div v-if="k==='backgroundColor'">
+              <el-input class="colorInput" v-model="value.backgroundColor" size="mini"></el-input>
+              <el-color-picker v-model="value.backgroundColor" size="mini"></el-color-picker>
+            </div>
+            <div v-if="k==='fontColor'">
+              <el-input class="colorInput" v-model="value.fontColor" size="mini" ></el-input>
+              <el-color-picker v-model="value.fontColor" size="mini"></el-color-picker>
+            </div>
+          </div>
+          <div v-for="(v, i, index) in val" :key="index">
+            <el-input class="colorInput" v-model="val[i]" size="mini" v-if="value.hasOwnProperty('color')"></el-input>
+            <el-color-picker v-model="val[i]" size="mini" v-if="value.hasOwnProperty('color')"></el-color-picker>
           </div>
         </div>
-        <div v-for="(v, i, index) in val"
-          :key="index">
-          <el-input class="colorInput" v-model="val[i]" size="mini" v-if="value.hasOwnProperty('color')"></el-input>
-          <el-color-picker v-model="val[i]" size="mini" v-if="value.hasOwnProperty('color')"></el-color-picker>
+
+        <div v-if="key =='datamappers'" :id="getDatamappersId(k)">
+          <div v-for="(v, i, index) in val" :key="index" >
+            <span v-if="i=='dataname'||i=='datatype'">{{i}}:{{v}}</span>
+            <div v-if="i=='mapform'">
+              <span >{{i}}</span>
+              <el-input v-model="val.mapform" size="mini" ></el-input>
+            </div>
+            <div v-if="i=='alias'">
+              <span >{{i}}</span>
+              <el-input v-model="val.alias" size="mini" ></el-input>
+            </div>
+          </div>
+          <el-divider v-if="k==0"></el-divider>
         </div>
+
       </div>
       <div v-if="key =='data' && value.length !== 0">
       <v-table
@@ -55,10 +75,22 @@ export default {
         style:{
           color:[]
         },
-        data:[]
+        data:[],
+        datamappers:[{
+          dataname: "value",
+          datatype: "num",
+          mapform: null,
+          alias: null
+        },
+        {
+          dataname: "name",
+          datatype: "string",
+          mapform: null,
+          alias: null
+        }]
       },
 
-      activeNames: ["metaConfig", "style", "data", "button"],//折叠面板
+      activeNames: ["metaConfig", "style", "data", "button", "datamappers"],//折叠面板
 
       columns:[
         {field: 'name', title:'name', width: 100, titleAlign: 'center',columnAlign:'center',isEdit:true,isResize:true},
@@ -106,6 +138,10 @@ export default {
     },
     sendIsActive(){
       this.$store.commit("commitIsActive", !this.isClick);
+    },
+    getDatamappersId(a){
+      if(a%2)  return "y";
+      else return "x";
     }
 }
 };
@@ -119,6 +155,7 @@ export default {
 }
 .el-input {
   width: 100%;
+  /* float: right; */
 }
 .colorInput {
   width: 110px;
