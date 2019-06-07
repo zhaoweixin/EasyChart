@@ -1,0 +1,18 @@
+{
+    "chartTypes":["LineChart",
+        "bubblechart",
+        "bubbleFrequencyChar",
+        "gaugechart",
+        "groupBarChart",
+        "groupPieChart",
+        "lineChart",
+        "piechart",
+        "radarChart",
+        "ratiochart",
+        "testChart",
+        "barChart",
+        "linechart_vega",
+        "scatter_vega"],
+    "templateTypes":["image88.png"],
+    "DataTables": ["cars.json", "settle-weather.csv"]
+}
