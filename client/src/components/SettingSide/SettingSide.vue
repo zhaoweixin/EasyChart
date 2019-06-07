@@ -36,7 +36,7 @@
       </v-table>
       </div>
       <div v-if="key == 'button'">
-        <button v-on:click="sendIsActive">{{value}}</button>
+        <el-button v-on:click="sendIsActive">{{value}}</el-button>
       </div>
     </el-collapse-item>
   </el-collapse>

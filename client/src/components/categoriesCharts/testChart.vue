@@ -1,6 +1,6 @@
 <template>
 
-  <div v-bind:id="id" class='container' @click="aa">
+  <div v-bind:id="id" class='container' @click="selectChart">
   </div>
 </template>
 
@@ -47,7 +47,7 @@
         this.myChart = echarts.init(container);
         this.myChart.setOption(this.t)
       },
-      aa(){
+      selectChart(){
         //commit传值
         // console.log("dd")
         this.$store.commit("commitPropsData",this.baseData)
