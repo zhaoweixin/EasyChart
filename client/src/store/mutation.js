@@ -25,9 +25,11 @@ const mutation = {
     },
     // 右侧栏提交改变的数据
     reChartData(state, payload) {
-
         state.chartComponentArray[parseInt(payload.id)-1] = payload;
             console.log("修改成功")
+    },
+    editInteraction(state, payload){
+        state.popUp = !state.popUp
     },
     // 提交更改视图的类型
     commitChange(state, payload){
@@ -39,9 +41,10 @@ const mutation = {
     commitIsActive(state,payload){
         state.isActive = payload;
     },
-  commitPropsData(state,payload){
+    commitPropsData(state,payload){
       state.propsData = payload
-  },
+    },
+    
 //   changeActive(state,payload){
 //       state.isActive = payload
 //   }

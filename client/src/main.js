@@ -9,7 +9,13 @@ import 'es6-promise/auto'
 import store from "./store/store"
 import 'vue-easytable/libs/themes-base/index.css'
 import {VTable,VPagination} from 'vue-easytable'
-// Vue.use(Vuex);
+
+import { vsButton, vsSelect, vsPopup} from 'vuesax'
+import 'vuesax/dist/vuesax.css' //Vuesax styles
+
+Vue.use(vsButton)
+Vue.use(vsSelect)
+Vue.use(vsPopup)
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 Vue.component(VTable.name, VTable)

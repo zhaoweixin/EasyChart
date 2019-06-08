@@ -84,7 +84,7 @@ export default {
     methods:{
         draw(){
             vegaEmbed("#"+this.id + "_vega", this.t, { theme: "default" });
-        },
+        }, 
         selectChart(){
         //commit传值
         this.$store.commit("commitPropsData",this.baseData)

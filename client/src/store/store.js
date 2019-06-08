@@ -21,6 +21,7 @@ const state = {
   chartChange: '',
   propsData:'',
   isActive: false,
+  popUp:false,
   chartCategory: [
     "bubblechart",
     "bubbleFrequencyChart",

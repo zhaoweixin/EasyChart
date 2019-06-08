@@ -42,6 +42,7 @@
     </div>
     <div>
       <el-button size="small" type="primary" @click="saveOption">click save</el-button>
+      <el-button size="small" type="primary" @click="popUp">edit interaction</el-button>
     </div>
   </div>
 </template>
@@ -239,6 +240,9 @@ export default {
       .catch(function (error) {
         console.error('oops, something went wrong!', error);
       });
+    },
+    popUp: function(){
+      this.$store.commit("editInteraction")
     }
   },
   watch: {}

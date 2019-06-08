@@ -18,7 +18,7 @@
             <dashboard>
                           <dragResize/>
             </dashboard>
-
+            <blueEditor></blueEditor>
           </el-main>
           <el-aside width="200px">
             <SettingSide></SettingSide>
@@ -36,6 +36,7 @@ import chartStore from "./components/ChartSide/chartStore"
 import SettingSide from "./components/SettingSide/SettingSide"
 import dashboard from "./components/dashboard/dashboard.vue"
 import dragResize from "./components/dragResize/dragResize"
+import blueEditor from "./components/blueEditor/blueEditor"
 export default {
   name: 'App',
   components: {
@@ -44,7 +45,8 @@ export default {
     chartStore,
     SettingSide,
     dashboard,
-    dragResize
+    dragResize,
+    blueEditor
   }
 }
 </script>
