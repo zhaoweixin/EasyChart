@@ -4,6 +4,17 @@ const mapperdata = {
   analyzedata(datamap, mapperdatas) {
     var mapperkeys = mapperdatas.keys();
     var fieldnames = [];
+    var ctable = false;
+    for (var i = 0; i < mapperkeys.length - 1; i++) {
+      //判断数据是否来自于同一张表
+      var f = mapperdatas.get(mapperkeys[i]).tablename;
+      var s = mapperdatas.get(mapperkeys[i + 1]).tablename;
+      if (f != s) {
+        ctable = true;
+        break;
+      }
+    }
+    if (ctable) return;
     for (var i = 0; i < mapperkeys.length; i++) {
       var pre = mapperdatas.get(mapperkeys[i]).pre;
       var data = datamap.get(mapperdatas.get(mapperkeys[i]).tablename).data;
