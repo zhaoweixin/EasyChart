@@ -70,7 +70,7 @@
             max: 1000,
             calculable: true,
             orient: 'vertical',
-            left: '250',
+            right: '0',
             top: 'center',
             inRange: {
               color: this.baseData.style.color,
@@ -85,7 +85,10 @@
 
           calendar: [
             {
-              cellSize: [20, 'auto'],
+              cellSize: [ 'auto'],
+              // right:10,
+              left:50,
+              right:80,
               bottom: 10,
               orient: 'vertical',
               range: '2017',
@@ -111,7 +114,32 @@
             echarts.init(document.getElementById(this.id)).resize()
           })
         })
+      },
+    watch:{
+      storeBaseData:{
+        handler(newVal){
+          if (newVal.id==this.id){
+            this.myChart.setOption({
+              visualMap:{
+                inRange:{
+                  color:newVal.style.color,
+                }
+              },
+
+              // title:{
+              //   text: newVal.metaConfig.title
+              // },
+              series:{
+                data:newVal.data
+              }
+            })
+          }
+
+          // console.log(newVal)
+        },
+        deep:true
       }
+    }
     }
 </script>
 

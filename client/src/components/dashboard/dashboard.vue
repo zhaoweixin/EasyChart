@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="preview" style="background:rgba(0,255,0,0.05)">
-      <div id="box" style="position:absolute;backgroundColor:">
+      <div id="box" style="position:absolute;">
         <svg id="editorborad" v-on:click="getData"></svg>
       </div>
       <el-button class='popup' type="text" @click="open">Save As Template</el-button>
@@ -54,6 +54,7 @@ import testChart from "../categoriesCharts/testChart.vue";
 import barChart from "../categoriesCharts/barChart.vue";
 import linechart_vega from "../categoriesCharts/linechart_vega.vue";
 import scatter_vega from "../categoriesCharts/scatter_vega.vue"
+import canlendar from  "../categoriesCharts/canlendar.vue"
 
 import * as d3 from "d3";
 export default {
@@ -80,7 +81,7 @@ export default {
   mounted() {
     this.chartInit("#preview");
   },
-  computed: {  
+  computed: {
     ...mapGetters(['getIsActive','chartArray']),
     ...mapGetters({ 'storeBaseData': "getPropsData" }),
   },
@@ -102,7 +103,7 @@ export default {
       this.$store.commit("commitPropsData", this.baseData);
     },
     applyColor(){
-      let that = this 
+      let that = this
       var chartArray =that.chartArray.map(
         function(item,index,array){
           console.log(that.getIsActive)
@@ -125,7 +126,7 @@ export default {
           this.$message({
             type: 'info',
             message: '取消输入'
-          });       
+          });
         });
       },
 
@@ -189,6 +190,7 @@ export default {
     barChart,
     linechart_vega,
     scatter_vega,
+    canlendar,
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
   }

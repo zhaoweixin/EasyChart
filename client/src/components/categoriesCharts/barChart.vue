@@ -65,7 +65,7 @@
 
         this.myChart=echarts.init(document.getElementById(this.id))
         this.option = {
-          color: ['#3398DB'],
+          color: this.baseData.style.color,
           tooltip : {
             trigger: 'axis',
             axisPointer : {            // 坐标轴指示器，坐标轴触发有效
@@ -116,7 +116,9 @@
       watch:{    //野
         storeBaseData: {
           handler(newVal){
-            if (newVal=this.id){
+
+            console.log(newVal)
+            if (newVal.id=this.id){
               this.myChart.setOption({
                 xAxis:[
                   {
