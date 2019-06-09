@@ -42,11 +42,58 @@
       },
       computed:{
         ...mapGetters({'storeBaseData': 'getPropsData'}),
+
+        t(){
+          return{
+            color: this.baseData.style.color,
+            tooltip : {
+              trigger: 'axis',
+              axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+              }
+            },
+            title:{
+              text:this.baseData.metaConfig.title
+            },
+            grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '3%',
+              containLabel: true
+            },
+            xAxis : [
+              {
+                type : 'category',
+                data : this.comArray(this.baseData.data,"name"),
+                axisTick: {
+                  alignWithLabel: true
+                }
+              }
+            ],
+            yAxis : [
+              {
+                type : 'value'
+              }
+            ],
+            series : [
+              {
+                name:'直接访问',
+                type:'bar',
+                barWidth: '60%',
+                data:this.comArray(this.baseData.data,"value")
+              }
+            ]
+          }
+        }
       },
       methods:{
         selectChart(){
             this.$store.commit("commitPropsData",this.baseData)
 
+        },
+        draw(){
+          this.myChart=echarts.init(document.getElementById(this.id))
+          this.myChart.setOption(this.t)
         },
         comArray(data,name){
           let arr=[]
@@ -60,51 +107,7 @@
       mounted(){
 
 
-          console.log(this.comArray(this.baseData.data,"name"))
-
-
-        this.myChart=echarts.init(document.getElementById(this.id))
-        this.option = {
-          color: this.baseData.style.color,
-          tooltip : {
-            trigger: 'axis',
-            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-              type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-            }
-          },
-          title:{
-            text:this.baseData.metaConfig.title
-          },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-          },
-          xAxis : [
-            {
-              type : 'category',
-              data : this.comArray(this.baseData.data,"name"),
-              axisTick: {
-                alignWithLabel: true
-              }
-            }
-          ],
-          yAxis : [
-            {
-              type : 'value'
-            }
-          ],
-          series : [
-            {
-              name:'直接访问',
-              type:'bar',
-              barWidth: '60%',
-              data:this.comArray(this.baseData.data,"value")
-            }
-          ]
-        };
-          this.myChart.setOption(this.option, true);
+       this.draw()
 
         var erd = elementResizeDetectorMaker()
         erd.listenTo(document.getElementById(this.id),  (element)=> {
@@ -119,9 +122,7 @@
       watch:{    //野
         storeBaseData: {
           handler(newVal){
-
-            console.log(newVal)
-            if (newVal.id=this.id){
+            if (newVal.id==this.id){
               this.myChart.setOption({
                 title:{
                   text:newVal.metaConfig.title
