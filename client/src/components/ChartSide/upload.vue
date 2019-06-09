@@ -15,7 +15,7 @@
       <el-button size="small" type="primary">click upload</el-button>
   </el-tooltip>
   
-    </el-upload>    
+    </el-upload>
 </template>
 <script>
   export default {

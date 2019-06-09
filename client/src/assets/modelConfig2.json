@@ -1,0 +1,124 @@
+{
+    "Barchart":{
+        "inPorts": [
+            {"name":"x","text":"X","attr":"encoding","type":"in"},
+            {"name":"y","text":"Y","attr":"encoding","type":"in"}
+        ],
+        "outPorts": [
+            {"name":"x","text":"X","attr":"encoding","type":"out"},
+            {"name":"y","text":"Y","attr":"encoding","type":"out"}
+        ],
+        "type": "Chart",
+        "maker": "bar",
+        "interaction": "controler"
+    },
+    "Linechart":{
+        "inPorts": [
+            {"name":"x","text":"X","attr":"encoding","type":"in"},
+            {"name":"y","text":"Y","attr":"encoding","type":"in"}
+        ],
+        "outPorts": [
+            {"name":"x","text":"X","attr":"encoding","type":"out"},
+            {"name":"y","text":"Y","attr":"encoding","type":"out"}
+        ],
+        "type":"Chart",
+        "maker": "line",
+        "interaction": "controler"
+    },
+    "Scatterplot":{
+        "inPorts": [
+            {"name":"x","text":"X","attr":"encoding","type":"in"},
+            {"name":"y","text":"Y","attr":"encoding","type":"in"}
+        ],
+        "outPorts": [
+            {"name":"x","text":"X","attr":"encoding","type":"out"},
+            {"name":"y","text":"Y","attr":"encoding","type":"out"}
+        ],
+        "type":"Chart",
+        "maker": "point",
+        "interaction": "controler"
+    },
+    "Stripplot":{
+        "inPorts": [
+            {"name":"x","text":"X","attr":"encoding","type":"in"},
+            {"name":"y","text":"Y","attr":"encoding","type":"in"}
+        ],
+        "outPorts": [
+            {"name":"x","text":"X","attr":"encoding","type":"out"},
+            {"name":"y","text":"Y","attr":"encoding","type":"out"}
+        ],
+        "type":"Chart",
+        "maker": "tick",
+        "interaction": "controler"
+    },
+    "Boxplot":{
+        "inPorts": [
+            {"name":"x","text":"X","attr":"encoding","type":"in"},
+            {"name":"y","text":"Y","attr":"encoding","type":"in"}
+        ],
+        "outPorts": [
+            {"name":"x","text":"X","attr":"encoding","type":"out"},
+            {"name":"y","text":"Y","attr":"encoding","type":"out"}
+        ],
+        "type":"Chart",
+        "maker": "boxplot",
+        "interaction": "controler"
+    },
+    "linechart_vega":{
+        "inPorts": [
+            {"name":"x","text":"X","attr":"encoding","type":"in"},
+            {"name":"y","text":"Y","attr":"encoding","type":"in"}
+        ],
+        "type":"Chart",
+        "maker": "lineplot",
+        "interaction": "controlled"
+    },
+    "scatter_vega":{
+        "inPorts": [
+            {"name":"x","text":"X","attr":"encoding","type":"in"},
+            {"name":"y","text":"Y","attr":"encoding","type":"in"}
+        ],
+        "type":"Chart",
+        "maker": "scatterplot",
+        "interaction": "controlled"
+    },
+    "Sum":{
+        "inPorts": [
+            {"name":"Num A","text":"Num A","attr":"operator","type":"in"},
+            {"name":"Num B","text":"Num B","attr":"operator","type":"in"}
+        ],
+        "outPorts": [
+            {"name":"Sum","text":"Sum","attr":"field","type":"out"}
+        ],
+        "type":"Caculator"
+    },
+    "Reduce":{
+        "inPorts": [
+            {"name":"Num A","text":"Num A","attr":"operator","type":"in"},
+            {"name":"Num B","text":"Num B","attr":"operator","type":"in"}
+        ],
+        "outPorts": [
+            {"name":"Reduce","text":"Reduce","attr":"field","type":"out"}
+        ],
+        "type":"Caculator"
+    },
+    "Multi":{
+        "inPorts": [
+            {"name":"Num A","text":"Num A","attr":"operator","type":"in"},
+            {"name":"Num B","text":"Num B","attr":"operator","type":"in"}
+        ],
+        "outPorts": [
+            {"name":"Multi","text":"Multi","attr":"field","type":"out"}
+        ],
+        "type":"Caculator"
+    },
+    "Filter":{
+        "inPorts": [
+            {"name":"dimension","text":"Dim","attr":"processor","type":"in"}
+        ],
+        "outPorts": [
+            {"name":"output","text":"Output","attr":"processor","type":"out"}
+        ],
+        "type":"Processor"
+    }
+}

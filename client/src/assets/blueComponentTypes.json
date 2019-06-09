@@ -1,0 +1,18 @@
+{
+
+    "Chart": { 
+        "name": "Chart", 
+        "childrens": ["Barchart", "Linechart", "Scatterplot", "Boxplot", "Stripplot", "Areaplot", "Circle", "ErrorBar", "ErrorBand", "Reacplot"],
+        "color": "#967ADC"
+    }, 
+    "Caculator": { 
+        "name": "Caculator", 
+        "childrens": ["Sum", "Reduce", "Multi"],
+        "color": "#37BC9B"
+    },
+    "Layout":{
+        "name":"Layout",
+        "childrens":["Template A","Template B"],
+        "color":"#37BC22"
+    }
+}
