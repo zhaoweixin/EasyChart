@@ -32,9 +32,9 @@
         <div v-if="key =='datamappers'" :id="getDatamappersId(k)">
           <div v-for="(v, i, index) in val" :key="index" >
             <span v-if="i=='dataname'||i=='datatype'">{{i}}:{{v}}</span>
-            <div v-if="i=='mapform'">
+            <div v-if="i=='mapfrom'">
               <span >{{i}}</span>
-              <el-input v-model="val.mapform" size="mini" ></el-input>
+              <el-input v-model="val.mapfrom" size="mini" ></el-input>
             </div>
             <div v-if="i=='alias'">
               <span >{{i}}</span>
@@ -79,13 +79,13 @@ export default {
         datamappers:[{
           dataname: "value",
           datatype: "num",
-          mapform: null,
+          mapfrom: null,
           alias: null
         },
         {
           dataname: "name",
           datatype: "string",
-          mapform: null,
+          mapfrom: null,
           alias: null
         }]
       },
