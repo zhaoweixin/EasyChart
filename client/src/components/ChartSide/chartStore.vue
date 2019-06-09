@@ -51,27 +51,66 @@ import stores from "../../store/store.js";
 import mutations from "../../store/mutation.js";
 import $ from "jquery";
 import * as d3 from "d3";
-import store from '../../store/store.js';
-import axios from "axios"
-var htmlToImage = require('html-to-image');
+import store from "../../store/store.js";
+import axios from "axios";
+import mapperdataM from "../../store/MapperDataManage.js";
+var htmlToImage = require("html-to-image");
 
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
+const MaxLength = 2;
+var MapperDatas = d3.map();
+var datamap = d3.map();
 $.extend({
   //读取指定csv文件的字段名
   csvtitle: function(url, f) {
     $.get(url, function(record) {
       record = record.split(/\n/);
       var title = record[0].split(",");
-      f.call(this, title);
+      record.shift();
+      var data = [];
+      for (var i = 0; i < record.length; i++) {
+        var t = record[i].split(",");
+        for (var y = 0; y < t.length; y++) {
+          if (!data[i]) data[i] = {};
+          data[i][title[y].trim()] = t[y]; //不添加trim函数将导致出现第二个属性名存在空格，trim将前后空格去掉
+        }
+      }
+
+      var titlemap = d3.map();
+      for (var i = 0; i < title.length; i++) {
+        titlemap.set(
+          title[i],
+          Number(data[0][title[i].trim()]).toString() == "NaN"
+            ? "string"
+            : "num"
+        );
+      }
+      var map = d3.map(
+        d3
+          .nest()
+          .key(function(d) {
+            return d[title[0]];
+          })
+          .map(data, d3.map)
+      );
+      var datas = {
+        title: title,
+        data: data,
+        map: map,
+        titlemap: titlemap
+      };
+      f.call(this, datas);
     });
   }
 });
 $.csvtitle("../../../static/data/testdata.csv", function(datas) {
-  add(datas, "data1");
+  datamap.set("data1", datas);
+  add(datas.title, "data1");
 });
 $.csvtitle("../../../static/data/ctestdata.csv", function(datas) {
-  add(datas, "data2");
+  datamap.set("data2", datas);
+  add(datas.title, "data2");
 });
 //name为表名，或者state存储的data数据昵称
 function add(data, name) {
@@ -88,32 +127,178 @@ function add(data, name) {
     .append("i")
     .attr("class", "icon-arrow");
   //将csv数据中的字段显示出来
-  adds
+  var tables = adds
     .append("ul")
     .attr("class", "dropdown-menu")
-    .selectAll("li")
-    .data(data)
-    .enter()
-    .append("li")
-    .append("a")
-    .text(function(d) {
-      return d;
-    });
-  $("#staticdata ul")
+    .append("table")
+    .attr("class", s);
+  var thead = tables.append("thead").append("tr");
+  thead.append("th").text("name");
+  thead.append("th").text("type");
+  thead.append("th").text("oper");
+  thead.append("th").text("group");
+  tables.append("tbody");
+
+  for (var i = 0; i < data.length; i++) {
+    var perv = null;
+    var groubv = "&nbsp" + null;
+    // if (datamap.get(s).titlemap.get(data[i]) == "string") {
+    perv =
+      "<select class='selectper'>" +
+      "<option value ='null'>null</option>" +
+      "<option value ='count'>count</option>" + //count计算条数
+      "<option value='avg'>avg</option>" + //avg是计算的平均值
+      "<option value='sum'>sum</option>" + //计算和
+      "</select>";
+    groubv = "<select class='selectgro'><option value='null'>null</option>";
+    var keys = datamap.get(s).title;
+    for (var j = 0; j < keys.length; j++) {
+      groubv += "<option value=" + keys[j] + ">" + keys[j] + "</option>";
+    }
+    groubv += "</select>";
+    //  }
+    /**
+     * 将字段名设置为表格每行的类名，将所属的数据表名，赋值为每行的value
+     */
+
+    var $tr = $(
+      "<tr class=" +
+        data[i] +
+        " value=" +
+        s +
+        "><td>" +
+        data[i] +
+        "&nbsp</td><td>" +
+        datamap.get(s).titlemap.get(data[i]) +
+        "&nbsp</td><td>" +
+        perv +
+        "</td><td>" +
+        groubv +
+        "</td></tr>"
+    );
+    $("#staticdata ." + s + " tbody").append($tr);
+  }
+  $("#staticdata ." + s + " tbody")
     .children()
     .draggable({
+      appendTo: "body",
       helper: "clone",
       scope: "ss",
+      start: function() {
+        d3.select("body .ui-draggable-dragging")
+          .style("z-index", 999)
+          .style("display", "table")
+          .style("table-layout", "fixed");
+
+        var c = $("body .ui-draggable-dragging")
+          .attr("class")
+          .split(" ");
+        //将被克隆的元素状态全部复制给克隆元素
+        var dragclass = c[0];
+        var oper = $("#staticdata ." + dragclass + " .selectper").val();
+        var groubs = $("#staticdata ." + dragclass + " .selectgro").val();
+        $("body .ui-draggable-dragging .selectper").val(oper);
+        $("body .ui-draggable-dragging .selectgro").val(groubs);
+      },
       stop: function() {
-        var left =
-          $("#staticdata .ui-draggable-dragging").position().left -
-          $(".el-aside").width() -
-          $(".el-main").width();
-        var top = $("#staticdata .ui-draggable-dragging").position().top;
-        console.log(left + "," + top);
-        if (left > 0 && top > 0) {
-          //判断是否在合法区域
-          console.log($(this).children()[0].text); //设置state中data的数据
+        var c = $("body .ui-draggable-dragging")
+          .attr("class")
+          .split(" ");
+
+        var dragclass = c[0];
+        var tablename = $("body .ui-draggable-dragging").attr("value");
+        var oper = $("body .ui-draggable-dragging .selectper").val();
+        var gro = $("body .ui-draggable-dragging .selectgro").val();
+        var top = $("body .ui-draggable-dragging").position().top;
+        var left = $("body .ui-draggable-dragging").position().left;
+        var width = $("body .ui-draggable-dragging").width();
+        var height = $("body .ui-draggable-dragging").height();
+        var maxleft = left + width;
+        var maxtop = top + height;
+        console.log(oper);
+        if (!$("#y").is(":visible")) {
+          return;
+        }
+        var onetargetTop = $("#y").position().top;
+        var onetargetleft = $("#y").position().left;
+        var onetargetMaxtop = $("#y").position().top + $("#y").height();
+        var onetype = $($($("#y").children()[1]).children()[0])
+          .text()
+          .split(":");
+        var oneinputf = $($("#y input")[0]);
+        var oneinputs = $($("#y input")[1]);
+
+        var twotargetTop = $("#x").position().top;
+        var twotargetleft = $("#x").position().left;
+        var twotargetMaxTop = $("#x").position().top + $("#x").height();
+        var twotype = $($($("#x").children()[1]).children()[0])
+          .text()
+          .split(":");
+
+        var twoinputf = $($("#x input")[0]);
+        var twoinputs = $($("#x input")[1]);
+
+        var dragtype = $($("body .ui-draggable-dragging").children()[1])
+          .text()
+          .toString();
+        console.log($("#y").children());
+        if (
+          onetargetTop <= top &&
+          onetargetMaxtop > maxtop &&
+          (onetargetleft >= left && onetargetleft < maxleft)
+        ) {
+          var Mapperdata = {
+            tablename: tablename,
+            fieldname: dragclass, //字段名
+            pre: oper,
+            groub: gro
+          };
+
+          if (dragtype.search(onetype[1]) == 0) {
+            MapperDatas.set(onetype[1], Mapperdata);
+            oneinputf.val(
+              Mapperdata.tablename +
+                ":" +
+                Mapperdata.fieldname +
+                "," +
+                Mapperdata.pre +
+                "," +
+                Mapperdata.groub
+            );
+            oneinputs.val(Mapperdata.fieldname);
+          }
+        }
+
+        if (
+          twotargetTop <= top &&
+          twotargetMaxTop > top &&
+          (twotargetleft >= left && twotargetleft < maxleft)
+        ) {
+          var Mapperdata = {
+            tablename: tablename,
+            fieldname: dragclass, //字段名
+            pre: oper,
+            groub: gro
+          };
+          if (dragtype.search(twotype[1]) == 0) {
+            MapperDatas.set(twotype[1], Mapperdata);
+            twoinputf.val(
+              Mapperdata.tablename +
+                ":" +
+                Mapperdata.fieldname +
+                "," +
+                Mapperdata.pre +
+                "," +
+                Mapperdata.groub
+            );
+            twoinputs.val(Mapperdata.fieldname);
+          }
+        }
+        if (twoinputf.val().length > 0 && oneinputf.val().length > 0) {
+          console.log("拖拽完成");
+          mapperdataM.setdatamap(datamap);
+          mapperdataM.setmapperdata(MapperDatas);
+          mapperdataM.startanalyzedata();
         }
       }
     });
@@ -196,9 +381,8 @@ export default {
             $(".el-main .ui-draggable-dragging").position().left -
             $(".el-aside").width();
 
-          console.log(chartType)
+          console.log(chartType);
           var item = {
-
             // chartname:chartType,
             chartname: chartType,
             x: 0,
@@ -206,7 +390,7 @@ export default {
             w: 4,
             h: 8,
             i: stores.state.chartIdArray.length,
-            j:'item'+stores.state.chartIdArray.length ,
+            j: "item" + stores.state.chartIdArray.length,
             color: "#828C88"
           };
           mutations.addIdToArray(stores.state, item);
@@ -216,36 +400,39 @@ export default {
     deletClone: function(e) {
       $("#clone").remove();
     },
-    saveOption: function(){
-      let that = this
-      htmlToImage.toPng(document.getElementById('screenShot'))
-        .then(function (dataUrl) {
+    saveOption: function() {
+      let that = this;
+      htmlToImage
+        .toPng(document.getElementById("screenShot"))
+        .then(function(dataUrl) {
           var img = dataUrl,
             data = img.replace(/^data:image\/\w+;base64,/, ""),
-            buf = new Buffer(data, 'base64'),
+            buf = new Buffer(data, "base64"),
             random = Math.floor(Math.random() * 100);
 
           var sendData = {
-            "image": {
-              "name": "image" + random + ".png",
-              "data": buf
+            image: {
+              name: "image" + random + ".png",
+              data: buf
             },
-            "chartIdArray":{
-              "name": "chartIdArray" + random + ".json",
-              "data": that.$store.state.chartIdArray
+            chartIdArray: {
+              name: "chartIdArray" + random + ".json",
+              data: that.$store.state.chartIdArray
             }
-          }
+          };
 
-          axios.post("http://localhost:3000/saveOption", sendData ,function(callback){
-            console.log(callback)
-          })
+          axios.post("http://localhost:3000/saveOption", sendData, function(
+            callback
+          ) {
+            console.log(callback);
+          });
         })
-      .catch(function (error) {
-        console.error('oops, something went wrong!', error);
-      });
+        .catch(function(error) {
+          console.error("oops, something went wrong!", error);
+        });
     },
-    popUp: function(){
-      this.$store.commit("editInteraction")
+    popUp: function() {
+      this.$store.commit("editInteraction");
     }
   },
   watch: {}
@@ -296,5 +483,35 @@ function clickdata() {
 
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
+}
+#staticdata table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  text-align: center;
+  width: 100%;
+}
+#staticdata table tbody {
+  display: block;
+
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+#staticdata table thead,
+#staticdata tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+#staticdata table thead {
+  width: calc(100% - 0.1em);
+}
+
+#staticdata table td {
+  word-wrap: break-word;
+  font: 10px Microsoft YaHei;
+}
+#staticdata table thead th {
+  background: #ccc;
 }
 </style>
