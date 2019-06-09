@@ -16,8 +16,8 @@ export default class BlueComponent {
         this.width = 180
         this.dx = 0 //Horizonal delta
         this.dy = 0 //Vertical delta
-        this.x = 300 * Math.random() + 100 //Init horizonal position
-        this.y = 100 * Math.random() + 100 //Init vertical position
+        this.x = null //Init horizonal position
+        this.y = null //Init vertical position
         this.dimPreview = '' 
         this.filterRange = [] //If there have a filter plug in component
         this.isDelete = false
@@ -28,6 +28,7 @@ export default class BlueComponent {
         this.id = ''
 
         for(let key in options){
+            console.log(key, options[key])
             //deep copy
             if(key == "inPorts" || key == "outPorts"){
                 let _ports = options[key]

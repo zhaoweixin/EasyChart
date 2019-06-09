@@ -34,10 +34,10 @@ export default {
         return{
             container: null,
             component:[
-                {"name": "linechart_vega"},
-                {"name": "Barchart"},
-                {"name": "Barchart"},
-                {"name": "scatter_vega"}
+                {"name": "linechart_vega", "interaction": "controlled"},
+                {"name": "Barchart", "interaction": "controler"},
+                {"name": "Barchart", "interaction": "controler"},
+                {"name": "scatter_vega", "interaction": "controlled"}
             ],
             drawingLine: "", //The line which is being darwing by user
             mouseAction: "", //mouse action label which used to change the mouse action state
@@ -45,7 +45,6 @@ export default {
             blueComponentsTypeCount:{}, //store the count of component according to different type
             dataList: [], //data candidates list
             modelConfig: modelConfig, //configuration detail of each component model
-
             selectedData: {}, //The dimensions in dataset which been selected by user
             dataComponent: {}, //The exsiting components in canvas (used to check the exsiting)
             blueComponents: [], //The exsiting components in canvas (used to store the exsiting)
@@ -68,7 +67,13 @@ export default {
             tableData:null,
             isTable:false,
             model_config_text:"", // store configuration of chart
-            calculatorDict:{}   
+            calculatorDict:{},
+            controlComponentCount:{
+                "controler": 0,
+                "controlled": 0,
+                "curler": 0,
+                "curled": 0
+            }   
 
         }
     },
@@ -215,6 +220,15 @@ export default {
         },
         addComponent(){
             let that = this;
+            this.component.forEach( (d) => {
+                if(d.interaction == "controler"){
+                    that.controlComponentCount['controler'] ++
+                }else if(d.interaction == "controlled"){
+                    that.controlComponentCount['controlled'] ++
+                }
+            })
+            console.log(this.component)
+            console.log(this.controlComponentCount)
             this.component.forEach( (d) =>{
                 that.createNewComponent(d.name)
             })
@@ -292,8 +306,20 @@ export default {
                 obj["fill"] = that.componentTypes[obj.type].color;
                 obj["name"] = name;
                 obj['id'] = obj.type + '-' + that.blueComponentsTypeCount[obj.type];
-                obj['x'] = 300 * Math.random() + 100;
-                obj['y'] = 300 * Math.random() + 100;
+                let interactionType = obj['interaction']
+
+                if(interactionType == "controlled"){
+                    let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
+                    obj['x'] = 300;
+                    obj['y'] = 200 + gap * that.controlComponentCount["curled"];
+                    that.controlComponentCount["curled"] ++;
+                }else if(interactionType == "controler"){
+                    let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
+                    obj['x'] = 1300;
+                    obj['y'] = 200 + gap * that.controlComponentCount["curler"];
+                    that.controlComponentCount["curler"] ++;
+                }
+
 
                 if(obj.inPorts != undefined){
                     for(let i=0; i<obj.inPorts.length; i++){
@@ -304,7 +330,7 @@ export default {
                     }
                 }
                 if(obj.type != "Layout"){
-                //layout do not have layout
+                    //layout do not have layout
                     if(obj.outPorts != undefined){
                         for(let i=0; i<obj.outPorts.length; i++){
                             obj.outPorts[i]["parentX"] = obj['x'];
@@ -313,12 +339,12 @@ export default {
                             obj.outPorts[i]["parentid"] = obj['id'];
                         }
                     }
-                }
-                if(obj.type == "Layout"){
+                }else if(obj.type == "Layout"){
                     that.layoutIdName[obj.id] = {}
                     that.layoutIdName[obj.id]["name"] = obj.name
                     that.layoutIdName[obj.id]["ref"] = "msg" + "-" + obj.name.split(" ")[1]
                 }
+
                 if(obj.type == "Chart"){
                     let propertiesname = obj.name + "-" + that.comChartCount[obj.name];
                     that.comChartCount[obj.name] = that.comChartCount[obj.name] + 1
