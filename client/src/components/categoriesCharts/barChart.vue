@@ -21,7 +21,7 @@
                 title:'柱图'
               },
               style:{
-                color:['#0050B3', '#1890FF', '#40A9FF', '#69C0FF']
+                color:['#69C0FF']
               },
               id:this.id,
               data :[{"name": "Mon", "value": "10"}, {"name": "Tue", "value": "706"}, {
@@ -72,6 +72,9 @@
               type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
             }
           },
+          title:{
+            text:this.baseData.metaConfig.title
+          },
           grid: {
             left: '3%',
             right: '4%',
@@ -120,6 +123,10 @@
             console.log(newVal)
             if (newVal.id=this.id){
               this.myChart.setOption({
+                title:{
+                  text:newVal.metaConfig.title
+                },
+                color:newVal.style.color,
                 xAxis:[
                   {
                     data:this.comArray(newVal.data,"name")
@@ -130,8 +137,6 @@
                 }
               })
             }
-
-            console.log(newVal)
           },
           deep:true
         }
