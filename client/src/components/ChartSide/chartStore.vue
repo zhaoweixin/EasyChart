@@ -128,7 +128,7 @@ var imgArray = [
   {
     id: 1,
     idView: require("../../../static/Image/linechart.png"),
-    chartType: "testChart"
+    chartType: "scatter_vega"
   },
   {
     id: 2,
@@ -195,9 +195,12 @@ export default {
           var left =
             $(".el-main .ui-draggable-dragging").position().left -
             $(".el-aside").width();
+
+          console.log(chartType)
           var item = {
+
             // chartname:chartType,
-            chartname: "linechart_vega",
+            chartname: chartType,
             x: 0,
             y: 0,
             w: 4,
@@ -221,7 +224,7 @@ export default {
             data = img.replace(/^data:image\/\w+;base64,/, ""),
             buf = new Buffer(data, 'base64'),
             random = Math.floor(Math.random() * 100);
-          
+
           var sendData = {
             "image": {
               "name": "image" + random + ".png",
