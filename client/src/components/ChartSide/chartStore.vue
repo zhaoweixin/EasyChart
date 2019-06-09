@@ -399,6 +399,7 @@ export default {
     },
     deletClone: function(e) {
       $("#clone").remove();
+      d3.selectAll("#clone").remove();
     },
     saveOption: function() {
       let that = this;
