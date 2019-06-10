@@ -23,13 +23,15 @@
           <el-aside width="200px">
             <SettingSide></SettingSide>
           </el-aside>
-          
+
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
+
+  import DataProxy from  './carDataHelper'
 import NavMenu from "./components/NavMenu/NavMenu"
 import Upload from "./components/ChartSide/upload"
 import chartStore from "./components/ChartSide/chartStore"
@@ -47,6 +49,9 @@ export default {
     dashboard,
     dragResize,
     blueEditor
+  },
+  mounted:async function(){
+    await DataProxy.initChartsData()
   }
 }
 </script>
@@ -59,27 +64,27 @@ export default {
     line-height: 60px;
     padding: 0;
   }
-  
+
   .el-aside {
     color: #333;
     text-align: center;
     height: 1020px;
   }
-  
+
   .el-main {
     color: #333;
     text-align: center;
   }
-  
+
   body > .el-container {
     margin-bottom: 40px;
   }
-  
+
   .el-container:nth-child(5) .el-aside,
   .el-container:nth-child(6) .el-aside {
     line-height: 260px;
   }
-  
+
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
   }

@@ -20,6 +20,16 @@ var datamapper = [
     alias: null
   }
 ];
+
+var barData=[
+  { name: "Mon", value: "10" },
+  { name: "Tue", value: "706" },
+  {
+    name: "Wed",
+    value: "239"
+  },
+  { name: "Thu", value: 172 }
+]
 export default {
   name: "LiZi",
 
@@ -36,15 +46,7 @@ export default {
             color: ["#69C0FF"]
           },
           id: this.id,
-          data: [
-            { name: "Mon", value: "10" },
-            { name: "Tue", value: "706" },
-            {
-              name: "Wed",
-              value: "239"
-            },
-            { name: "Thu", value: 172 }
-          ] ,
+          data: barData ,
           datamappers: datamapper
         };
         return a;

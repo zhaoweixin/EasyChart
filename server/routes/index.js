@@ -37,11 +37,9 @@ router.post('/saveOption', function(req, res, next){
 })
 
 router.post("/getdata", function(req, res, next){
-  /*
   {
-    "dataName": "cars"
+    dataName:"cars"
   }
-  */
   let dataName = req.body.dataName
   if(dataName && dataName != undefined){
     var Folder = "./public/data/"
