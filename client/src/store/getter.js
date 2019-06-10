@@ -23,6 +23,10 @@ const getter = {
   getPropsData: state => {    //野
     return state.propsData
   },
+
+  getInteractionData:state=>{
+      return state.interactionData
+  }
   // getBarData:state=>{
   //     return state.barData
   // }
