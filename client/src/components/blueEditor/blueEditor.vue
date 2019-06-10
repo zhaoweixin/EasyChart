@@ -8,9 +8,9 @@
                     </div>
                     <div>
                         <el-button size="small" type="primary" @click="close" class="buttonInner">Filter</el-button>
-                        <el-button size="small" type="primary" @click="close" class="buttonInner">Caculator</el-button>
-                        <el-button size="small" type="primary" @click="close" class="buttonInner">Func2</el-button>
-                        <el-button size="small" type="primary" @click="close" class="buttonInner">Func3</el-button>
+                        <el-button size="small" type="primary" @click="calculator('Sum')" class="buttonInner">Sum</el-button>
+                        <el-button size="small" type="primary" @click="calculator('Reduce')" class="buttonInner">Reduce</el-button>
+                        <el-button size="small" type="primary" @click="calculator('Multi')" class="buttonInner">Multi</el-button>
                         <el-button size="small" type="primary" @click="close" class="buttonInner">Close</el-button>
                     </div>
                 </el-header>
@@ -306,16 +306,17 @@ export default {
                 obj["fill"] = that.componentTypes[obj.type].color;
                 obj["name"] = name;
                 obj['id'] = obj.type + '-' + that.blueComponentsTypeCount[obj.type];
-                let interactionType = obj['interaction']
+                let interactionType = obj['interaction'],
+                    chartType = obj['type']
 
                 if(interactionType == "controlled"){
                     let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
-                    obj['x'] = 300;
+                    obj['x'] = 1300;
                     obj['y'] = 200 + gap * that.controlComponentCount["curled"];
                     that.controlComponentCount["curled"] ++;
                 }else if(interactionType == "controler"){
                     let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
-                    obj['x'] = 1300;
+                    obj['x'] = 300;
                     obj['y'] = 200 + gap * that.controlComponentCount["curler"];
                     that.controlComponentCount["curler"] ++;
                 }
@@ -562,6 +563,15 @@ export default {
                 for(let j=0; j<this.blueComponentNameList.length; j++){
                 componentGraph[i][j] = 0
                 }
+            }
+        },
+        calculator(option){
+            if(option == 'Sum'){
+                that.createNewComponent(option)
+            }else if(option == 'Reduce'){
+                that.createNewComponent(option)
+            }else if(option == 'Multi'){
+                that.createNewComponent(option)
             }
         }
     }
