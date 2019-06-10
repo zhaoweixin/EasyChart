@@ -7,7 +7,7 @@
                         <p>Edit Interaction</p>
                     </div>
                     <div>
-                        <el-button size="small" type="primary" @click="close" class="buttonInner">Filter</el-button>
+                        <el-button size="small" type="primary" @click="calculator('Filter')" class="buttonInner">Filter</el-button>
                         <el-button size="small" type="primary" @click="calculator('Sum')" class="buttonInner">Sum</el-button>
                         <el-button size="small" type="primary" @click="calculator('Reduce')" class="buttonInner">Reduce</el-button>
                         <el-button size="small" type="primary" @click="calculator('Multi')" class="buttonInner">Multi</el-button>
@@ -27,6 +27,7 @@ import BlueprintLine from "./blueprintLine"
 import BlueComponent from "./blueComponent"
 import modelConfig from "../../assets/modelConfig2.json"
 import blueComponentTypes from "../../assets/blueComponentTypes.json"
+import dashboardVue from '../dashboard/dashboard.vue';
 
 export default {
     name:'blueEditor',
@@ -73,7 +74,9 @@ export default {
                 "controlled": 0,
                 "curler": 0,
                 "curled": 0
-            }   
+            },
+            componentGraph:[],
+            dataMapper:{}
 
         }
     },
@@ -149,6 +152,38 @@ export default {
     },
     methods:{
         close: function(){
+            let that = this
+            let controlledCom = []
+            this.blueComponentNameList.forEach( (d,i) => {
+                let com = that.getComponentById(d)
+                if(com.control == "controlled"){
+                    controlledCom.push(d)
+                }
+            })
+            //that.componentGraph
+            //this.blueComponentNameList
+            for(let i=0; i<controlledCom.length; i++){
+                let controlledIndex = this.blueComponentNameList.indexOf(controlledCom[i])
+                for(let j=0; j<this.blueComponentNameList.length; j++){
+                    if(this.componentGraph[j][controlledIndex] == 1){
+                        //link
+                        let source = this.blueComponentNameList[j],
+                            target = this.blueComponentNameList[controlledIndex],
+                            linkList = this.getblueLinesByLinkName(source + "_" + target)
+                        for(let k=0; k<linkList.length; k++){
+                            let link = linkList[k],
+                                targetname = link["target"]["name"]
+                            for(let l=0;l<that.dataMapper[link.targetId]["mapper"].length; l++){
+                                if(that.dataMapper[link.targetId]["mapper"][l]["dataname"] == targetname){
+                                    that.dataMapper[link.targetId]["mapper"][l]["mapfrom"]["source"] = link["source"]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //console.log(this.dataMapper)
+            //console.log(controlledCom, this.blueComponentNameList, that.componentGraph)
             this.$store.commit("editInteraction")
         },
         chartInit(props){
@@ -305,6 +340,7 @@ export default {
                 //make sure that the viewer name equal to button content
                 obj["fill"] = that.componentTypes[obj.type].color;
                 obj["name"] = name;
+                obj['control'] = null;
                 obj['id'] = obj.type + '-' + that.blueComponentsTypeCount[obj.type];
                 let interactionType = obj['interaction'],
                     chartType = obj['type']
@@ -314,13 +350,22 @@ export default {
                     obj['x'] = 1300;
                     obj['y'] = 200 + gap * that.controlComponentCount["curled"];
                     that.controlComponentCount["curled"] ++;
+                    obj['control'] = "controlled"
                 }else if(interactionType == "controler"){
                     let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
                     obj['x'] = 300;
                     obj['y'] = 200 + gap * that.controlComponentCount["curler"];
                     that.controlComponentCount["curler"] ++;
+                    obj['control'] = "controler"
                 }
 
+                if(chartType == 'Caculator'){
+                    obj['x'] = 800;
+                    obj['y'] = 500;
+                }else if(chartType == 'Processor'){
+                    obj['x'] = 800;
+                    obj['y'] = 100;
+                }
 
                 if(obj.inPorts != undefined){
                     for(let i=0; i<obj.inPorts.length; i++){
@@ -352,6 +397,28 @@ export default {
                 }
                 that.blueComponentsTypeCount[obj.type] = that.blueComponentsTypeCount[obj.type] + 1
                 _com = new BlueComponent(that.container, obj);
+
+                if(obj.inPorts.length != 0){
+                    let dic = {
+                        "name": obj.name,
+                        "id": obj.id,
+                        "type":obj.type,
+                        "control": obj.control,
+                        "mapper":[]
+                    }
+                    obj.inPorts.forEach( (d,i) => {
+                        dic["mapper"].push({
+                            "dataname": d.name,
+                            "dataType": "string",
+                            "mapfrom": {
+                                "operator": null,
+                                "source": ''
+                            },
+                            "alias": null
+                        })
+                    })
+                    that.dataMapper[obj.id] = dic
+                }
                 that.blueComponents.push(_com);
                 addClickEvent2Circle(that, _com);
             }
@@ -402,7 +469,6 @@ export default {
                 properties["id"] = source;
                 properties['x'] = 300 * Math.random() + 100;
                 properties['y'] = 300 * Math.random() + 100;
-                
 
                 let _com = new BlueComponent(that.container, properties);
                 that.dataComponent[source] = _com;
@@ -504,12 +570,24 @@ export default {
             }
         }
         },
+        getblueLinesByLinkName(name){
+            //name sourceId_targetId Chart-0_Chart-1
+            let list = []
+            this.blueLines.forEach( (d,i) => {
+                let connect = d.getConnectInfo()
+                let linkName = connect.sourceId + '_' + connect.targetId
+                if(linkName == name){
+                    list.push(connect)
+                }
+            })
+            return list
+        },
         buildBlueGraph(con){
+            //console.log(that.blueLines)
             let that = this
             let connect = con.getConnectInfo()
             let _source = connect.source
             let _target = connect.target
-            let componentGraph = new Array()
             //two dimensional matrix of storage blueprint connection logic
 
             //更新that.chartlayoutObj viewer- layout-0_chartA parentid + "_" + text
@@ -556,23 +634,23 @@ export default {
             }
             //建立根据componentIndex覆盖更新二维数组
             this.blueComponentNameList.forEach(function(d, i){
-                componentGraph[i] = new Array()
+                that.componentGraph[i] = new Array()
             })
             //graph init
             for(let i=0; i<this.blueComponentNameList.length; i++){
                 for(let j=0; j<this.blueComponentNameList.length; j++){
-                componentGraph[i][j] = 0
+                that.componentGraph[i][j] = 0
                 }
             }
+            for(let i=0; i<this.blueLinesName.length; i++){
+                let indexsource = this.blueComponentNameList.indexOf(String(this.blueLinesName[i]).split('_')[0])
+                let indextarget = this.blueComponentNameList.indexOf(String(this.blueLinesName[i]).split('_')[1])
+                that.componentGraph[indexsource][indextarget] = 1
+            }
+
         },
         calculator(option){
-            if(option == 'Sum'){
-                that.createNewComponent(option)
-            }else if(option == 'Reduce'){
-                that.createNewComponent(option)
-            }else if(option == 'Multi'){
-                that.createNewComponent(option)
-            }
+            this.createNewComponent(option)
         }
     }
 }
