@@ -50,12 +50,16 @@ const mutation = {
 
         state.interactionData=[]
       } else{
-        let isHave = state.interactionData.indexOf(payload)>-1
+        let isHave = state.interactionData.some(item=>{
+          if (item.name==payload.name){
+            return true
+          }
+        })
         if (!isHave){
           state.interactionData.push(payload)
         }
       }
-
+      console.log(state.interactionData)
   }
 }
 

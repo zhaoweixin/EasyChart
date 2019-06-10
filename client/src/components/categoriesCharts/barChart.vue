@@ -59,6 +59,7 @@ export default {
   },
   computed: {
     ...mapGetters({ storeBaseData: "getPropsData" }),
+    ...mapGetters({getInterData:"getInteractionData"}),
 
     t() {
       return {
@@ -156,6 +157,13 @@ export default {
         }
       },
       deep: true
+    },
+    getInterData:{
+      handler(newVal){
+        this.baseData.data=newVal
+        this.$store.commit("commitPropsData", this.baseData);
+      },
+      deep:true
     }
   }
 };

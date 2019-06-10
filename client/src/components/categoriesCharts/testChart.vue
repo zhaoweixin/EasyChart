@@ -68,7 +68,7 @@
         })
       })
 
-      this.myChart.on("click",function (d) {
+      this.myChart.on("click", (d)=>{
         let b={
           name:d.name,
           value:d.value
