@@ -22,6 +22,7 @@ const state = {
   propsData:'',
   isActive: false,
   popUp:false,
+  interactionData:[],   //交互暂存数组
   chartCategory: [
     "bubblechart",
     "bubbleFrequencyChart",

@@ -68,6 +68,14 @@
         })
       })
 
+      this.myChart.on("click",function (d) {
+        let b={
+          name:d.name,
+          value:d.value
+        }
+        this.$store.commit("InteractionData",b)
+      })
+
     },
 
     computed:{
@@ -124,6 +132,7 @@
           ]
         };
       },
+
     },
     watch:{    //野
       storeBaseData: {

@@ -44,10 +44,19 @@ const mutation = {
     commitPropsData(state,payload){
       state.propsData = payload
     },
-    
-//   changeActive(state,payload){
-//       state.isActive = payload
-//   }
+
+  InteractionData(state,payload){
+      if (payload==0){
+
+        state.interactionData=[]
+      } else{
+        let isHave = state.interactionData.indexOf(payload)>-1
+        if (!isHave){
+          state.interactionData.push(payload)
+        }
+      }
+
+  }
 }
 
 export default mutation
