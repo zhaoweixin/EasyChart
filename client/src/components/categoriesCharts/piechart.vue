@@ -44,7 +44,7 @@ export default {
               width: 484,
               height: 310,
           }
-              return a; 
+              return a;
 
           }
         }
@@ -138,7 +138,7 @@ export default {
           lineWidth: 1,
           stroke: '#fff'
         })
-      
+
       //点击交互
       // this.chart.on('click', ev=> {
       //   const data =ev.data._origin;
@@ -160,7 +160,7 @@ export default {
       this.chart.render()
     },
   }
-  
+
 };
 </script>
 
@@ -177,4 +177,3 @@ export default {
 
 
 
-    

@@ -23,13 +23,15 @@
           <el-aside width="200px">
             <SettingSide></SettingSide>
           </el-aside>
-          
+
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
+
+  import DataProxy from  './carDataHelper'
 import NavMenu from "./components/NavMenu/NavMenu"
 import Upload from "./components/ChartSide/upload"
 import chartStore from "./components/ChartSide/chartStore"
@@ -37,6 +39,7 @@ import SettingSide from "./components/SettingSide/SettingSide"
 import dashboard from "./components/dashboard/dashboard.vue"
 import dragResize from "./components/dragResize/dragResize"
 import blueEditor from "./components/blueEditor/blueEditor"
+  import axios from "axios";
 export default {
   name: 'App',
   components: {
@@ -47,6 +50,23 @@ export default {
     dashboard,
     dragResize,
     blueEditor
+  },
+  mounted:async function(){
+    await  this.getdata()
+  },
+  methods:{
+    getdata(){
+      let data = {
+        "dataName":"seattle-weather"
+      }
+      axios.post("http://localhost:3000/getdata", data, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res)=>{
+        this.$store.commit("commitWeatherData",res.data.data)
+      })
+    }
   }
 }
 </script>
@@ -59,27 +79,27 @@ export default {
     line-height: 60px;
     padding: 0;
   }
-  
+
   .el-aside {
     color: #333;
     text-align: center;
     height: 1020px;
   }
-  
+
   .el-main {
     color: #333;
     text-align: center;
   }
-  
+
   body > .el-container {
     margin-bottom: 40px;
   }
-  
+
   .el-container:nth-child(5) .el-aside,
   .el-container:nth-child(6) .el-aside {
     line-height: 260px;
   }
-  
+
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
   }

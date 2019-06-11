@@ -31,7 +31,7 @@
             @resized="resizedEvent"
             @click.native="getId(item.i)"
           >
-            <component :is="item.chartname" :id="item.j" :props="item.props"></component>
+            <component :is="item.chartname" :id="item.j" :props="item.props" ></component>
           </grid-item>
         </div>
       </grid-layout>
