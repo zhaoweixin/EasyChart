@@ -23,6 +23,7 @@ const state = {
   isActive: false,
   popUp:false,
   interactionData:[],   //交互暂存数组
+  dataMapper:[],
   chartCategory: [
     "bubblechart",
     "bubbleFrequencyChart",

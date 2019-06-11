@@ -114,10 +114,10 @@
     },
     "Filter":{
         "inPorts": [
-            {"name":"dimension","text":"Dim","attr":"processor","type":"in"}
+            {"name":"dimension","text":"In","attr":"processor","type":"in"}
         ],
         "outPorts": [
-            {"name":"output","text":"Output","attr":"processor","type":"out"}
+            {"name":"output","text":"Out","attr":"processor","type":"out"}
         ],
         "type":"Processor"
     }

@@ -26,9 +26,9 @@ export default class BlueComponent {
         this.time = 1
         this.isLoading = true
         this.id = ''
+        this.control = null
 
         for(let key in options){
-            console.log(key, options[key])
             //deep copy
             if(key == "inPorts" || key == "outPorts"){
                 let _ports = options[key]
@@ -486,7 +486,6 @@ export default class BlueComponent {
         
         d3.select(node).attr("transform", function(q){
             
-            //console.log("d3.event.x y, that.x,y", d3.event.x, d3.event.y, that.x, that.y)
             that.dx = d3.event.x - that.x
             that.dy = d3.event.y - that.y
             that.x  = d3.event.x

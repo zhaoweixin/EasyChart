@@ -22,7 +22,6 @@ var datamapper = [
 ];
 export default {
   name: "LiZi",
-
   props: {
     id: String,
     baseData: {

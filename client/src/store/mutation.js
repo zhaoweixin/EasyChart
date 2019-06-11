@@ -44,6 +44,9 @@ const mutation = {
     commitPropsData(state,payload){
       state.propsData = payload
     },
+    updateDataMapper(state,payload){
+        state.dataMapper = JSON.parse(JSON.stringify(payload))
+    },
 
   InteractionData(state,payload){
       if (payload==0){
