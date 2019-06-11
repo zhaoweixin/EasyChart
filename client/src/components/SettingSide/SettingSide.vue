@@ -45,11 +45,29 @@
           <el-divider v-if="k==0"></el-divider>
         </div>
       </div>
+
       <div v-if="key =='data' && value.length !== 0">
-        <v-table
+        <v-table 
+          v-if="value[0].hasOwnProperty('name')"
           column-width-drag
           :table-data="value"
-          :columns="columns"
+          :columns="columnsName"
+          :cell-edit-done="cellEditDone"
+          style="width:100%"
+        ></v-table>
+        <v-table 
+          v-if="value[0].hasOwnProperty('x')"
+          column-width-drag
+          :table-data="value"
+          :columns="columnsX"
+          :cell-edit-done="cellEditDone"
+          style="width:100%"
+        ></v-table>
+        <v-table 
+          v-if="value[0].hasOwnProperty('item')"
+          column-width-drag
+          :table-data="value"
+          :columns="columnsItem"
           :cell-edit-done="cellEditDone"
           style="width:100%"
         ></v-table>
@@ -93,7 +111,7 @@ export default {
 
       activeNames: ["metaConfig", "style", "data", "button", "datamappers"], //折叠面板
 
-      columns: [
+      columnsName: [
         {
           field: "name",
           title: "name",
@@ -106,6 +124,46 @@ export default {
         {
           field: "value",
           title: "value",
+          width: 100,
+          titleAlign: "center",
+          columnAlign: "center",
+          isEdit: true,
+          isResize: true
+        }
+      ],
+      columnsX: [
+        {
+          field: "x",
+          title: "x",
+          width: 100,
+          titleAlign: "center",
+          columnAlign: "center",
+          isEdit: true,
+          isResize: true
+        },
+        {
+          field: "y",
+          title: "y",
+          width: 100,
+          titleAlign: "center",
+          columnAlign: "center",
+          isEdit: true,
+          isResize: true
+        }
+      ],
+      columnsItem: [
+        {
+          field: "item",
+          title: "item",
+          width: 100,
+          titleAlign: "center",
+          columnAlign: "center",
+          isEdit: true,
+          isResize: true
+        },
+        {
+          field: "count",
+          title: "count",
           width: 100,
           titleAlign: "center",
           columnAlign: "center",
