@@ -33,7 +33,7 @@ const mutation = {
     },
     // 提交更改视图的类型
     commitChange(state, payload){
-        state.chartChange = payload;
+        state.chartSizeChange = payload;
     },
     commitDashboardId(state,payload){
         state.dashboardId = payload;

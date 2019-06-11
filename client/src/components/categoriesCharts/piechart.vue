@@ -53,28 +53,20 @@ export default {
     };
   },
   computed: {
-    // toDrawChart() {
-    //   return this.$store.state.toDrawChart;
-    // },
-    getChartXY() {
-      return this.$store.getters.getChartXY;
-    },
-    chartLayer() {
-      return this.$store.state.chartLayer;
-    },
-    boxStyle: function() {
-      return {
-        width: this.localw + 'px',
-        height: this.localh + 'px',
-        transform: 'translate(' + this.localx + 'px,' + this.localy + 'px) '
-      }
-    },
     ...mapState({
       chartArray: state => state.chartIdArray,
-      refreshData: state => state.chartChange,
+      refreshData: state => state.chartSizeChange,
     })
   },
-  
+  watch: {
+    'refreshData': {
+      deep:true,
+      handler() {
+        this.chart.changeSize(this.$store.state.chartSizeChange.newWidth,this.$store.state.chartSizeChange.newHeight);
+        console.log("更改了wh")
+      }
+    }
+  },
   mounted() {
     this.initChart();
     //this.chartInit();
