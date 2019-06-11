@@ -1,45 +1,50 @@
 <template>
   <div id="Store">
-    <div>
-      Echart Img example
-      <el-carousel :interval="4000" type="card" height="70px">
-        <el-carousel-item v-for="item in imgArray" :key="item.id">
-          <el-row>
-            <el-col :span="24">
-              <img
-                ref="imgHeight"
-                :src="item.idView"
-                @mouseover="createClone($event,item.chartType,'echarts')"
-                @mouseout="deletClone($event)"
-              >
-            </el-col>
-          </el-row>
-        </el-carousel-item>
-      </el-carousel>
-    </div>
-    <div>
-      D3 Img example
-      <el-carousel :interval="4000" type="card" height="70px">
-        <el-carousel-item v-for="item in imgArray" :key="item.id">
-          <el-row>
-            <el-col :span="24">
-              <img
-                ref="imgHeight"
-                :src="item.idView"
-                @mouseover="createClone($event,item.chartType,'D3')"
-                @mouseout="deletClone($event)"
-              >
-            </el-col>
-          </el-row>
-        </el-carousel-item>
-      </el-carousel>
-    </div>
-    <div>
-      <a>Data Drag</a>
-      <div id="staticdata">
-        <ul></ul>
-      </div>
-    </div>
+    <el-collapse>
+      <el-collapse-item title=" Echart Img example">
+        <div>
+          <el-carousel :interval="4000" type="card" height="70px">
+            <el-carousel-item v-for="item in imgArray" :key="item.id">
+              <el-row>
+                <el-col :span="24">
+                  <img
+                    ref="imgHeight"
+                    :src="item.idView"
+                    @mouseover="createClone($event,item.chartType,'echarts')"
+                    @mouseout="deletClone($event)"
+                  >
+                </el-col>
+              </el-row>
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+      </el-collapse-item>
+      <el-collapse-item title="D3 Img example">
+        <div>
+          <el-carousel :interval="4000" type="card" height="70px">
+            <el-carousel-item v-for="item in imgArray" :key="item.id">
+              <el-row>
+                <el-col :span="24">
+                  <img
+                    ref="imgHeight"
+                    :src="item.idView"
+                    @mouseover="createClone($event,item.chartType,'D3')"
+                    @mouseout="deletClone($event)"
+                  >
+                </el-col>
+              </el-row>
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+      </el-collapse-item>
+      <el-collapse-item title="Data Drag">
+        <div>
+          <div id="staticdata">
+            <ul></ul>
+          </div>
+        </div>
+      </el-collapse-item>
+    </el-collapse>
     <div>
       <el-button size="small" type="primary" @click="saveOption">click save</el-button>
       <el-button size="small" type="primary" @click="popUp">edit interaction</el-button>
@@ -54,10 +59,14 @@ import * as d3 from "d3";
 import store from "../../store/store.js";
 import axios from "axios";
 import mapperdataM from "../../store/MapperDataManage.js";
-var htmlToImage = require("html-to-image");
+import modeConfig from "../../assets/modelConfig2.json";
 
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
+
+console.log(modeConfig);
+var htmlToImage = require("html-to-image");
+
 const MaxLength = 2;
 var MapperDatas = d3.map();
 var datamap = d3.map();
@@ -318,7 +327,17 @@ var imgArray = [
   {
     id: 2,
     idView: require("../../../static/Image/piechart.png"),
-    chartType: "testChart"
+    chartType: "piechart"
+  },
+  {
+    id: 3,
+    idView: require("../../../static/Image/line_vega.png"),
+    chartType: "linechart_vega"
+  },
+  {
+    id: 4,
+    idView: require("../../../static/Image/scatter_vega.png"),
+    chartType: "scatter_vega"
   }
 ];
 export default {
@@ -336,7 +355,7 @@ export default {
         .css("height", "200px")
         .css("width", "200px")
         .css("top", function() {
-          var y = $(e)[0].clientY - 80 + "px";
+          var y = $(e)[0].clientY + 60 + "px";
           return y;
         })
         .css("left", "15%");
@@ -398,7 +417,6 @@ export default {
       });
     },
     deletClone: function(e) {
-      $("#clone").remove();
       d3.selectAll("#clone").remove();
     },
     saveOption: function() {
@@ -514,5 +532,9 @@ function clickdata() {
 }
 #staticdata table thead th {
   background: #ccc;
+}
+#Store .el-collapse-item .el-collapse-item__header {
+  text-align: center;
+  font: 10px Microsoft YaHei;
 }
 </style>

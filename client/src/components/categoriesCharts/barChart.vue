@@ -8,28 +8,18 @@ import { mapGetters } from "vuex";
 import echarts from "echarts";
 var datamapper = [
   {
-    dataname: "value",
-    datatype: "num",
-    mapfrom: null,
-    alias: null
+    Fieldname: "value",
+    Fieldtype: "num",
+    Mapfrom: null,
+    Alias: null
   },
   {
-    dataname: "name",
-    datatype: "string",
-    mapfrom: null,
-    alias: null
+    Fieldname: "name",
+    Fieldtype: "string",
+    Mapfrom: null,
+    Alias: null
   }
 ];
-
-var barData=[
-  { name: "Mon", value: "10" },
-  { name: "Tue", value: "706" },
-  {
-    name: "Wed",
-    value: "239"
-  },
-  { name: "Thu", value: 172 }
-]
 export default {
   name: "LiZi",
 
@@ -46,7 +36,15 @@ export default {
             color: ["#69C0FF"]
           },
           id: this.id,
-          data: barData ,
+          data: [
+            { name: "Mon", value: "10" },
+            { name: "Tue", value: "706" },
+            {
+              name: "Wed",
+              value: "239"
+            },
+            { name: "Thu", value: 172 }
+          ],
           datamappers: datamapper
         };
         return a;
@@ -61,7 +59,7 @@ export default {
   },
   computed: {
     ...mapGetters({ storeBaseData: "getPropsData" }),
-    ...mapGetters({getInterData:"getInteractionData"}),
+    ...mapGetters({ getInterData: "getInteractionData" }),
 
     t() {
       return {
@@ -141,6 +139,7 @@ export default {
     //野
     storeBaseData: {
       handler(newVal) {
+        console.log(newVal);
         if (newVal.id == this.id) {
           this.myChart.setOption({
             title: {
@@ -160,12 +159,13 @@ export default {
       },
       deep: true
     },
-    getInterData:{
-      handler(newVal){
-        this.baseData.data=newVal
+    getInterData: {
+      handler(newVal) {
+        this.baseData.data = newVal;
+        console.log(this.baseData);
         this.$store.commit("commitPropsData", this.baseData);
       },
-      deep:true
+      deep: true
     }
   }
 };
