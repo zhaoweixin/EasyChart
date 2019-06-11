@@ -1,11 +1,13 @@
 <template>
 
   <div v-bind:id="id" class='container' @click="selectChart">
-  </div>
+    <div v-bind:id="g2id" class='container'></div>
+    </div>
 </template>
 
 <!--<script src="https://d3js.org/d3.v4.min.js"></script>-->
 <script>
+var elementResizeDetectorMaker = require("element-resize-detector")
 import G2 from "@antv/g2";
 import { mapState } from 'vuex';
 import $ from "jquery";
@@ -39,6 +41,8 @@ export default {
                 },{
                   "item":"精神病","count":351,"percent":0.014754098360655738
                 }],
+              width: 484,
+              height: 310,
           }
               return a; 
 
@@ -50,26 +54,40 @@ export default {
       isInit:false,
       name: "lineChart",
       chart:{},
+      g2id: this.id + "_g2"
     };
   },
   computed: {
     ...mapState({
       chartArray: state => state.chartIdArray,
       refreshData: state => state.chartSizeChange,
-    })
+    }),
   },
   watch: {
     'refreshData': {
       deep:true,
       handler() {
-        this.chart.changeSize(this.$store.state.chartSizeChange.newWidth,this.$store.state.chartSizeChange.newHeight);
+        //this.chart.changeSize(this.$store.state.chartSizeChange.newWidth,this.$store.state.chartSizeChange.newHeight);
         console.log("更改了wh")
       }
     }
   },
   mounted() {
+    let that = this;
     this.initChart();
-    //this.chartInit();
+    
+    var erd = elementResizeDetectorMaker()
+    erd.listenTo(document.getElementById(this.id),  (element)=> {
+          var width = element.offsetWidth
+          var height = element.offsetHeight
+          
+          this.$nextTick(function () {
+            console.log("实现了");
+            //that.chart.changeSize(width,height);
+            //echarts.init(document.getElementById(this.id)).resize()
+            this.chart.changeSize(width,height)
+          })
+        })
   },
   methods: {
     selectChart() {
@@ -77,9 +95,9 @@ export default {
     },
     initChart() {
       this.chart = new G2.Chart({
-        container: this.id,
-        width: 484,
-        height: 310
+        container: this.g2id,
+        width: this.baseData.width,
+        height: this.baseData.height,
       })
       this.chart.source(this.baseData.data, {
         percent: {
@@ -141,13 +159,20 @@ export default {
       // });
       this.chart.render()
     },
-
   }
   
 };
 </script>
 
 
+<style scoped>
+
+  .container {
+    height: 100%;
+    width: 100%;
+    border: 3px solid white;
+  }
+</style>
 
 
 
