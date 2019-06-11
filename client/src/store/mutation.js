@@ -51,10 +51,16 @@ const mutation = {
     state.weatherData.baseData=payload
     state.weatherData.barData = Data(payload,"bar")
     state.weatherData.pieData = Data(payload,"pie")
+    state.weatherData.canlenderData = Data(payload,"canlender")
+    state.weatherData.pointData = Data(payload,"point")
 
     console.log(state.weatherData)
   },
-
+  commitInteractionData(state,payload){
+    state.weatherData.barData = {data:interationData(state.weatherData.baseData,"bar" ,payload),
+      change:interationData(state.weatherData.baseData,"bar" ,payload).length/40}
+    console.log(state.weatherData.barData)
+  },
   InteractionData(state,payload){
       if (payload==0){
 
@@ -75,18 +81,31 @@ const mutation = {
 
 export default mutation
 
-//取风
+//init 天气数据
 function Data(payload,type) {
-let arr_bar = []
-  let  arr_pie = [],arrpie=[]
+let arr_bar = [];
+  let  arr_pie = [],arrpie=[];
+let arr_canlender = [];
+let arr_point = []
   for (let i=0;i<payload.length;i++){
-    arr_bar.push(
-      {
-        name:payload[i].date,
-        value:payload[i].wind
-      }
-    )
-    arrpie.push(payload[i].weather)
+    if (payload[i].date.indexOf("2012")>-1) {
+      arr_bar.push(   //柱状图
+        {
+          name:payload[i].date,
+          value:payload[i].precipitation
+        }
+      )
+      arrpie.push(payload[i].weather) //圆环
+      arr_canlender.push([payload[i].date,payload[i].precipitation])   //日历图数据
+      arr_point.push(  //散点数据
+        {
+          name:payload[i].date,
+          value:payload[i].wind
+        }
+      )
+    }else {
+      break
+    }
   }
   let a =can_data(arrpie)
 
@@ -100,10 +119,52 @@ let arr_bar = []
   switch (type){
     case 'bar':return arr_bar;
     case 'pie':return arr_pie;
+    case 'canlender':return arr_canlender;
+    case 'point':return arr_canlender;
   }
 }
 
+function interationData(payload,type,factor) {
+  let arr_bar = [];
+  let  arr_pie = [],arrpie=[];
+  let arr_canlender = [];
+  let arr_point = []
+  for (let i=0;i<payload.length;i++){
+    if ((payload[i].date.indexOf("2012")>-1)&&(payload[i].weather==factor)) {
+      arr_bar.push(   //柱状图
+        {
+          name:payload[i].date,
+          value:payload[i].precipitation
+        }
+      )
+      arrpie.push(payload[i].weather) //圆环
+      arr_canlender.push([payload[i].date,payload[i].precipitation])   //日历图数据
+      arr_point.push(  //散点数据
+        {
+          name:payload[i].date,
+          value:payload[i].wind
+        }
+      )
+    }
+  }
+  let a =can_data(arrpie)
 
+  for (let i=0;i<a.length;i++){
+    arr_pie.push({
+      "item":a[i][0],
+      "count":a[i][1],
+      "percent":a[i][1]/payload.length
+    })
+  }
+  switch (type){
+    case 'bar':return arr_bar;
+    case 'pie':return arr_pie;
+    case 'canlender':return arr_canlender;
+    case 'point':return arr_canlender;
+  }
+}
+
+//单个数组合并重复项成二维数组
 function can_data(_arr){
   var _res = []; //
   _arr.sort();

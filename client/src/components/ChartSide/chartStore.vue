@@ -332,12 +332,17 @@ var imgArray = [
   {
     id: 3,
     idView: require("../../../static/Image/line_vega.png"),
-    chartType: "canlendar"
+    chartType: "linechart_vega"
   },
   {
     id: 4,
     idView: require("../../../static/Image/scatter_vega.png"),
     chartType: "scatter_vega"
+  },
+  {
+    id: 5,
+    idView: require("../../../static/Image/canlender.png"),
+    chartType: "canlendar"
   }
 ];
 export default {

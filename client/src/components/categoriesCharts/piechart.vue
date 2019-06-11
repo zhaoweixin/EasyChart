@@ -110,23 +110,12 @@ export default {
         })
 
       //点击交互
-      // this.chart.on('click', ev=> {
-      //   const data =ev.data._origin;
-      //   // data.push()
-      //   let arr=[];
-      //   arr=[data.item,this.city]
+      this.chart.on('click', ev=> {
+        const data =ev.data._origin;
 
-      //   this.$root.$emit('updataLine',arr)
-      //   this.$root.$emit('updateFunnel',arr)
-      //   this.$root.$emit('updateColum',arr)
-      //   this.$root.$emit('updateGrp',arr)
-      //   this.$root.$emit('updateBarChart',arr)
-
-      //   Pubsub.publish("manBing",data.item)
-
-
-
-      // });
+        console.log(data.item);
+        this.$store.commit("commitInteractionData",data.item)
+      });
       this.chart.render()
     },
 

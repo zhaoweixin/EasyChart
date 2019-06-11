@@ -24,9 +24,12 @@ const getter = {
     return state.propsData
   },
 
+  getWeatherInterData: state => {
+    return state.weatherData.barData
+  },
   getInteractionData:state=>{
       return state.interactionData
-  }
+  },
   // getBarData:state=>{
   //     return state.barData
   // }

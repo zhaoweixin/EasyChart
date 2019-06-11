@@ -4,7 +4,7 @@
 
 <script>
 var elementResizeDetectorMaker = require("element-resize-detector");
-import { mapGetters } from "vuex";
+import {mapState, mapGetters } from "vuex";
 import echarts from "echarts";
 
 var datamapper = [
@@ -50,9 +50,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({ storeBaseData: "getPropsData" }),
-    ...mapGetters({ getInterData: "getInteractionData" }),
-
+    ...mapGetters({ storeBaseData: "getPropsData" ,
+      getWeatInterData: "getWeatherInterData"
+    }),
     t() {
       return {
         color: this.baseData.style.color,
@@ -88,7 +88,7 @@ export default {
         ],
         series: [
           {
-            name: "直接访问",
+            name: "降雨量",
             type: "bar",
             barWidth: "60%",
             data: this.comArray(this.baseData.data, "value")
@@ -98,6 +98,7 @@ export default {
     }
   },
   methods: {
+
     selectChart() {
       this.$store.commit("commitPropsData", this.baseData);
     },
@@ -113,12 +114,10 @@ export default {
       }
       return arr;
     }
-
-
 },
   mounted() {
     this.draw();
-
+    console.log(this.getWeatInterData);
     var erd = elementResizeDetectorMaker();
     erd.listenTo(document.getElementById(this.id), element => {
       var width = element.offsetWidth;
@@ -133,7 +132,7 @@ export default {
     //野
     storeBaseData: {
       handler(newVal) {
-        console.log(newVal);
+        console.log(this.getWeatInterData)
         if (newVal.id == this.id) {
           this.myChart.setOption({
             title: {
@@ -155,8 +154,16 @@ export default {
     },
     getInterData: {
       handler(newVal) {
-        this.baseData.data = newVal;
-        this.$store.commit("commitPropsData", this.baseData);
+
+        console.log("dd")
+        // this.baseData.data = newVal;
+        // this.$store.commit("commitPropsData", this.baseData);
+      },
+      deep: true
+    },
+    getWeatInterData:{
+      handler(){
+        console.log("dddddd")
       },
       deep: true
     }

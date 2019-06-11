@@ -25,7 +25,8 @@
                   color:['#e0ffff', '#006edd']
                 },
                 id:this.id,
-                data:this.getVirtulData(2017)
+                data:this.$store.state.weatherData.canlenderData
+                // data:this.getVirtulData(2017)
               }
           }
       },
@@ -47,7 +48,7 @@
           var data = [];
           for (var time = date; time < end; time += dayTime) {
             data.push([
-              echarts.format.formatTime('yyyy-MM-dd', time),
+              echarts.format.formatTime('yyyy/MM/dd', time),
               Math.floor(Math.random() * 1000)
             ]);
           }
@@ -70,7 +71,7 @@
           },
           visualMap: {
             min: 0,
-            max: 1000,
+            max: 60,
             calculable: true,
             orient: 'vertical',
             right: '0',
@@ -94,7 +95,7 @@
               right:80,
               bottom: 10,
               orient: 'vertical',
-              range: '2017',
+              range: '2012',
               dayLabel: {
                 margin: 5
               }
