@@ -29,6 +29,7 @@
             :id="index"
             :style="{backgroundColor:item.color}"
             @resized="resizedEvent"
+            @click.native="getId(item.i)"
           >
             <component :is="item.chartname" :id="item.j" :props="item.props" ></component>
           </grid-item>
@@ -178,6 +179,9 @@ export default {
       if (this.show) { //是否绘制网格
         drawGrids(width, height);
       }
+    },
+    getId(item){
+      console.log("得到ID了"+ item);
     }
   },
   components: {
