@@ -18,7 +18,7 @@ const state = {
   chartComponentArray: [], //图表组件数组
   chartIdArray: [],
   charttest: "ww",
-  chartChange: '',
+  chartSizeChange: {},
   propsData:'',
   isActive: false,
   popUp:false,

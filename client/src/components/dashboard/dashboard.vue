@@ -28,6 +28,7 @@
             :i="item.i"
             :id="index"
             :style="{backgroundColor:item.color}"
+            @resized="resizedEvent"
           >
             <component :is="item.chartname" :id="item.j" :props="item.props"></component>
           </grid-item>
@@ -136,6 +137,10 @@ export default {
       this.container.append("g").attr("id", that.gridLayer);
       this.$store.commit("setChartLayer", { chartLayer: that.chartLayer });
       this.chartResize(window.innerWidth * 0.77, window.innerHeight);
+    },
+    resizedEvent: function(i, newH, newW, newHPx, newWPx){
+        console.log("RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx);
+        this.$store.commit('commitChange',{newWidth:newWPx,newHeight:newHPx});
     },
     chartResize(width, height) {
       let that = this;
