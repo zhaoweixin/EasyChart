@@ -327,7 +327,7 @@ var imgArray = [
   {
     id: 2,
     idView: require("../../../static/Image/piechart.png"),
-    chartType: "testChart"
+    chartType: "lineChart"
   },
   {
     id: 3,
