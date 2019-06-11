@@ -101,7 +101,7 @@ export default {
                             that.remove(this.blueComponents[i])
                             break;
                         }
-                        
+
                         let curEle = curVal[i];
                         let preEle = oldVal[i];
                         //Obtain the newest postion of each component
@@ -139,7 +139,7 @@ export default {
                 }
             },
             deep: true
-        }        
+        }
     },
     mounted() {
         let that = this;
@@ -218,7 +218,7 @@ export default {
             this.width = width;
             this.height = height;
             let drawGrids = function(that){
-            //Darwing the grids line in canvas which help user the recognize the canvas and components        
+            //Darwing the grids line in canvas which help user the recognize the canvas and components
                 let lineData = [];
                 for (let i = 10; i < that.width; i += 20) {
                     lineData.push({ x1: i, y1: 0, x2: i, y2: that.height });
@@ -250,7 +250,7 @@ export default {
             d3.select("#editorborad")
                 .attr("width", this.width)
                 .attr("height", this.height);
-            
+
             drawGrids(that)
         },
         addComponent(){
@@ -303,7 +303,7 @@ export default {
                     ));
                 that.blueLines.push(line);
                 that.mouseAction = "drawing_line";
-                
+
                 let allPorts = [];
 
                 that.blueComponents.forEach(function(component,i) {
@@ -514,24 +514,24 @@ export default {
                 that.blueLinesName.splice(index, 1)
                 }
             }
-            
+
             //third delete component in array
             for(let i=0; i<this.blueComponents.length; i++){
                 if(comid == this.blueComponents[i].getId()){
                 this.blueComponents[i] = null;
                 this.blueComponents.splice(i, 1);
-                
+
                 break;
                 }
             }
-            
+
             //remove ports
             for(let i=0; i<that.exstingPorts.length; i++){
                 if(comid == that.exstingPorts[i].parentid){
                 this.exstingPorts.splice(i, 1);
                 }
             }
-            
+
             if(comtype == "Data"){
                 delete that.selectedData[comid]
                 delete that.dataComponent[comid]
@@ -647,7 +647,6 @@ export default {
                 let indextarget = this.blueComponentNameList.indexOf(String(this.blueLinesName[i]).split('_')[1])
                 that.componentGraph[indexsource][indextarget] = 1
             }
-
         },
         calculator(option){
             this.createNewComponent(option)

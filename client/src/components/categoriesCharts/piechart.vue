@@ -26,21 +26,9 @@ export default {
                   '#FE902D','#FCCA74']
               },
               id:this.id,
-              data : [{
-                  "item":"高血压","count":3228,"percent":0.13568726355611602
-                },{
-                  "item":"糖尿病","count":880,"percent":0.036990332072299285
-                },{
-                  "item":"老人","count":16376,"percent":0.6883564522908785
-                },{
-                  "item":"残疾人","count":190,"percent":0.007986548970155528
-                },{
-                  "item":"儿童","count":2765,"percent":0.11622530474989491
-                },{
-                  "item":"精神病","count":351,"percent":0.014754098360655738
-                }],
+              data : this.$store.state.weatherData.pieData,
           }
-              return a; 
+              return a;
 
           }
         }
@@ -120,7 +108,7 @@ export default {
           lineWidth: 1,
           stroke: '#fff'
         })
-      
+
       //点击交互
       // this.chart.on('click', ev=> {
       //   const data =ev.data._origin;
@@ -143,7 +131,7 @@ export default {
     },
 
   }
-  
+
 };
 </script>
 
@@ -152,4 +140,3 @@ export default {
 
 
 
-    

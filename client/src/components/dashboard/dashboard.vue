@@ -30,7 +30,7 @@
             :style="{backgroundColor:item.color}"
             @resized="resizedEvent"
           >
-            <component :is="item.chartname" :id="item.j" :props="item.props"></component>
+            <component :is="item.chartname" :id="item.j" :props="item.props" ></component>
           </grid-item>
         </div>
       </grid-layout>

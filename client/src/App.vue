@@ -39,6 +39,7 @@ import SettingSide from "./components/SettingSide/SettingSide"
 import dashboard from "./components/dashboard/dashboard.vue"
 import dragResize from "./components/dragResize/dragResize"
 import blueEditor from "./components/blueEditor/blueEditor"
+  import axios from "axios";
 export default {
   name: 'App',
   components: {
@@ -51,7 +52,21 @@ export default {
     blueEditor
   },
   mounted:async function(){
-    await DataProxy.initChartsData()
+    await  this.getdata()
+  },
+  methods:{
+    getdata(){
+      let data = {
+        "dataName":"seattle-weather"
+      }
+      axios.post("http://localhost:3000/getdata", data, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res)=>{
+        this.$store.commit("commitWeatherData",res.data.data)
+      })
+    }
   }
 }
 </script>

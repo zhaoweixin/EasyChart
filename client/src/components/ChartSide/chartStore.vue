@@ -332,7 +332,7 @@ var imgArray = [
   {
     id: 3,
     idView: require("../../../static/Image/line_vega.png"),
-    chartType: "linechart_vega"
+    chartType: "canlendar"
   },
   {
     id: 4,
@@ -409,6 +409,7 @@ export default {
             w: 4,
             h: 8,
             i: stores.state.chartIdArray.length,
+            static:true,
             j: "item" + stores.state.chartIdArray.length,
             color: "#828C88"
           };

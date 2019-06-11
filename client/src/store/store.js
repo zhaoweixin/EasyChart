@@ -24,6 +24,7 @@ const state = {
   popUp:false,
   interactionData:[],   //交互暂存数组
   dataMapper:[],
+  weatherData:{},
   chartCategory: [
     "bubblechart",
     "bubbleFrequencyChart",

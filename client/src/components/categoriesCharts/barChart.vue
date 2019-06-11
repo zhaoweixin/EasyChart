@@ -6,6 +6,7 @@
 var elementResizeDetectorMaker = require("element-resize-detector");
 import { mapGetters } from "vuex";
 import echarts from "echarts";
+
 var datamapper = [
   {
     Fieldname: "value",
@@ -35,15 +36,7 @@ export default {
             color: ["#69C0FF"]
           },
           id: this.id,
-          data: [
-            { name: "Mon", value: "10" },
-            { name: "Tue", value: "706" },
-            {
-              name: "Wed",
-              value: "239"
-            },
-            { name: "Thu", value: 172 }
-          ],
+          data: this.$store.state.weatherData.barData,
           datamappers: datamapper
         };
         return a;
@@ -120,7 +113,9 @@ export default {
       }
       return arr;
     }
-  },
+
+
+},
   mounted() {
     this.draw();
 
@@ -161,7 +156,6 @@ export default {
     getInterData: {
       handler(newVal) {
         this.baseData.data = newVal;
-        console.log(this.baseData);
         this.$store.commit("commitPropsData", this.baseData);
       },
       deep: true
