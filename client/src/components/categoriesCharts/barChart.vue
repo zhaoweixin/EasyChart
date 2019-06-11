@@ -32,7 +32,6 @@ var barData=[
 ]
 export default {
   name: "LiZi",
-
   props: {
     id: String,
     baseData: {

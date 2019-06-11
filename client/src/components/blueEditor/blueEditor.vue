@@ -28,7 +28,7 @@ import BlueComponent from "./blueComponent"
 import modelConfig from "../../assets/modelConfig2.json"
 import blueComponentTypes from "../../assets/blueComponentTypes.json"
 import dashboardVue from '../dashboard/dashboard.vue';
-
+import axios from "axios";
 export default {
     name:'blueEditor',
     data(){
@@ -182,7 +182,7 @@ export default {
                     }
                 }
             }
-            //console.log(this.dataMapper)
+            this.$store.commit("updateDataMapper", that.dataMapper)
             //console.log(controlledCom, this.blueComponentNameList, that.componentGraph)
             this.$store.commit("editInteraction")
         },
