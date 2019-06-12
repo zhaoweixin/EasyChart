@@ -341,7 +341,7 @@ var imgArray = [
   },
   {
     id: 5,
-    idView: require("../../../static/Image/canlender.png"),
+    idView: require("../../../static/Image/canlendar.png"),
     chartType: "canlendar"
   }
 ];
