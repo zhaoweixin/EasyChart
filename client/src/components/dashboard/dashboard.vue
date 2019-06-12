@@ -17,10 +17,11 @@
         :vertical-compact="true"
         :use-css-transforms="true"
       >
-        <div @click.stop>
+        <div @click.stop v-on:dblclick="changeStatic">
           <grid-item
             v-for="(item,index) in chartArray"
             :key="index"
+            :static="item.static"
             :x="item.x"
             :y="item.y"
             :w="item.w"
@@ -101,6 +102,11 @@ export default {
     }
   },
   methods: {
+     changeStatic(event){
+       let i = event.path[3].id
+       this.$store.commit("changeStatic",i)
+       console.log(i)
+    },
     getData() { //获取baseData里的内容，并传进state里
       this.$store.commit("commitPropsData", this.baseData);
     },

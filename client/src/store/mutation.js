@@ -83,6 +83,9 @@ const mutation = {
           state.interactionData.push(payload)
         }
       }
+  },
+  changeStatic(state,id){
+    state.chartIdArray[id].static = true;
   }
 }
 
