@@ -83,6 +83,9 @@ export default {
     computed:{
         popupActivo4 () {
             return this.$store.state.popUp
+        },
+        _components () {
+            return this.$store.getters.getChartComponentArray
         }
     },
     watch:{
@@ -90,6 +93,12 @@ export default {
             handler(val, oldVal){
                 console.log(val, oldVal)
             }
+        },
+        _components : {
+            handler(val, oldVal){
+                this.addComponent(val[val.length-1])
+            },
+            deep:true
         },
         //Monitor the positon's change of component
         blueComponents: {
@@ -209,7 +218,7 @@ export default {
         this.container.append("g").attr("id", "grid_layer");
         this.chartResize(window.innerWidth * 0.95, window.innerHeight * 0.81);
         bluecomponentscountInit(that)
-        this.addComponent()
+        //this.addComponent()
         },
         chartResize(innerWidth, innerHeight){
             let that = this
@@ -253,20 +262,14 @@ export default {
 
             drawGrids(that)
         },
-        addComponent(){
+        addComponent(com){
             let that = this;
-            this.component.forEach( (d) => {
-                if(d.interaction == "controler"){
-                    that.controlComponentCount['controler'] ++
-                }else if(d.interaction == "controlled"){
-                    that.controlComponentCount['controlled'] ++
-                }
-            })
-            console.log(this.component)
-            console.log(this.controlComponentCount)
-            this.component.forEach( (d) =>{
-                that.createNewComponent(d.name)
-            })
+            if(com.interaction == "controler"){
+                that.controlComponentCount['controler'] ++
+            }else if(com.interaction == "controlled"){
+                that.controlComponentCount['controlled'] ++
+            }
+            that.createNewComponent(com.name)
         },
         createNewComponent(){
             let that = this,
@@ -485,6 +488,7 @@ export default {
             }
 
             let _name = arguments[0]
+            console.log(arguments[0], that.modelConfig)
             constructproperty(that, that.modelConfig[_name], _name)
         },
         remove(com){

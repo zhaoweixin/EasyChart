@@ -78,6 +78,11 @@ export default {
   },
   mounted() {
     this.initChart();
+    this.$store.commit("pushDataSetToState", {
+          "name":"GroupBarchart",
+          "interaction":"controlled"
+    })
+    
   },
   methods: {
     selectChart() {

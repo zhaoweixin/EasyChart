@@ -98,13 +98,16 @@ export default {
     }
   },
   methods: {
-
     selectChart() {
       this.$store.commit("commitPropsData", this.baseData);
     },
     draw() {
       this.myChart = echarts.init(document.getElementById(this.id));
       this.myChart.setOption(this.t);
+      this.$store.commit("pushDataSetToState", {
+        "name":"Barchart",
+        "interaction":"controler"
+      })
     },
     comArray(data, name) {
       let arr = [];

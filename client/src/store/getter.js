@@ -36,6 +36,9 @@ const getter = {
   getInteractionData:state=>{
       return state.interactionData
   },
+  getChartComponentArray: state=>{
+      return state.chartComponentArray
+  }
   // getBarData:state=>{
   //     return state.barData
   // }

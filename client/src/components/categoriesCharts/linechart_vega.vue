@@ -80,6 +80,11 @@ export default {
                 that.draw()
             })
         })
+        this.$store.commit("pushDataSetToState", {
+          "name":"Linechart_vega",
+          "interaction":"controlled"
+      })
+      
     },
     methods:{
         draw(){

@@ -255,6 +255,11 @@ export default {
           //Pubsub.publish("getTimeData",data_time)
         }
       })
+
+      this.$store.commit("pushDataSetToState", {
+          "name":"Linechart",
+          "interaction":"controlled"
+      })
       this.slider.render();
     },
 
