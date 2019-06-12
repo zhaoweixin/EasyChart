@@ -27,6 +27,9 @@ const getter = {
   getWeatherBarData: state => {
     return state.interacBarData
   },
+  getWeatherPrData: state => {
+    return state.interacPieData
+  },
   getWeatherCanlendarData: state => {
     return state.interacCanlendarData
   },

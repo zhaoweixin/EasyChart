@@ -26,6 +26,7 @@ const state = {
   interacCanlendarData:[],   //交互Canlendar
   interacScatterData:[],   //交互Point
   interacWeatherData:[],   //交互总的数据
+  interacPieData:[],   //交互pie
   dataMapper:[],
   weatherData:{},
   chartCategory: [

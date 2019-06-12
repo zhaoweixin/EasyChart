@@ -36,8 +36,26 @@
       },
       methods:{
         selectChart(){
+          this.baseData.data = this.changeObject(this.baseData.data)
           this.$store.commit("commitPropsData",this.baseData)
+        },
+        changeObject(data){
+          let a =[]
+          for (let i = 0; i < data.length; i++) {
+            a.push({
+              date:data[i][0],
+              value:data[i][1]
+            })
+          }
+          return a
+        },
 
+        changeArray(data){
+          let a=[]
+          for (let i = 0;i<data.length;i++){
+            a.push([data[i].date,data[i].value])
+          }
+          return a
         },
         getVirtulData(year) {
           // year = year;
@@ -134,7 +152,7 @@
               //   text: newVal.metaConfig.title
               // },
               series:{
-                data:newVal.data
+                data:this.changeArray(newVal.data)
               }
             })
           }
