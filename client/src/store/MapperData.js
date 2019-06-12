@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import store from "./store.js";
 var cnull = 0;
 const mapperdata = {
   analyzedata(datamap, mapperdatas) {
@@ -53,9 +54,10 @@ function count(data, countfield, group) {
       if (field[j][countfield] != null) count++;
     }
     if (!result[i]) result[i] = {};
-    result[i]["count(" + countfield + ")"] = count;
-    result[i][group] = keys[i];
+    result[i]["value"] = count;
+    result[i]["name"] = keys[i];
   }
+  store.state.propsData.data = result;
   console.log(result);
 }
 function sum(data, sumfield, group) {
@@ -71,9 +73,10 @@ function sum(data, sumfield, group) {
       }
     }
     if (!result[i]) result[i] = {};
-    result[i]["sum(" + sumfield + ")"] = sum;
-    result[i][group] = keys[i];
+    result[i]["value"] = sum;
+    result[i]["name"] = keys[i];
   }
+  store.state.propsData.data = result;
   console.log(result);
 }
 function avg(data, avgfield, group) {
@@ -89,8 +92,8 @@ function avg(data, avgfield, group) {
       }
     }
     if (!result[i]) result[i] = {};
-    result[i]["avg(" + avgfield + ")"] = avg / field.length;
-    result[i][group] = keys[i];
+    result[i]["value"] = avg / field.length;
+    result[i]["name"] = keys[i];
   }
   console.log(result);
 }
@@ -113,6 +116,7 @@ function publicopre(data, group) {
       })
       .map(data, d3.map)
   );
+  console.log(map);
   return map;
 }
 
