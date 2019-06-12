@@ -25,13 +25,7 @@ export default {
                         color:['#ffffff']
                     },
                     id: this.id,
-                    data: [
-                        {"x": 1500, "y": 0},
-                        {"x": 1000, "y": 2010},
-                        {"x": 2010, "y": 0},
-                        {"x": 500, "y": 2030},
-                        {"x": 2030, "y": 0}
-                    ],
+                    data: this.$store.state.weatherData.pointData,
                     width: 200,
                     height: 200
                 }
@@ -48,7 +42,9 @@ export default {
         }
     },
     computed:{
-        ...mapGetters({'storeBaseData': 'getPropsData'}),
+        ...mapGetters({storeBaseData: 'getPropsData',
+          WeatherScatterData :'getWeatherScatterData'
+        }),
         t(){
             return{
                 "$schema": "https://vega.github.io/schema/vega-lite/v3.json",
@@ -56,7 +52,7 @@ export default {
                 "data": {"values": this.baseData.data},
                 "mark": "point",
                 "encoding": {
-                    "x": {"field": "x","type": "quantitative"},
+                    "x": {"field": "x","type": "ordinal"},
                     "y": {"field": "y","type": "quantitative"}
                 },
                 "width": this.baseData.width,
@@ -70,7 +66,7 @@ export default {
     },
     mounted(){
         let that = this
-        this.draw() 
+        this.draw()
         var erd = elementResizeDetectorMaker()
         erd.listenTo(document.getElementById(that.id), (element)=>{
             this.baseData.width = element.offsetWidth
@@ -81,7 +77,7 @@ export default {
         })
     },
     methods:{
-        draw(){            
+        draw(){
             vegaEmbed("#"+this.id + "_vega", this.t, { theme: "default" });
         },
         selectChart(){
@@ -89,7 +85,6 @@ export default {
         }
     },
     watch:{
-        /*
         storeBaseData: {
             handler(newVal){
                 if (newVal.id==this.id){
@@ -98,9 +93,16 @@ export default {
                     this.baseData.data = newVal.data
                     this.draw()
                 }
-            }
-        }
-        */
+            },
+          deep:true
+        },
+      WeatherScatterData:{
+        handler(newVal){
+          this.baseData.data = newVal;
+          this.$store.commit("commitPropsData", this.baseData);
+        },
+        deep:true
+      }
     }
 }
 </script>

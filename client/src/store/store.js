@@ -22,7 +22,10 @@ const state = {
   propsData:'',
   isActive: false,
   popUp:false,
-  interactionData:[],   //交互暂存数组
+  interacBarData:[],   //交互Bar数组
+  interacCanlendarData:[],   //交互Canlendar
+  interacScatterData:[],   //交互Point
+  interacWeatherData:[],   //交互总的数据
   dataMapper:[],
   weatherData:{},
   chartCategory: [

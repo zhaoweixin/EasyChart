@@ -53,17 +53,25 @@ const mutation = {
     state.weatherData.pieData = Data(payload,"pie")
     state.weatherData.canlenderData = Data(payload,"canlender")
     state.weatherData.pointData = Data(payload,"point")
+  },
+  commitInteracBarData(state,payload){
+    state.interacBarData =interationData(state.weatherData.baseData,"bar" ,payload)
+  },
+  commitInteracCanlendarData(state,payload){
+    state.interacCanlendarData =interationData(state.weatherData.baseData,"canlender" ,payload)
+  },
+  commitInteracScatterData(state,payload){
+    state.interacScatterData =interationData(state.weatherData.baseData,"point" ,payload)
+  },
+  commitZongWeatherData(state,payload){
+    state.interacBarData = state.weatherData.barData
+    state.interacCanlendarData =  state.weatherData.canlenderData
+    state.interacScatterData = state.weatherData.pointData
+  },
 
-    console.log(state.weatherData)
-  },
-  commitInteractionData(state,payload){
-    state.weatherData.barData = {data:interationData(state.weatherData.baseData,"bar" ,payload),
-      change:interationData(state.weatherData.baseData,"bar" ,payload).length/40}
-    console.log(state.weatherData.barData)
-  },
+
   InteractionData(state,payload){
       if (payload==0){
-
         state.interactionData=[]
       } else{
         let isHave = state.interactionData.some(item=>{
@@ -75,7 +83,6 @@ const mutation = {
           state.interactionData.push(payload)
         }
       }
-      console.log(state.interactionData)
   }
 }
 
@@ -99,8 +106,8 @@ let arr_point = []
       arr_canlender.push([payload[i].date,payload[i].precipitation])   //日历图数据
       arr_point.push(  //散点数据
         {
-          name:payload[i].date,
-          value:payload[i].wind
+          x:payload[i].date,
+          y:payload[i].wind
         }
       )
     }else {
@@ -120,7 +127,7 @@ let arr_point = []
     case 'bar':return arr_bar;
     case 'pie':return arr_pie;
     case 'canlender':return arr_canlender;
-    case 'point':return arr_canlender;
+    case 'point':return arr_point;
   }
 }
 
@@ -139,10 +146,11 @@ function interationData(payload,type,factor) {
       )
       arrpie.push(payload[i].weather) //圆环
       arr_canlender.push([payload[i].date,payload[i].precipitation])   //日历图数据
+
       arr_point.push(  //散点数据
         {
-          name:payload[i].date,
-          value:payload[i].wind
+          x:payload[i].date,
+          y:payload[i].wind
         }
       )
     }
@@ -160,7 +168,7 @@ function interationData(payload,type,factor) {
     case 'bar':return arr_bar;
     case 'pie':return arr_pie;
     case 'canlender':return arr_canlender;
-    case 'point':return arr_canlender;
+    case 'point':return arr_point;
   }
 }
 

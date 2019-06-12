@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     ...mapGetters({ storeBaseData: "getPropsData" ,
-      getWeatInterData: "getWeatherInterData"
+      getWeatInterData: "getWeatherBarData"
     }),
     t() {
       return {
@@ -117,7 +117,6 @@ export default {
 },
   mounted() {
     this.draw();
-    console.log(this.getWeatInterData);
     var erd = elementResizeDetectorMaker();
     erd.listenTo(document.getElementById(this.id), element => {
       var width = element.offsetWidth;
@@ -132,7 +131,6 @@ export default {
     //野
     storeBaseData: {
       handler(newVal) {
-        console.log(this.getWeatInterData)
         if (newVal.id == this.id) {
           this.myChart.setOption({
             title: {
@@ -154,16 +152,15 @@ export default {
     },
     getInterData: {
       handler(newVal) {
-
-        console.log("dd")
         // this.baseData.data = newVal;
         // this.$store.commit("commitPropsData", this.baseData);
       },
       deep: true
     },
-    getWeatInterData:{
-      handler(){
-        console.log("dddddd")
+    getWeatInterData: {
+      handler(newVal) {
+        this.baseData.data = newVal;
+        this.$store.commit("commitPropsData", this.baseData);
       },
       deep: true
     }

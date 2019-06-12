@@ -47,7 +47,7 @@
       </div>
 
       <div v-if="key =='data' && value.length !== 0">
-        <v-table 
+        <v-table
           v-if="value[0].hasOwnProperty('name')"
           column-width-drag
           :table-data="value"
@@ -55,7 +55,7 @@
           :cell-edit-done="cellEditDone"
           style="width:100%"
         ></v-table>
-        <v-table 
+        <v-table
           v-if="value[0].hasOwnProperty('x')"
           column-width-drag
           :table-data="value"
@@ -63,7 +63,7 @@
           :cell-edit-done="cellEditDone"
           style="width:100%"
         ></v-table>
-        <v-table 
+        <v-table
           v-if="value[0].hasOwnProperty('item')"
           column-width-drag
           :table-data="value"

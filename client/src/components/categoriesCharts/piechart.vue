@@ -9,7 +9,7 @@
 <script>
 var elementResizeDetectorMaker = require("element-resize-detector")
 import G2 from "@antv/g2";
-import { mapState } from 'vuex';
+import { mapState,mapGetters } from 'vuex';
 import $ from "jquery";
 export default {
   name: "lineChart",
@@ -28,19 +28,7 @@ export default {
                   '#FE902D','#FCCA74']
               },
               id:this.id,
-              data : [{
-                  "item":"高血压","count":3228,"percent":0.13568726355611602
-                },{
-                  "item":"糖尿病","count":880,"percent":0.036990332072299285
-                },{
-                  "item":"老人","count":16376,"percent":0.6883564522908785
-                },{
-                  "item":"残疾人","count":190,"percent":0.007986548970155528
-                },{
-                  "item":"儿童","count":2765,"percent":0.11622530474989491
-                },{
-                  "item":"精神病","count":351,"percent":0.014754098360655738
-                }],
+              data : this.$store.state.weatherData.pieData,
               width: 484,
               height: 310,
           }
@@ -62,6 +50,7 @@ export default {
       chartArray: state => state.chartIdArray,
       refreshData: state => state.chartSizeChange,
     }),
+    ...mapGetters({ storeBaseData: "getPropsData"})
   },
   watch: {
     'refreshData': {
@@ -70,17 +59,23 @@ export default {
         //this.chart.changeSize(this.$store.state.chartSizeChange.newWidth,this.$store.state.chartSizeChange.newHeight);
         console.log("更改了wh")
       }
+    },
+    storeBaseData:{
+      handler(newVal){
+        console.log(newVal)
+      },
+      deep:true
     }
   },
   mounted() {
     let that = this;
     this.initChart();
-    
+
     var erd = elementResizeDetectorMaker()
     erd.listenTo(document.getElementById(this.id),  (element)=> {
           var width = element.offsetWidth
           var height = element.offsetHeight
-          
+
           this.$nextTick(function () {
             console.log("实现了");
             //that.chart.changeSize(width,height);
@@ -141,10 +136,16 @@ export default {
 
       //点击交互
       this.chart.on('click', ev=> {
-        const data =ev.data._origin;
 
-        console.log(data.item);
-        this.$store.commit("commitInteractionData",data.item)
+
+        if ( typeof ev.data!='undefined'?true :false) {
+          const data =ev.data._origin;
+          this.$store.commit("commitInteracBarData", data.item)
+          this.$store.commit("commitInteracCanlendarData", data.item)
+          this.$store.commit("commitInteracScatterData", data.item)
+        }else {
+          this.$store.commit("commitZongWeatherData",1)
+        };
       });
       this.chart.render()
     },

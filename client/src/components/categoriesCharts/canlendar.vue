@@ -32,6 +32,8 @@
       },
       computed:{
         ...mapGetters({'storeBaseData': 'getPropsData'}),
+        ...mapGetters({'weatherCanlIntData': 'getWeatherCanlendarData'})
+
       },
       methods:{
         selectChart(){
@@ -42,8 +44,6 @@
           // year = year;
           var date = +echarts.number.parseDate(year + '-01-01');
           var end = +echarts.number.parseDate((+year + 1) + '-01-01');
-
-          console.log(date)
           var dayTime = 3600 * 24 * 1000;
           var data = [];
           for (var time = date; time < end; time += dayTime) {
@@ -52,9 +52,6 @@
               Math.floor(Math.random() * 1000)
             ]);
           }
-
-          console.log(data)
-
           return data;
         }
       },
@@ -140,6 +137,13 @@
           }
 
           // console.log(newVal)
+        },
+        deep:true
+      },
+      weatherCanlIntData:{
+        handler(newVal){
+          this.baseData.data = newVal
+          this.$store.commit("commitPropsData",this.baseData)
         },
         deep:true
       }

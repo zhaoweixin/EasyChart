@@ -329,11 +329,11 @@ var imgArray = [
     idView: require("../../../static/Image/piechart.png"),
     chartType: "piechart"
   },
-  {
-    id: 3,
-    idView: require("../../../static/Image/line_vega.png"),
-    chartType: "linechart_vega"
-  },
+  // {
+  //   id: 3,
+  //   idView: require("../../../static/Image/line_vega.png"),
+  //   chartType: "linechart_vega"
+  // },
   {
     id: 4,
     idView: require("../../../static/Image/scatter_vega.png"),
@@ -414,7 +414,7 @@ export default {
             w: 4,
             h: 8,
             i: stores.state.chartIdArray.length,
-            static:true,
+            static:false,
             j: "item" + stores.state.chartIdArray.length,
             color: "#828C88"
           };
