@@ -1,7 +1,7 @@
 <template>
-
   <div v-bind:id="id" class='container' @click="selectChart">
-    <div v-bind:id="g2id" class='container'></div>
+    <div v-bind:id="g2id" class='container'>
+    </div>
     </div>
 </template>
 
@@ -53,19 +53,21 @@ export default {
     ...mapGetters({ storeBaseData: "getPropsData"})
   },
   watch: {
-    'refreshData': {
-      deep:true,
-      handler() {
-        //this.chart.changeSize(this.$store.state.chartSizeChange.newWidth,this.$store.state.chartSizeChange.newHeight);
-        console.log("更改了wh")
-      }
-    },
-    storeBaseData:{
-      handler(newVal){
-        console.log(newVal)
+    // 'refreshData': {
+    //   deep:true,
+    //   handler() {
+    //     //this.chart.changeSize(this.$store.state.chartSizeChange.newWidth,this.$store.state.chartSizeChange.newHeight);
+    //     console.log("更改了wh")
+    //   }
+    // },
+    storeBaseData: {
+      handler(newVal) {
+        if (newVal.id == this.id) {
+          this.chart.repaint();
+        }
       },
-      deep:true
-    }
+      deep: true
+    },
   },
   mounted() {
     let that = this;
@@ -132,23 +134,34 @@ export default {
         }).style({
           lineWidth: 1,
           stroke: '#fff'
+        }).select({
+          animate: false,
+
+        }).animate({
+          delay:100,
+          duration: 60
         })
 
       //点击交互
-      this.chart.on('click', ev=> {
-
-
-        if ( typeof ev.data!='undefined'?true :false) {
+      this.chart.on('interval:click', ev=> {
+        console.log("shuju"+ev)
+        const shape = ev.shape;
+        if (ev.shape.get('selected')?true :false) {
           const data =ev.data._origin;
           this.$store.commit("commitInteracBarData", data.item)
           this.$store.commit("commitInteracCanlendarData", data.item)
           this.$store.commit("commitInteracScatterData", data.item)
-        }else {
+          console.log('yibufen')
+        }
+        else
+        {
           this.$store.commit("commitZongWeatherData",1)
+          console.log('quanbu')
         };
       });
       this.chart.render()
     },
+
   }
 
 };

@@ -322,7 +322,7 @@ var imgArray = [
   {
     id: 1,
     idView: require("../../../static/Image/linechart.png"),
-    chartType: "scatter_vega"
+    chartType: "lineChart"
   },
   {
     id: 2,

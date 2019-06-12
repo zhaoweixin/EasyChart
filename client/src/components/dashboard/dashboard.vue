@@ -103,7 +103,8 @@ export default {
   },
   methods: {
      changeStatic(event){
-       let i = event.path[3].id
+       let i = event.path[3].id;
+        i = i.charAt(i.length - 1);
        this.$store.commit("changeStatic",i)
        console.log(i)
     },
@@ -119,7 +120,6 @@ export default {
         });
     },
     open() {
-      // console.log("hhhahahahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
         this.$prompt('请输入模板名称','Save' ,{
           confirmButtonText: '确定',
           cancelButtonText: '取消',

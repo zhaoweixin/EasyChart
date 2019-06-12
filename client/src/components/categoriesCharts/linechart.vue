@@ -1,19 +1,25 @@
 <template>
 
   <div v-bind:id="id" class='container' @click="selectChart">
-    <div id="linechart_top"></div>
-    <div id="slider"></div>
+    <div v-bind:id="g2id" class="container_2">
+      <div id="linechart_top">
+      </div>
+      <div id="slider" class="slider_1"></div>
+    </div>
   </div>
 
 </template>
 
 
 <script>
+var elementResizeDetectorMaker = require("element-resize-detector")
 import G2 from "@antv/g2";
 const slider = require("@antv/g2-plugin-slider");
 import { DataSet } from "@antv/data-set";
 import { mapState } from 'vuex';
 import $ from "jquery";
+import linechart_vegaVue from './linechart_vega.vue';
+import { autoMaxBins } from 'vega-lite/build/src/bin';
 export default {
   name: "lineChart",
   props:{
@@ -31,81 +37,104 @@ export default {
                   '#FE902D','#FCCA74']
               },
               id:this.id,
-              data : [{
-                "time":"2016-01-01","签约人群":"总签约人数","签约人数":0
-                },{"time":"2016-01-01","签约人群":"重点签约人数","签约人数":0
-                },{"time":"2016-02-01","签约人群":"总签约人数","签约人数":0
-                },{"time":"2016-02-01","签约人群":"重点签约人数","签约人数":0
-                },{"time":"2016-03-01","签约人群":"总签约人数","签约人数":0
-                },{"time":"2016-03-01","签约人群":"重点签约人数","签约人数":0
-                },{"time":"2016-04-01","签约人群":"总签约人数","签约人数":0
-                },{"time":"2016-04-01","签约人群":"重点签约人数","签约人数":0
-                },{"time":"2016-05-01","签约人群":"总签约人数","签约人数":0
-                },{"time":"2016-05-01","签约人群":"重点签约人数","签约人数":0
-                },{"time":"2016-06-01","签约人群":"总签约人数","签约人数":0
-                },{"time":"2016-06-01","签约人群":"重点签约人数","签约人数":0
-                },{"time":"2016-07-01","签约人群":"总签约人数","签约人数":0
-                },{"time":"2016-07-01","签约人群":"重点签约人数","签约人数":0
-                },{"time":"2016-08-01","签约人群":"总签约人数","签约人数":0
-                },{"time":"2016-08-01","签约人群":"重点签约人数","签约人数":0
-                },{"time":"2016-09-01","签约人群":"总签约人数","签约人数":0
-                },{"time":"2016-09-01","签约人群":"重点签约人数","签约人数":0
-                },{"time":"2016-10-01","签约人群":"总签约人数","签约人数":0
-                },{"time":"2016-10-01","签约人群":"重点签约人数","签约人数":0
-                },{"time":"2016-11-01","签约人群":"总签约人数","签约人数":3
-                },{"time":"2016-11-01","签约人群":"重点签约人数","签约人数":1
-                },{"time":"2016-12-01","签约人群":"总签约人数","签约人数":4
-                },{"time":"2016-12-01","签约人群":"重点签约人数","签约人数":3
-                },{"time":"2017-01-01","签约人群":"总签约人数","签约人数":16
-                },{"time":"2017-01-01","签约人群":"重点签约人数","签约人数":16
-                },{"time":"2017-02-01","签约人群":"总签约人数","签约人数":250
-                },{"time":"2017-02-01","签约人群":"重点签约人数","签约人数":249
-                },{"time":"2017-03-01","签约人群":"总签约人数","签约人数":342
-                },{"time":"2017-03-01","签约人群":"重点签约人数","签约人数":339
-                },{"time":"2017-04-01","签约人群":"总签约人数","签约人数":188
-                },{"time":"2017-04-01","签约人群":"重点签约人数","签约人数":188
-                },{"time":"2017-05-01","签约人群":"总签约人数","签约人数":3
-                },{"time":"2017-05-01","签约人群":"重点签约人数","签约人数":2
-                },{"time":"2017-06-01","签约人群":"总签约人数","签约人数":2119
-                },{"time":"2017-06-01","签约人群":"重点签约人数","签约人数":926
-                },{"time":"2017-07-01","签约人群":"总签约人数","签约人数":15921
-                },{"time":"2017-07-01","签约人群":"重点签约人数","签约人数":5454
-                },{"time":"2017-08-01","签约人群":"总签约人数","签约人数":9047
-                },{"time":"2017-08-01","签约人群":"重点签约人数","签约人数":3042
-                },{"time":"2017-09-01","签约人群":"总签约人数","签约人数":7203
-                },{"time":"2017-09-01","签约人群":"重点签约人数","签约人数":3356
-                },{"time":"2017-10-01","签约人群":"总签约人数","签约人数":31633
-                },{"time":"2017-10-01","签约人群":"重点签约人数","签约人数":11891
-                },{"time":"2017-11-01","签约人群":"总签约人数","签约人数":76973
-                },{"time":"2017-11-01","签约人群":"重点签约人数","签约人数":24889
-                },{"time":"2017-12-01","签约人群":"总签约人数","签约人数":36357
-                },{"time":"2017-12-01","签约人群":"重点签约人数","签约人数":13142
-                },{"time":"2018-01-01","签约人群":"总签约人数","签约人数":5244
-                },{"time":"2018-01-01","签约人群":"重点签约人数","签约人数":2315
-                },{"time":"2018-02-01","签约人群":"总签约人数","签约人数":43280
-                },{"time":"2018-02-01","签约人群":"重点签约人数","签约人数":22350
-                },{"time":"2018-03-01","签约人群":"总签约人数","签约人数":79382
-                },{"time":"2018-03-01","签约人群":"重点签约人数","签约人数":38555
-                },{"time":"2018-04-01","签约人群":"总签约人数","签约人数":75383
-                },{"time":"2018-04-01","签约人群":"重点签约人数","签约人数":37424
-                },{"time":"2018-05-01","签约人群":"总签约人数","签约人数":72234
-                },{"time":"2018-05-01","签约人群":"重点签约人数","签约人数":30401
-                },{"time":"2018-06-01","签约人群":"总签约人数","签约人数":71267
-                },{"time":"2018-06-01","签约人群":"重点签约人数","签约人数":28115
-                },{"time":"2018-07-01","签约人群":"总签约人数","签约人数":157487
-                },{"time":"2018-07-01","签约人群":"重点签约人数","签约人数":76366
-                },{"time":"2018-08-01","签约人群":"总签约人数","签约人数":83563
-                },{"time":"2018-08-01","签约人群":"重点签约人数","签约人数":38653
-                },{"time":"2018-09-01","签约人群":"总签约人数","签约人数":40644
-                },{"time":"2018-09-01","签约人群":"重点签约人数","签约人数":14774
-                },{"time":"2018-10-01","签约人群":"总签约人数","签约人数":38981
-                },{"time":"2018-10-01","签约人群":"重点签约人数","签约人数":12559
-                },{"time":"2018-11-01","签约人群":"总签约人数","签约人数":90184
-                },{"time":"2018-11-01","签约人群":"重点签约人数","签约人数":22146
-                },{"time":"2018-12-01","签约人群":"总签约人数","签约人数":"__vue_devtool_undefined__"
-                },{"time":"2018-12-01","签约人群":"重点签约人数","签约人数":"__vue_devtool_undefined__"
-                }]
-          }
+              data:[{
+                  "time": "2016-01-01",
+                  "city": "Tokyo",
+                  "temperature": 7
+              }, {
+                  "time": "2016-01-01",
+                  "city": "London",
+                  "temperature": 3.9
+              }, {
+                  "time": "2016-02-01",
+                  "city": "Tokyo",
+                  "temperature": 6.9
+              }, {
+                  "time": "2016-02-01",
+                  "city": "London",
+                  "temperature": 4.2
+              }, {
+                  "time": "2016-03-01",
+                  "city": "Tokyo",
+                  "temperature": 9.5
+              }, {
+                  "time": "2016-03-01",
+                  "city": "London",
+                  "temperature": 5.7
+              }, {
+                  "time": "2016-04-01",
+                  "city": "Tokyo",
+                  "temperature": 14.5
+              }, {
+                  "time": "2016-04-01",
+                  "city": "London",
+                  "temperature": 8.5
+              }, {
+                  "time": "2016-05-01",
+                  "city": "Tokyo",
+                  "temperature": 18.4
+              }, {
+                  "time": "2016-05-01",
+                  "city": "London",
+                  "temperature": 11.9
+              }, {
+                  "time": "2016-06-01",
+                  "city": "Tokyo",
+                  "temperature": 21.5
+              }, {
+                  "time": "2016-06-01",
+                  "city": "London",
+                  "temperature": 15.2
+              }, {
+                  "time": "2016-07-01",
+                  "city": "Tokyo",
+                  "temperature": 25.2
+              }, {
+                  "time": "2016-07-01",
+                  "city": "London",
+                  "temperature": 17
+              }, {
+                  "time": "2016-08-01",
+                  "city": "Tokyo",
+                  "temperature": 26.5
+              }, {
+                  "time": "2016-08-01",
+                  "city": "London",
+                  "temperature": 16.6
+              }, {
+                  "time": "2016-09-01",
+                  "city": "Tokyo",
+                  "temperature": 23.3
+              }, {
+                  "time": "2016-09-01",
+                  "city": "London",
+                  "temperature": 14.2
+              }, {
+                  "time": "2016-10-01",
+                  "city": "Tokyo",
+                  "temperature": 18.3
+              }, {
+                  "time": "2016-10-01",
+                  "city": "London",
+                  "temperature": 10.3
+              }, {
+                  "time": "2016-11-01",
+                  "city": "Tokyo",
+                  "temperature": 13.9
+              }, {
+                  "time": "2016-11-01",
+                  "city": "London",
+                  "temperature": 6.6
+              }, {
+                  "time": "2016-12-01",
+                  "city": "Tokyo",
+                  "temperature": 9.6
+              }, {
+                  "time": "2016-12-01",
+                  "city": "London",
+                  "temperature": 4.8
+              }]
+            }
               return a; 
 
           }
@@ -116,6 +145,7 @@ export default {
       isInit:false,
       name: "lineChart",
       chart:{},
+      g2id: this.id + "_g2"
     };
   },
   computed: {
@@ -125,99 +155,89 @@ export default {
     })
   },
   mounted() {
+    let that = this;
     this.initChart();
+
+    var erd = elementResizeDetectorMaker()
+    erd.listenTo(document.getElementById(this.id),  (element)=> {
+          var width = element.offsetWidth
+          var height = element.offsetHeight
+
+          this.$nextTick(function () {
+            console.log("实现了");
+            //that.chart.changeSize(width,height);
+            //echarts.init(document.getElementById(this.id)).resize()
+            that.chart.changeSize(width,height - 30);
+            that.slider.repaint();
+            //this.slider.changeSize(width,20);
+          })
+        })
   },
   methods: {
     selectChart() {
       this.$store.commit("commitPropsData", this.baseData);
     },
     initChart() {
+      // 折线图
       this.chart = new G2.Chart({
         container: 'linechart_top',
-        width: 484,
         height: 310,
+        width: 484,
       });
 
       var ds = new DataSet({
         state: {
-          start: new Date('2016-01-01').getTime(),
-          end: new Date('2018-12-01').getTime(),
+          start: new Date('2016-01').getTime(),
+          end: new Date('2016-12').getTime(),
         }
       });
 
-        // console.log(this.data)
-        var dv = ds.createView().source(this.baseData.data);
-        dv.transform({
-          type: "filter",
-          callback: function callback(data) {
-            var time = new Date(data.time).getTime();
-            return time >= ds.state.start && time <= ds.state.end;
-          }
-        });
-        this.chart.tooltip({
-          crosshairs: {
-            type: "line"
-          }
-        });
-        this.chart.axis("签约人数", {
-          label: {
-            formatter: function formatter(val) {
-              return val + "人";
-            },
-            line: {
-              stroke: "white"
-            },
-            textStyle :{
-              fill:'#c2ccd0',
-            }
-          }
-        });
-        this.chart.axis("time",{
+      // console.log(this.data)
+      var dv = ds.createView().source(this.baseData.data);
+      dv.transform({
+        type: "filter",
+        callback: function callback(data) {
+          var time = new Date(data.time).getTime();
+          return time >= ds.state.start && time <= ds.state.end;
+        }
+      });
+
+      this.chart.source(dv, {
+        time: {
+          type: 'time',
+          mask: 'YYYY-MM',
+        },
+        range: [0, 1]
+
+      });
+      this.chart.tooltip({
+        crosshairs: {
+          type: 'line'
+        }
+      });
+      this.chart.axis("time",{
           label:{
             textStyle:{
               fill:'#c2ccd0',
             }
           }
         });
+      this.chart.axis('temperature', {
+        label: {
+          formatter: function formatter(val) {
+            return val + '°C';
+          }
+        }
+      });
+      this.chart.line().position('time*temperature').color('city');
+      this.chart.point().position('time*temperature').color('city').size(4).shape('circle').style({
+        stroke: '#fff',
+        lineWidth: 1
+      });
+      this.chart.legend(false);
+      this.chart.render();
 
-        // this.chart.scale("签约人数", {
-        //   type: "pow"
-        // });
-        this.chart.source(dv, {
-          time: {
-            type: 'time',
-            mask:'YYYY-MM'
-          },
-          range: [0, 1]
-        });
-      this.chart.area().position('time*签约人数')
-      .color('签约人群')
-      .shape('smooth');
-
-      this.chart
-          .line()
-          .position("time*签约人数")
-          .color("签约人群")
-          .shape("smooth");
-        this.chart
-          .point()
-          .position("time*签约人数")
-          .color("签约人群")
-          .size(4)
-          .shape("line")
-          .style({
-            stroke: "#fff",
-            lineWidth: 2
-          });
-        this.chart.legend({
-          position:'top'
-        });
-        this.chart.render();
-        // 创建 Slider
-
-
-      //console.log(this.slider)
-
+      // slider
       if (this.slider != null){
         this.slider.destroy();
       }
@@ -226,8 +246,9 @@ export default {
         start: ds.state.start, // 和状态量对应
         end: ds.state.end,
         xAxis: "time",
-        yAxis: "签约人数",
-        width: 484,
+        yAxis: "temperature",
+        //width: 484,
+        padding:[ 20, 20, 95, 80 ],
         data:dv,
         backgroundChart: {
           type: "line",
@@ -256,8 +277,8 @@ export default {
         }
       })
       this.slider.render();
-    },
 
+    }
   }
   
 };
@@ -266,6 +287,29 @@ export default {
 
 
 
-
+<style lang="css">
+.container {
+    height: 100%;
+    width: 100%;
+  }
+.container_2 {
+    height: 100%;
+    width: 100%;
+}
+#linechart_top {
+  position: relative;
+    height: 80%;
+    width: 100%;
+}
+#slider {
+  position: relative;
+  width: 100%;
+  left: 1px;
+  right: -1px;
+  top: 20px;
+  bottom: 0px;
+  text-align: center;
+}
+</style>
 
     
