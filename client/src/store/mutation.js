@@ -85,7 +85,6 @@ const mutation = {
       }
   },
   changeStatic(state,id){
-    console.log(state.chartIdArray[id]);
     state.chartIdArray[id].static = !state.chartIdArray[id].static;
   }
 }

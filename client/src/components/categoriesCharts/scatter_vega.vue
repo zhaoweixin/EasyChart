@@ -75,6 +75,11 @@ export default {
                 that.draw()
             })
         })
+
+        this.$store.commit("pushDataSetToState", {
+          "name":"Scatter_vega",
+          "interaction":"controlled"
+        })
     },
     methods:{
         draw(){

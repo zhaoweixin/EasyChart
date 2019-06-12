@@ -30,7 +30,6 @@
             :id="index"
             :style="{backgroundColor:item.color}"
             @resized="resizedEvent"
-            @click.native="getId(item.i)"
           >
             <component :is="item.chartname" :id="item.j" :props="item.props" ></component>
           </grid-item>
@@ -79,6 +78,7 @@ export default {
       },
       show: false,
       changeColor: false,
+      j:0,
     };
   },
   mounted() {
@@ -107,6 +107,14 @@ export default {
         i = i.charAt(i.length - 1);
        this.$store.commit("changeStatic",i)
        console.log(i)
+       let that=this;
+       let i = event.path[3].id;
+       i = i.charAt(i.length - 1);
+       that.j = that.j + 1;
+       let count = that.j 
+       console.log(count)
+       this.$store.commit("changeStatic",{'index':i,'value':count});
+      //  console.log(i)
     },
     getData() { //获取baseData里的内容，并传进state里
       this.$store.commit("commitPropsData", this.baseData);
@@ -186,9 +194,9 @@ export default {
         drawGrids(width, height);
       }
     },
-    getId(item){
-      console.log("得到ID了"+ item);
-    }
+    // getId(item){
+    //   console.log("得到ID了"+ item);
+    // }
   },
   components: {
     bubblechart,

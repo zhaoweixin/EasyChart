@@ -12,7 +12,7 @@ import G2 from "@antv/g2";
 import { mapState,mapGetters } from 'vuex';
 import $ from "jquery";
 export default {
-  name: "lineChart",
+  name: "pieChart",
   props:{
         id:String,
         baseData: {
@@ -160,6 +160,11 @@ export default {
         };
       });
       this.chart.render()
+
+      this.$store.commit("pushDataSetToState", {
+          "name":"Piechart",
+          "interaction":"controlled"
+      })
     },
 
   }

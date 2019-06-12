@@ -46,6 +46,10 @@
         // console.log(this.id, container)
         this.myChart = echarts.init(container);
         this.myChart.setOption(this.t)
+        this.$store.commit("pushDataSetToState", {
+          "name":"testChart",
+          "interaction":"controler"
+        })
       },
       selectChart(){
         //commit传值

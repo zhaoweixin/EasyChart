@@ -352,6 +352,10 @@ export default {
         });
       this.chart.render();
       console.log("生成了一个bubbleChart");
+      this.$store.commit("pushDataSetToState", {
+        "name":"Bubblechart",
+        "interaction":"controlled"
+      })
       // this.$store.commit("pushDataSetToState", {
       //   dataset: $.extend(true,{},val)
       // });

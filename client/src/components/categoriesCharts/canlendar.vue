@@ -11,7 +11,6 @@
         name: "canlendar",
       props:{
           id:String
-
       },
       data(){
         return {
@@ -114,6 +113,10 @@
             //使echarts尺寸重置
             echarts.init(document.getElementById(this.id)).resize()
           })
+        })
+        this.$store.commit("pushDataSetToState", {
+          "name":"Canlendar",
+          "interaction":"controlled"
         })
       },
     watch:{

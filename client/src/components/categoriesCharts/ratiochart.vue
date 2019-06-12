@@ -486,13 +486,19 @@ export default {
           stroke: "#1890ff"
         });
       this.chart.render();
+      this.$store.commit("pushDataSetToState", {
+          "name":"Ratiochart",
+          "interaction":"controlled"
+      })
       // this.chart.destory();
       // this.chart.changeData(this.sourceData2);
       // this.chart.render();
       //this.$store.state.chartComponetArray.push(bubbleChart);
+      /*
       this.$store.commit("pushDataSetToState", {
         dataset: this.bubblechartSet
       });
+      */
       //console.log(this.$store.state.chartComponentArray[0].dataset);
     },
     getContainer() {

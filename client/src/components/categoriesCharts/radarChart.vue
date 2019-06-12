@@ -407,6 +407,10 @@ export default {
           stroke: "#1890ff"
         });
       this.chart.render();
+      this.$store.commit("pushDataSetToState", {
+          "name":"Radarchart",
+          "interaction":"controlled"
+      })
       // this.chart.destory();
       // this.chart.changeData(this.sourceData2);
       // this.chart.render();
