@@ -1,6 +1,6 @@
 <template>
   <el-collapse v-model="activeNames">
-    <el-collapse-item v-for="(value, key) in baseData" :key="key" :title="key" :name="key">
+    <el-collapse-item v-for="(value, key) in baseData" :key="key" :title="key" :name="key" v-show="collapseShow(key)">
       <div v-for="(val, k) in value" :key="k">
         <div v-if="key =='metaConfig'">
           <span>{{k}}</span>
@@ -71,9 +71,17 @@
           :cell-edit-done="cellEditDone"
           style="width:100%"
         ></v-table>
+        <v-table
+          v-if="value[0].hasOwnProperty('date')"
+          column-width-drag
+          :table-data="value"
+          :columns="columnsDate"
+          :cell-edit-done="cellEditDone"
+          style="width:100%"
+        ></v-table>
       </div>
       <div v-if="key == 'button'">
-        <el-button v-on:click="sendIsActive">{{value}}</el-button>
+        <el-button v-on:click="sendIsActive(value.method)">{{value.title}}</el-button>
       </div>
     </el-collapse-item>
   </el-collapse>
@@ -81,6 +89,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { startanalyzedata } from "../../store/MapperDataManage";
 export default {
   name: "settingside",
   data() {
@@ -170,6 +179,26 @@ export default {
           isEdit: true,
           isResize: true
         }
+      ],
+      columnsDate: [
+        {
+          field: "date",
+          title: "date",
+          width: 100,
+          titleAlign: "center",
+          columnAlign: "center",
+          isEdit: true,
+          isResize: true
+        },
+        {
+          field: "value",
+          title: "value",
+          width: 100,
+          titleAlign: "center",
+          columnAlign: "center",
+          isEdit: true,
+          isResize: true
+        }
       ]
     };
   },
@@ -208,23 +237,26 @@ export default {
     cellEditDone(newValue, oldValue, rowIndex, rowData, field) {
       this.baseData.data[rowIndex][field] = newValue;
     },
-    sendIsActive() {
-      this.$store.commit("commitIsActive", !this.isClick);
+    sendIsActive(key) {
+      if(key=="dashboard"){
+        this.$store.commit("commitIsActive", !this.isClick);
+      }
+      else if(key=="startanalyzedata"){
+        startanalyzedata();//不知道是否在这里用
+      }
+
     },
     getDatamappersId(a) {
       if (a % 2) return "y";
       else return "x";
+    },
+    collapseShow(key){
+      return key=="metaConfig"||key=="style"||key== "data"||key=="button"||key=="datamappers";
     }
   }
 };
 </script>
 <style>
-.item {
-  float: right;
-}
-.itemName {
-  float: left;
-}
 .el-input {
   width: 100%;
   /* float: right; */

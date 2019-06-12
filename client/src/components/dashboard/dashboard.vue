@@ -74,7 +74,10 @@ export default {
           fontColor: "" //字体颜色
         },
         data: [],
-        button:'apply to all charts'
+        button: {
+            method: "dashboard",
+            title: "apply to all charts"
+          }
       },
       show: false,
       changeColor: false,
