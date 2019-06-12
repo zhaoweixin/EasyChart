@@ -11,6 +11,15 @@ var elementResizeDetectorMaker = require("element-resize-detector")
 import G2 from "@antv/g2";
 import { mapState,mapGetters } from 'vuex';
 import $ from "jquery";
+
+var datamapper = [
+  {
+    Fieldname: "name",
+    Fieldtype: "string",
+    Mapfrom: null,
+    Alias: null
+  }
+];
 export default {
   name: "pieChart",
   props:{
@@ -28,7 +37,20 @@ export default {
                   '#FE902D','#FCCA74']
               },
               id:this.id,
-              data : this.$store.state.weatherData.pieData,
+              data : [{
+                "item":"高血压","count":3228,"percent":0.13568726355611602
+              },{
+                "item":"糖尿病","count":880,"percent":0.036990332072299285
+              },{
+                "item":"老人","count":16376,"percent":0.6883564522908785
+              },{
+                "item":"残疾人","count":190,"percent":0.007986548970155528
+              },{
+                "item":"儿童","count":2765,"percent":0.11622530474989491
+              },{
+                "item":"精神病","count":351,"percent":0.014754098360655738
+              }],
+              datamappers: datamapper,
               width: 484,
               height: 310,
           }
@@ -50,7 +72,12 @@ export default {
       chartArray: state => state.chartIdArray,
       refreshData: state => state.chartSizeChange,
     }),
-    ...mapGetters({ storeBaseData: "getPropsData"})
+    ...mapGetters({ storeBaseData: "getPropsData",
+      getWeatPieData:"getWeatherPrData"
+    }),
+    dataMap(){
+      return this.storeBaseData.datamappers
+    },
   },
   watch: {
     // 'refreshData': {
@@ -66,8 +93,26 @@ export default {
           this.chart.repaint();
         }
       },
-      deep: true
+      deep:true
     },
+    getWeatPieData:{
+      handler(newVal){
+        this.baseData.data = newVal;
+        this.$store.commit("commitPropsData", this.baseData);
+      },
+      deep:true
+    },
+    dataMap:{
+      handler(newVal){
+
+        console.log(newVal)
+        this.baseData.datamappers = newVal
+        if (newVal[0].Alias != null){
+          this.$store.commit("commitPieData",newVal[0].Alias)
+        }
+      },
+      deep:true
+    }
   },
   mounted() {
     let that = this;

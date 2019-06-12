@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import store from "../../store/store";
+
 var elementResizeDetectorMaker = require("element-resize-detector");
 import { mapState, mapGetters } from "vuex";
 import echarts from "echarts";
@@ -36,7 +38,14 @@ export default {
             color: ["#69C0FF"]
           },
           id: this.id,
-          data: this.$store.state.weatherData.barData,
+          data: [
+            { name: "Mon", value: "10" },
+            { name: "Tue", value: "706" },
+            {
+              name: "Wed",
+              value: "239"
+            },
+            { name: "Thu", value: 172 }],
           datamappers: datamapper,
           button: {
             method: "startanalyzedata",
@@ -58,6 +67,10 @@ export default {
       storeBaseData: "getPropsData",
       getWeatInterData: "getWeatherBarData"
     }),
+    dataMap(){
+      return this.storeBaseData.datamappers
+    },
+
     t() {
       return {
         color: this.baseData.style.color,
@@ -86,11 +99,9 @@ export default {
             }
           }
         ],
-        yAxis: [
-          {
+        yAxis: [{
             type: "value"
-          }
-        ],
+          }],
         series: [
           {
             name: "降雨量",
@@ -139,6 +150,8 @@ export default {
     //野
     storeBaseData: {
       handler(newVal) {
+
+        console.log(newVal)
         if (newVal.id == this.id) {
           this.myChart.setOption({
             title: {
@@ -171,6 +184,17 @@ export default {
         this.$store.commit("commitPropsData", this.baseData);
       },
       deep: true
+    },
+    dataMap:{
+      handler(newVal){
+        this.baseData.datamappers=newVal
+
+        if (newVal[0].Alias != null && newVal[1].Alias!=null){
+          let a  = [newVal[0].Alias,newVal[1].Alias]
+          this.$store.commit("commitDataMapper", a)
+        }
+      },
+      deep:true
     }
   }
 };

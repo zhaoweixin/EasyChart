@@ -103,10 +103,6 @@ export default {
   },
   methods: {
      changeStatic(event){
-       let i = event.path[3].id;
-        i = i.charAt(i.length - 1);
-       this.$store.commit("changeStatic",i)
-       console.log(i)
        let that=this;
        let i = event.path[3].id;
        i = i.charAt(i.length - 1);

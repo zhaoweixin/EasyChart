@@ -48,11 +48,13 @@ const mutation = {
         state.dataMapper = JSON.parse(JSON.stringify(payload))
     },
   commitWeatherData(state,payload){
-    state.weatherData.baseData=payload
-    state.weatherData.barData = Data(payload,"bar")
-    state.weatherData.pieData = Data(payload,"pie")
-    state.weatherData.canlenderData = Data(payload,"canlender")
-    state.weatherData.pointData = Data(payload,"point")
+
+        state.weatherData.baseData = payload
+        state.weatherData.barData = Data(payload, "bar")
+        state.weatherData.pieData = Data(payload, "pie")
+        state.weatherData.canlenderData = Data(payload, "canlender")
+        state.weatherData.pointData = Data(payload, "point")
+
   },
   commitInteracBarData(state,payload){
     state.interacBarData =interationData(state.weatherData.baseData,"bar" ,payload)
@@ -68,7 +70,17 @@ const mutation = {
     state.interacCanlendarData =  state.weatherData.canlenderData
     state.interacScatterData = state.weatherData.pointData
   },
-
+  commitDataMapper(state,payload){
+      if (payload[0]=='date'&&payload[1]=='wind') {
+        state.interacBarData = state.weatherData.barData
+      }
+  },
+  commitPieData(state,payload){
+    if (payload == 'weather') {
+      console.log("aaa")
+      state.interacPieData =state.weatherData.pieData
+    }
+  },
 
   InteractionData(state,payload){
       if (payload==0){

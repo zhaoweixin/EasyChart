@@ -190,6 +190,7 @@ export default {
     },
     storeBaseData: {
       handler(newVal) {
+        console.log(newVal)
         this.baseData = newVal;
       },
       deep: true
