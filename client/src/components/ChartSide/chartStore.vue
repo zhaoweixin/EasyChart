@@ -76,6 +76,9 @@ $.extend({
     $.get(url, function(record) {
       record = record.split(/\n/);
       var title = record[0].split(",");
+      for (var i = 0; i < title.length; i++) {
+        title[i] = title[i].trim();
+      }
       record.shift();
       var data = [];
       for (var i = 0; i < record.length; i++) {
@@ -112,6 +115,10 @@ $.extend({
       f.call(this, datas);
     });
   }
+});
+$.csvtitle("../../../static/data/seattle-weather.csv", function(datas) {
+  datamap.set("weather", datas);
+  add(datas.title, "weather");
 });
 $.csvtitle("../../../static/data/testdata.csv", function(datas) {
   datamap.set("data1", datas);
@@ -274,6 +281,21 @@ function add(data, name) {
                 "," +
                 Mapperdata.groub
             );
+            if (store.state.propsData.datamappers != null) {
+              var set = store.state.propsData.datamappers[0];
+              if (set.Fieldtype != onetype)
+                set = store.state.propsData.datamappers[1];
+              set.Mapfrom =
+                Mapperdata.tablename +
+                ":" +
+                Mapperdata.fieldname +
+                "," +
+                Mapperdata.pre +
+                "," +
+                Mapperdata.groub;
+              set.Alias = Mapperdata.fieldname;
+            }
+
             oneinputs.val(Mapperdata.fieldname);
           }
         }
@@ -300,14 +322,30 @@ function add(data, name) {
                 "," +
                 Mapperdata.groub
             );
+            if (store.state.propsData.datamappers != null) 
+            {
+              var set = store.state.propsData.datamappers[1];
+              if (set.Fieldtype != twotype)
+                set = store.state.propsData.datamappers[0];
+              set.Mapfrom =
+                Mapperdata.tablename +
+                ":" +
+                Mapperdata.fieldname +
+                "," +
+                Mapperdata.pre +
+                "," +
+                Mapperdata.groub;
+              set.Alias = Mapperdata.fieldname;
+            }
+
             twoinputs.val(Mapperdata.fieldname);
           }
         }
         if (twoinputf.val().length > 0 && oneinputf.val().length > 0) {
-          console.log("拖拽完成");
+          console.log("拖拽完成:");
           mapperdataM.setdatamap(datamap);
           mapperdataM.setmapperdata(MapperDatas);
-          mapperdataM.startanalyzedata();
+          //  mapperdataM.startanalyzedata();
         }
       }
     });
@@ -414,7 +452,7 @@ export default {
             w: 4,
             h: 8,
             i: stores.state.chartIdArray.length,
-            static:false,
+            static: false,
             j: "item" + stores.state.chartIdArray.length,
             color: "#828C88"
           };

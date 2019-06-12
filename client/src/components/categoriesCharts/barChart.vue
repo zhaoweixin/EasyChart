@@ -4,7 +4,7 @@
 
 <script>
 var elementResizeDetectorMaker = require("element-resize-detector");
-import {mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import echarts from "echarts";
 
 var datamapper = [
@@ -37,7 +37,11 @@ export default {
           },
           id: this.id,
           data: this.$store.state.weatherData.barData,
-          datamappers: datamapper
+          datamappers: datamapper,
+          button: {
+            method: "startanalyzedata",
+            title: "Apply"
+          }
         };
         return a;
       }
@@ -50,7 +54,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({ storeBaseData: "getPropsData" ,
+    ...mapGetters({
+      storeBaseData: "getPropsData",
       getWeatInterData: "getWeatherBarData"
     }),
     t() {
@@ -117,7 +122,7 @@ export default {
       }
       return arr;
     }
-},
+  },
   mounted() {
     this.draw();
     var erd = elementResizeDetectorMaker();
