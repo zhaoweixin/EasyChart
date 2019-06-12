@@ -89,8 +89,11 @@ export default {
     // },
     storeBaseData: {
       handler(newVal) {
+
+        console.log(newVal)
         if (newVal.id == this.id) {
           this.chart.repaint();
+          this.chart.changeData(newVal.data);
         }
       },
       deep:true
