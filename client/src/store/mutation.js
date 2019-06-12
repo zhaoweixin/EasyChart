@@ -95,8 +95,14 @@ const mutation = {
         }
       }
   },
-  changeStatic(state,id){
-    state.chartIdArray[id].static = true;
+  changeStatic(state,payload){
+    if(payload.value%2==1){
+      state.chartIdArray[payload.index].static = true;
+    }
+    else{
+      state.chartIdArray[payload.index].static = false;
+    }
+    
   }
 }
 
