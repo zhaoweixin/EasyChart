@@ -435,7 +435,7 @@ var imgArraytwo = [
   {
     id: 3,
     idView: require("../../../static/Image/Funnelplot.png"),
-    chartType: "Funnelplot"
+    chartType: "funnelPlot"
   },
   {
     id: 4,
