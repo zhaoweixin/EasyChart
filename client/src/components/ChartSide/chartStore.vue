@@ -524,7 +524,7 @@ export default {
             i: stores.state.chartIdArray.length,
             static: false,
             j: "item" + stores.state.chartIdArray.length,
-            color: "#828C88"
+            color: "#f7f7f7"
           };
           mutations.addIdToArray(stores.state, item);
         }
