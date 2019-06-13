@@ -85,9 +85,17 @@
           :cell-edit-done="cellEditDone"
           style="width:100%"
         ></v-table>
+        <v-table
+          v-if="value[0].hasOwnProperty('city')"
+          column-width-drag
+          :table-data="value"
+          :columns="columnsCity"
+          :cell-edit-done="cellEditDone"
+          style="width:100%"
+        ></v-table>
       </div>
-      <div v-if="key == 'button'" style="padding-left:20px; padding-right:20px">
-        <el-button v-on:click="sendIsActive(value.method)">{{value.title}}</el-button>
+      <div v-if="key == 'button'">
+        <el-button v-on:click="sendIsActive(value.method)" size="small">{{value.title}}</el-button>
       </div>
     </el-collapse-item>
   </el-collapse>
@@ -190,7 +198,7 @@ export default {
         {
           field: "date",
           title: "date",
-          width: 100,
+          width: 120,
           titleAlign: "center",
           columnAlign: "center",
           isEdit: true,
@@ -199,7 +207,27 @@ export default {
         {
           field: "value",
           title: "value",
-          width: 100,
+          width: 80,
+          titleAlign: "center",
+          columnAlign: "center",
+          isEdit: true,
+          isResize: true
+        }
+      ],
+      columnsCity: [
+        {
+          field: "time",
+          title: "time",
+          width: 120,
+          titleAlign: "center",
+          columnAlign: "center",
+          isEdit: true,
+          isResize: true
+        },
+        {
+          field: "temperature",
+          title: "value",
+          width: 80,
           titleAlign: "center",
           columnAlign: "center",
           isEdit: true,
@@ -258,7 +286,7 @@ export default {
       return (
         key == "metaConfig" ||
         key == "style" ||
-        key == "data" ||
+        (key == "data" && this.baseData.data.length != 0)||
         key == "button" ||
         key == "datamappers"
       );
@@ -272,7 +300,7 @@ export default {
   /* float: right; */
 }
 .colorInput {
-  width: 110px;
+  width: 100px;
   float: left;
 }
 </style>
