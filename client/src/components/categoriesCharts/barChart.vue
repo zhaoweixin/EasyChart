@@ -32,7 +32,7 @@ export default {
       default: function() {
         let a = {
           metaConfig: {
-            title: "柱图"
+            title: "降雨量"
           },
           style: {
             color: ["#69C0FF"]

@@ -76,6 +76,9 @@
         this.myChart=echarts.init(document.getElementById(this.id))
 
         this.option = {
+          title:{
+            text:'2012年降雨分布'
+          },
           tooltip: {
             position: 'top',
             formatter: function (p) {
