@@ -28,8 +28,13 @@
       <el-tooltip effect="dark" content="Click Save" placement="bottom">
         <el-button type="info" @click="saveOption" size="small" icon="el-icon-edit"></el-button>
       </el-tooltip>
+<<<<<<< HEAD
       <el-tooltip effect="dark" content="Edit Interaction" placement="bottom">
         <el-button type="info"  @click="popUp" size="small" icon="el-icon-pie-chart"></el-button>
+=======
+      <el-tooltip effect="dark" content="edit interaction" placement="bottom">
+      <el-button type="info" size="small" icon="el-icon-pie-chart" @click="popUp"></el-button>
+>>>>>>> 0fe56a3225db4ed18a959863c8264435a2bf8e35
       </el-tooltip>
       <el-tooltip effect="dark" content="Save As Template" placement="bottom">
         <el-button type="info" @click="open" icon="el-icon-folder-checked" size="small"></el-button>
@@ -61,6 +66,40 @@ export default {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
+      popUp: function() {
+      this.$store.commit("editInteraction");
+    },
+    saveOption: function() {
+      let that = this;
+      htmlToImage
+        .toPng(document.getElementById("screenShot"))
+        .then(function(dataUrl) {
+          var img = dataUrl,
+            data = img.replace(/^data:image\/\w+;base64,/, ""),
+            buf = new Buffer(data, "base64"),
+            random = Math.floor(Math.random() * 100);
+
+          var sendData = {
+            image: {
+              name: "image" + random + ".png",
+              data: buf
+            },
+            chartIdArray: {
+              name: "chartIdArray" + random + ".json",
+              data: that.$store.state.chartIdArray
+            }
+          };
+
+          axios.post("http://localhost:3000/saveOption", sendData, function(
+            callback
+          ) {
+            console.log(callback);
+          });
+        })
+        .catch(function(error) {
+          console.error("oops, something went wrong!", error);
+        });
+    },
       open() {
         this.$prompt('请输入模板名称','Save' ,{
           confirmButtonText: '确定',

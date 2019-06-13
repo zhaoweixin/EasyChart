@@ -45,10 +45,17 @@
         </div>
       </el-collapse-item>
     </el-collapse>
+<<<<<<< HEAD
     <div>
       <!--<el-button size="small" type="primary" @click="saveOption">click save</el-button>-->
       <!--<el-button size="small" type="primary" @click="popUp">edit interaction</el-button>-->
     </div>
+=======
+    <!-- <div>
+      <el-button size="small" type="primary" @click="saveOption">click save</el-button>
+
+    </div> -->
+>>>>>>> 0fe56a3225db4ed18a959863c8264435a2bf8e35
   </div>
 </template>
 <script>
@@ -462,40 +469,37 @@ export default {
     deletClone: function(e) {
       d3.selectAll("#clone").remove();
     },
-    saveOption: function() {
-      let that = this;
-      htmlToImage
-        .toPng(document.getElementById("screenShot"))
-        .then(function(dataUrl) {
-          var img = dataUrl,
-            data = img.replace(/^data:image\/\w+;base64,/, ""),
-            buf = new Buffer(data, "base64"),
-            random = Math.floor(Math.random() * 100);
+    // saveOption: function() {
+    //   let that = this;
+    //   htmlToImage
+    //     .toPng(document.getElementById("screenShot"))
+    //     .then(function(dataUrl) {
+    //       var img = dataUrl,
+    //         data = img.replace(/^data:image\/\w+;base64,/, ""),
+    //         buf = new Buffer(data, "base64"),
+    //         random = Math.floor(Math.random() * 100);
 
-          var sendData = {
-            image: {
-              name: "image" + random + ".png",
-              data: buf
-            },
-            chartIdArray: {
-              name: "chartIdArray" + random + ".json",
-              data: that.$store.state.chartIdArray
-            }
-          };
+    //       var sendData = {
+    //         image: {
+    //           name: "image" + random + ".png",
+    //           data: buf
+    //         },
+    //         chartIdArray: {
+    //           name: "chartIdArray" + random + ".json",
+    //           data: that.$store.state.chartIdArray
+    //         }
+    //       };
 
-          axios.post("http://localhost:3000/saveOption", sendData, function(
-            callback
-          ) {
-            console.log(callback);
-          });
-        })
-        .catch(function(error) {
-          console.error("oops, something went wrong!", error);
-        });
-    },
-    popUp: function() {
-      this.$store.commit("editInteraction");
-    }
+    //       axios.post("http://localhost:3000/saveOption", sendData, function(
+    //         callback
+    //       ) {
+    //         console.log(callback);
+    //       });
+    //     })
+    //     .catch(function(error) {
+    //       console.error("oops, something went wrong!", error);
+    //     });
+    // },
   },
   watch: {}
 };
