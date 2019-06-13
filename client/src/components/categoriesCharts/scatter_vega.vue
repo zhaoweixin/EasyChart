@@ -102,6 +102,8 @@ export default {
           deep:true
         },
       WeatherScatterData:{
+
+          // console.log()
         handler(newVal){
           this.baseData.data = newVal;
           this.$store.commit("commitPropsData", this.baseData);

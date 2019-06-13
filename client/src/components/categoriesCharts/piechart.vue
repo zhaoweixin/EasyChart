@@ -194,18 +194,15 @@ export default {
         })
 
       //点击交互
-      this.chart.on('interval:click', ev=> {
-        console.log('ev'+ev.shape.get('selected'));
-        if (ev.shape.get('selected')? true :false) {
+      this.chart.on('click', ev=> {
+        if ( typeof ev.data!='undefined'?true :false) {
           const data =ev.data._origin;
           this.$store.commit("commitInteracBarData", data.item)
           this.$store.commit("commitInteracCanlendarData", data.item)
           this.$store.commit("commitInteracScatterData", data.item)
-          console.log('yibufen')
-        }
-        else{
+          this.$store.commit("commitInteracLineData", data.item)
+        }else {
           this.$store.commit("commitZongWeatherData",1)
-          console.log('quanbu')
         };
       });
       this.chart.render()

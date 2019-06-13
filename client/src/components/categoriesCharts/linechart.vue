@@ -16,7 +16,7 @@ var elementResizeDetectorMaker = require("element-resize-detector")
 import G2 from "@antv/g2";
 const slider = require("@antv/g2-plugin-slider");
 import { DataSet } from "@antv/data-set";
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import $ from "jquery";
 import linechart_vegaVue from './linechart_vega.vue';
 import { autoMaxBins } from 'vega-lite/build/src/bin';
@@ -32,110 +32,12 @@ export default {
                 title:'扶贫'
               },
               style:{
-                color:['#35c17c','#af7eff',
-                  '#3bcaff','#27C181',
-                  '#FE902D','#FCCA74']
+                color:['#35c17c','#af7eff']
               },
               id:this.id,
-              data:[{
-                  "time": "2016-01-01",
-                  "city": "Tokyo",
-                  "temperature": 7
-              }, {
-                  "time": "2016-01-01",
-                  "city": "London",
-                  "temperature": 3.9
-              }, {
-                  "time": "2016-02-01",
-                  "city": "Tokyo",
-                  "temperature": 6.9
-              }, {
-                  "time": "2016-02-01",
-                  "city": "London",
-                  "temperature": 4.2
-              }, {
-                  "time": "2016-03-01",
-                  "city": "Tokyo",
-                  "temperature": 9.5
-              }, {
-                  "time": "2016-03-01",
-                  "city": "London",
-                  "temperature": 5.7
-              }, {
-                  "time": "2016-04-01",
-                  "city": "Tokyo",
-                  "temperature": 14.5
-              }, {
-                  "time": "2016-04-01",
-                  "city": "London",
-                  "temperature": 8.5
-              }, {
-                  "time": "2016-05-01",
-                  "city": "Tokyo",
-                  "temperature": 18.4
-              }, {
-                  "time": "2016-05-01",
-                  "city": "London",
-                  "temperature": 11.9
-              }, {
-                  "time": "2016-06-01",
-                  "city": "Tokyo",
-                  "temperature": 21.5
-              }, {
-                  "time": "2016-06-01",
-                  "city": "London",
-                  "temperature": 15.2
-              }, {
-                  "time": "2016-07-01",
-                  "city": "Tokyo",
-                  "temperature": 25.2
-              }, {
-                  "time": "2016-07-01",
-                  "city": "London",
-                  "temperature": 17
-              }, {
-                  "time": "2016-08-01",
-                  "city": "Tokyo",
-                  "temperature": 26.5
-              }, {
-                  "time": "2016-08-01",
-                  "city": "London",
-                  "temperature": 16.6
-              }, {
-                  "time": "2016-09-01",
-                  "city": "Tokyo",
-                  "temperature": 23.3
-              }, {
-                  "time": "2016-09-01",
-                  "city": "London",
-                  "temperature": 14.2
-              }, {
-                  "time": "2016-10-01",
-                  "city": "Tokyo",
-                  "temperature": 18.3
-              }, {
-                  "time": "2016-10-01",
-                  "city": "London",
-                  "temperature": 10.3
-              }, {
-                  "time": "2016-11-01",
-                  "city": "Tokyo",
-                  "temperature": 13.9
-              }, {
-                  "time": "2016-11-01",
-                  "city": "London",
-                  "temperature": 6.6
-              }, {
-                  "time": "2016-12-01",
-                  "city": "Tokyo",
-                  "temperature": 9.6
-              }, {
-                  "time": "2016-12-01",
-                  "city": "London",
-                  "temperature": 4.8
-              }]
+              data:this.$store.state.weatherData.lineData
             }
-              return a; 
+              return a;
 
           }
         }
@@ -152,8 +54,36 @@ export default {
     ...mapState({
       chartArray: state => state.chartIdArray,
       refreshData: state => state.chartChange,
-    })
+    }),
+      ...mapGetters({
+        storeBaseData: "getPropsData",
+        getWeatInterlineData: "getWeatherLineData"
+      })
   },
+  watch:{
+    storeBaseData: {
+      handler(newVal) {
+        console.log(newVal);
+        if (newVal.id == this.id) {
+          this.chart.repaint();
+          this.chart.changeData(newVal.data)
+        }
+      },
+      deep: true
+    },
+    getWeatInterlineData:{
+      handler(newVal) {
+        console.log(newVal);
+          this.baseData.data = newVal;
+          console.log('time'+this.baseData.data[0].time)
+          console.log('time'+this.baseData.data[this.baseData.data.length-1].time)
+          this.$store.commit("commitPropsData", this.baseData);
+      },
+      deep: true
+    }
+
+  },
+
   mounted() {
     let that = this;
     this.initChart();
@@ -187,8 +117,8 @@ export default {
 
       var ds = new DataSet({
         state: {
-          start: new Date('2016-01').getTime(),
-          end: new Date('2016-12').getTime(),
+          start: new Date('2012-01').getTime(),
+          end: new Date('2012-12').getTime(),
         }
       });
 
@@ -229,11 +159,12 @@ export default {
           }
         }
       });
-      this.chart.line().position('time*temperature').color('city');
-      this.chart.point().position('time*temperature').color('city').size(4).shape('circle').style({
+      this.chart.area().position('time*temperature').color('city').shape('smooth');
+      this.chart.line().position('time*temperature').color('city').size(0.1).shape('smooth').style({
         stroke: '#fff',
         lineWidth: 1
       });
+      //this.chart.point().position('time*temperature').color('city').
       this.chart.legend(false);
       this.chart.render();
 
@@ -285,7 +216,7 @@ export default {
 
     }
   }
-  
+
 };
 </script>
 
@@ -317,4 +248,3 @@ export default {
 }
 </style>
 
-    

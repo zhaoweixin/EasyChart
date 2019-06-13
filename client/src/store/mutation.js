@@ -52,6 +52,9 @@ const mutation = {
     state.weatherData.pieData = Data(payload,"pie")
     state.weatherData.canlenderData = Data(payload,"canlender")
     state.weatherData.pointData = Data(payload,"point")
+    state.weatherData.lineData = Data(payload,"line")
+
+    console.log(state.weatherData.lineData)
   },
   commitInteracBarData(state,payload){
     state.interacBarData =interationData(state.weatherData.baseData,"bar" ,payload)
@@ -62,10 +65,14 @@ const mutation = {
   commitInteracScatterData(state,payload){
     state.interacScatterData =interationData(state.weatherData.baseData,"point" ,payload)
   },
+  commitInteracLineData(state,payload){
+    state.interacLineData =interationData(state.weatherData.baseData,"line" ,payload)
+  },
   commitZongWeatherData(state,payload){
     state.interacBarData = state.weatherData.barData
     state.interacCanlendarData =  state.weatherData.canlenderData
     state.interacScatterData = state.weatherData.pointData
+    state.interacLineData = state.weatherData.lineData
   },
 
   commitDataMapper(state,payload){
@@ -114,6 +121,7 @@ let arr_bar = [];
   let  arr_pie = [],arrpie=[];
 let arr_canlender = [];
 let arr_point = []
+  let arr_line = []
   for (let i=0;i<payload.length;i++){
     if (payload[i].date.indexOf("2012")>-1) {
       arr_bar.push(   //柱状图
@@ -130,8 +138,16 @@ let arr_point = []
           y:payload[i].wind
         }
       )
-    }else {
-      break
+      arr_line.push({
+        'time':payload[i].date,
+        'city':'max',
+        'temperature':parseInt(payload[i].temp_max)
+      },
+        {
+          'time':payload[i].date,
+          'city':'min',
+          'temperature':parseInt(payload[i].temp_min)
+        })
     }
   }
   let a =can_data(arrpie)
@@ -148,6 +164,7 @@ let arr_point = []
     case 'pie':return arr_pie;
     case 'canlender':return arr_canlender;
     case 'point':return arr_point;
+    case 'line':return arr_line
   }
 }
 
@@ -156,6 +173,7 @@ function interationData(payload,type,factor) {
   let  arr_pie = [],arrpie=[];
   let arr_canlender = [];
   let arr_point = []
+  let arr_line = []
   for (let i=0;i<payload.length;i++){
     if ((payload[i].date.indexOf("2012")>-1)&&(payload[i].weather==factor)) {
       arr_bar.push(   //柱状图
@@ -173,6 +191,16 @@ function interationData(payload,type,factor) {
           y:payload[i].wind
         }
       )
+      arr_line.push({
+          'time':payload[i].date,
+          'city':'max',
+          'temperature':parseInt(payload[i].temp_max)
+        },
+        {
+          'time':payload[i].date,
+          'city':'min',
+          'temperature':parseInt(payload[i].temp_min)
+        })
     }
   }
   let a =can_data(arrpie)
@@ -189,6 +217,7 @@ function interationData(payload,type,factor) {
     case 'pie':return arr_pie;
     case 'canlender':return arr_canlender;
     case 'point':return arr_point;
+    case 'line':return arr_line
   }
 }
 
