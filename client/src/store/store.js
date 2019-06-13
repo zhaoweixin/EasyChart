@@ -40,7 +40,8 @@ const state = {
     "mapBoxView",
     "pieChart",
     "radarChart",
-    "ratiochart"
+    "ratiochart",
+    "funnelPlot"
   ] //图表中类数组
 };
 
