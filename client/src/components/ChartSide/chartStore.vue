@@ -1,8 +1,8 @@
 <template>
   <div id="Store">
     <el-collapse>
-      <el-collapse-item title=" Echart Img example" style="padding-left:20px">
-        <div >
+      <el-collapse-item title=" Echart Img example">
+        <div>
           <el-carousel :interval="4000" type="card" height="70px">
             <el-carousel-item v-for="item in imgArray" :key="item.id">
               <el-row>
@@ -19,7 +19,7 @@
           </el-carousel>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="D3 Img example" style="padding-left:20px">
+      <el-collapse-item title="D3 Img example">
         <div>
           <el-carousel :interval="4000" type="card" height="70px">
             <el-carousel-item v-for="item in imgArray" :key="item.id">
@@ -37,7 +37,7 @@
           </el-carousel>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="Data Drag" style="padding-left:20px">
+      <el-collapse-item title="Data Drag">
         <div>
           <div id="staticdata">
             <ul></ul>
@@ -46,8 +46,7 @@
       </el-collapse-item>
     </el-collapse>
     <div>
-      <!--<el-button size="small" type="primary" @click="saveOption">click save</el-button>-->
-      <!--<el-button size="small" type="primary" @click="popUp">edit interaction</el-button>-->
+      <el-button size="small" type="primary" @click="saveOption">click save</el-button>
     </div>
   </div>
 </template>
@@ -64,6 +63,7 @@ import modeConfig from "../../assets/modelConfig2.json";
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
 
+console.log(modeConfig);
 var htmlToImage = require("html-to-image");
 
 const MaxLength = 2;
@@ -231,120 +231,191 @@ function add(data, name) {
         var maxleft = left + width;
         var maxtop = top + height;
         console.log(oper);
-        if (!$("#y").is(":visible")) {
+
+        if (!$("#y").is(":visible") && !$("#x").is(":visible")) {
           return;
-        }
-        var onetargetTop = $("#y").position().top;
-        var onetargetleft = $("#y").position().left;
-        var onetargetMaxtop = $("#y").position().top + $("#y").height();
-        var onetype = $($($("#y").children()[1]).children()[0])
-          .text()
-          .split(":");
-        var oneinputf = $($("#y input")[0]);
-        var oneinputs = $($("#y input")[1]);
+        } else {
+          if ($("#x").is(":visible") && !$("#y").is(":visible")) {
+            var twotargetTop = $("#x").position().top;
+            var twotargetleft = $("#x").position().left;
+            var twotargetMaxTop = $("#x").position().top + $("#x").height();
+            var twotype = $($($("#x").children()[1]).children()[0])
+              .text()
+              .split(":");
 
-        var twotargetTop = $("#x").position().top;
-        var twotargetleft = $("#x").position().left;
-        var twotargetMaxTop = $("#x").position().top + $("#x").height();
-        var twotype = $($($("#x").children()[1]).children()[0])
-          .text()
-          .split(":");
+            var twoinputf = $($("#x input")[0]);
+            var twoinputs = $($("#x input")[1]);
 
-        var twoinputf = $($("#x input")[0]);
-        var twoinputs = $($("#x input")[1]);
+            var dragtype = $($("body .ui-draggable-dragging").children()[1])
+              .text()
+              .toString();
 
-        var dragtype = $($("body .ui-draggable-dragging").children()[1])
-          .text()
-          .toString();
-        console.log($("#y").children());
-        if (
-          onetargetTop <= top &&
-          onetargetMaxtop > maxtop &&
-          (onetargetleft >= left && onetargetleft < maxleft)
-        ) {
-          var Mapperdata = {
-            tablename: tablename,
-            fieldname: dragclass, //字段名
-            pre: oper,
-            groub: gro
-          };
+            if (
+              twotargetTop <= top &&
+              twotargetMaxTop > top &&
+              (twotargetleft >= left && twotargetleft < maxleft)
+            ) {
+              var Mapperdata = {
+                tablename: tablename,
+                fieldname: dragclass, //字段名
+                pre: oper,
+                groub: gro
+              };
+              if (dragtype.search(twotype[1]) == 0) {
+                MapperDatas.set(twotype[1], Mapperdata);
+                twoinputf.val(
+                  Mapperdata.tablename +
+                    ":" +
+                    Mapperdata.fieldname +
+                    "," +
+                    Mapperdata.pre +
+                    "," +
+                    Mapperdata.groub
+                );
+                if (store.state.propsData.datamappers != null) {
+                  var set = store.state.propsData.datamappers[0];
 
-          if (dragtype.search(onetype[1]) == 0) {
-            MapperDatas.set(onetype[1], Mapperdata);
-            oneinputf.val(
-              Mapperdata.tablename +
-                ":" +
-                Mapperdata.fieldname +
-                "," +
-                Mapperdata.pre +
-                "," +
-                Mapperdata.groub
-            );
-            if (store.state.propsData.datamappers != null) {
-              var set = store.state.propsData.datamappers[0];
-              if (set.Fieldtype != onetype)
-                set = store.state.propsData.datamappers[1];
-              set.Mapfrom =
-                Mapperdata.tablename +
-                ":" +
-                Mapperdata.fieldname +
-                "," +
-                Mapperdata.pre +
-                "," +
-                Mapperdata.groub;
-              set.Alias = Mapperdata.fieldname;
+                  set.Mapfrom =
+                    Mapperdata.tablename +
+                    ":" +
+                    Mapperdata.fieldname +
+                    "," +
+                    Mapperdata.pre +
+                    "," +
+                    Mapperdata.groub;
+                  set.Alias = Mapperdata.fieldname;
+                }
+
+                twoinputs.val(Mapperdata.fieldname);
+              }
+              if (twoinputf.val().length > 0) {
+                console.log("拖拽完成:");
+                mapperdataM.setdatamap(datamap);
+                mapperdataM.setmapperdata(MapperDatas);
+                //  mapperdataM.startanalyzedata();
+              }
+            }
+          } else {
+            var onetargetTop;
+            var onetargetleft;
+            var onetargetMaxtop;
+            var onetype;
+            var oneinputf;
+            var oneinputs;
+
+            onetargetTop = $("#y").position().top;
+            onetargetleft = $("#y").position().left;
+            onetargetMaxtop = $("#y").position().top + $("#y").height();
+            onetype = $($($("#y").children()[1]).children()[0])
+              .text()
+              .split(":");
+            oneinputf = $($("#y input")[0]);
+            oneinputs = $($("#y input")[1]);
+
+            var twotargetTop = $("#x").position().top;
+            var twotargetleft = $("#x").position().left;
+            var twotargetMaxTop = $("#x").position().top + $("#x").height();
+            var twotype = $($($("#x").children()[1]).children()[0])
+              .text()
+              .split(":");
+
+            var twoinputf = $($("#x input")[0]);
+            var twoinputs = $($("#x input")[1]);
+
+            var dragtype = $($("body .ui-draggable-dragging").children()[1])
+              .text()
+              .toString();
+
+            if (
+              onetargetTop <= top &&
+              onetargetMaxtop > maxtop &&
+              (onetargetleft >= left && onetargetleft < maxleft)
+            ) {
+              var Mapperdata = {
+                tablename: tablename,
+                fieldname: dragclass, //字段名
+                pre: oper,
+                groub: gro
+              };
+
+              if (dragtype.search(onetype[1]) == 0) {
+                MapperDatas.set(onetype[1], Mapperdata);
+                oneinputf.val(
+                  Mapperdata.tablename +
+                    ":" +
+                    Mapperdata.fieldname +
+                    "," +
+                    Mapperdata.pre +
+                    "," +
+                    Mapperdata.groub
+                );
+                if (store.state.propsData.datamappers != null) {
+                  var set = store.state.propsData.datamappers[0];
+                  if (set.Fieldtype != onetype)
+                    set = store.state.propsData.datamappers[1];
+                  set.Mapfrom =
+                    Mapperdata.tablename +
+                    ":" +
+                    Mapperdata.fieldname +
+                    "," +
+                    Mapperdata.pre +
+                    "," +
+                    Mapperdata.groub;
+                  set.Alias = Mapperdata.fieldname;
+                }
+
+                oneinputs.val(Mapperdata.fieldname);
+              }
             }
 
-            oneinputs.val(Mapperdata.fieldname);
-          }
-        }
+            if (
+              twotargetTop <= top &&
+              twotargetMaxTop > top &&
+              (twotargetleft >= left && twotargetleft < maxleft)
+            ) {
+              var Mapperdata = {
+                tablename: tablename,
+                fieldname: dragclass, //字段名
+                pre: oper,
+                groub: gro
+              };
+              if (dragtype.search(twotype[1]) == 0) {
+                MapperDatas.set(twotype[1], Mapperdata);
+                twoinputf.val(
+                  Mapperdata.tablename +
+                    ":" +
+                    Mapperdata.fieldname +
+                    "," +
+                    Mapperdata.pre +
+                    "," +
+                    Mapperdata.groub
+                );
+                if (store.state.propsData.datamappers != null) {
+                  var set = store.state.propsData.datamappers[1];
+                  if (set.Fieldtype != twotype)
+                    set = store.state.propsData.datamappers[0];
+                  set.Mapfrom =
+                    Mapperdata.tablename +
+                    ":" +
+                    Mapperdata.fieldname +
+                    "," +
+                    Mapperdata.pre +
+                    "," +
+                    Mapperdata.groub;
+                  set.Alias = Mapperdata.fieldname;
+                }
 
-        if (
-          twotargetTop <= top &&
-          twotargetMaxTop > top &&
-          (twotargetleft >= left && twotargetleft < maxleft)
-        ) {
-          var Mapperdata = {
-            tablename: tablename,
-            fieldname: dragclass, //字段名
-            pre: oper,
-            groub: gro
-          };
-          if (dragtype.search(twotype[1]) == 0) {
-            MapperDatas.set(twotype[1], Mapperdata);
-            twoinputf.val(
-              Mapperdata.tablename +
-                ":" +
-                Mapperdata.fieldname +
-                "," +
-                Mapperdata.pre +
-                "," +
-                Mapperdata.groub
-            );
-            if (store.state.propsData.datamappers != null) 
-            {
-              var set = store.state.propsData.datamappers[1];
-              if (set.Fieldtype != twotype)
-                set = store.state.propsData.datamappers[0];
-              set.Mapfrom =
-                Mapperdata.tablename +
-                ":" +
-                Mapperdata.fieldname +
-                "," +
-                Mapperdata.pre +
-                "," +
-                Mapperdata.groub;
-              set.Alias = Mapperdata.fieldname;
+                twoinputs.val(Mapperdata.fieldname);
+              }
             }
 
-            twoinputs.val(Mapperdata.fieldname);
+            if (twoinputf.val().length > 0 && oneinputf.val().length > 0) {
+              console.log("拖拽完成:");
+              mapperdataM.setdatamap(datamap);
+              mapperdataM.setmapperdata(MapperDatas);
+              //  mapperdataM.startanalyzedata();
+            }
           }
-        }
-        if (twoinputf.val().length > 0 && oneinputf.val().length > 0) {
-          console.log("拖拽完成:");
-          mapperdataM.setdatamap(datamap);
-          mapperdataM.setmapperdata(MapperDatas);
-          //  mapperdataM.startanalyzedata();
         }
       }
     });
@@ -453,7 +524,7 @@ export default {
             i: stores.state.chartIdArray.length,
             static: false,
             j: "item" + stores.state.chartIdArray.length,
-            color: "#F7F7F7"
+            color: "#828C88"
           };
           mutations.addIdToArray(stores.state, item);
         }
@@ -462,37 +533,37 @@ export default {
     deletClone: function(e) {
       d3.selectAll("#clone").remove();
     },
-    // saveOption: function() {
-    //   let that = this;
-    //   htmlToImage
-    //     .toPng(document.getElementById("screenShot"))
-    //     .then(function(dataUrl) {
-    //       var img = dataUrl,
-    //         data = img.replace(/^data:image\/\w+;base64,/, ""),
-    //         buf = new Buffer(data, "base64"),
-    //         random = Math.floor(Math.random() * 100);
+    saveOption: function() {
+      let that = this;
+      htmlToImage
+        .toPng(document.getElementById("screenShot"))
+        .then(function(dataUrl) {
+          var img = dataUrl,
+            data = img.replace(/^data:image\/\w+;base64,/, ""),
+            buf = new Buffer(data, "base64"),
+            random = Math.floor(Math.random() * 100);
 
-    //       var sendData = {
-    //         image: {
-    //           name: "image" + random + ".png",
-    //           data: buf
-    //         },
-    //         chartIdArray: {
-    //           name: "chartIdArray" + random + ".json",
-    //           data: that.$store.state.chartIdArray
-    //         }
-    //       };
+          var sendData = {
+            image: {
+              name: "image" + random + ".png",
+              data: buf
+            },
+            chartIdArray: {
+              name: "chartIdArray" + random + ".json",
+              data: that.$store.state.chartIdArray
+            }
+          };
 
-    //       axios.post("http://localhost:3000/saveOption", sendData, function(
-    //         callback
-    //       ) {
-    //         console.log(callback);
-    //       });
-    //     })
-    //     .catch(function(error) {
-    //       console.error("oops, something went wrong!", error);
-    //     });
-    // },
+          axios.post("http://localhost:3000/saveOption", sendData, function(
+            callback
+          ) {
+            console.log(callback);
+          });
+        })
+        .catch(function(error) {
+          console.error("oops, something went wrong!", error);
+        });
+    }
   },
   watch: {}
 };

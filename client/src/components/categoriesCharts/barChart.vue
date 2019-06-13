@@ -4,7 +4,7 @@
 
 <script>
 import store from "../../store/store";
-
+import Dataconfig from "../../store/dataconfig.js";
 var elementResizeDetectorMaker = require("element-resize-detector");
 import { mapState, mapGetters } from "vuex";
 import echarts from "echarts";
@@ -45,7 +45,8 @@ export default {
               name: "Wed",
               value: "239"
             },
-            { name: "Thu", value: 172 }],
+            { name: "Thu", value: 172 }
+          ],
           datamappers: datamapper,
           button: {
             method: "startanalyzedata",
@@ -93,21 +94,23 @@ export default {
         xAxis: [
           {
             type: "category",
-            data: this.comArray(this.baseData.data, "name"),
+            data: this.comArray(this.baseData.data, Dataconfig.barxname),
             axisTick: {
               alignWithLabel: true
             }
           }
         ],
-        yAxis: [{
+        yAxis: [
+          {
             type: "value"
-          }],
+          }
+        ],
         series: [
           {
             name: "降雨量",
             type: "bar",
             barWidth: "60%",
-            data: this.comArray(this.baseData.data, "value")
+            data: this.comArray(this.baseData.data, Dataconfig.baryname)
           }
         ]
       };
@@ -121,9 +124,9 @@ export default {
       this.myChart = echarts.init(document.getElementById(this.id));
       this.myChart.setOption(this.t);
       this.$store.commit("pushDataSetToState", {
-        "name":"Barchart",
-        "interaction":"controler"
-      })
+        name: "Barchart",
+        interaction: "controler"
+      });
     },
     comArray(data, name) {
       let arr = [];
@@ -150,6 +153,7 @@ export default {
     //野
     storeBaseData: {
       handler(newVal) {
+        console.log(newVal);
         if (newVal.id == this.id) {
           this.myChart.setOption({
             title: {
@@ -158,11 +162,12 @@ export default {
             color: newVal.style.color,
             xAxis: [
               {
-                data: this.comArray(newVal.data, "name")
+                data: this.comArray(newVal.data, Dataconfig.barxname)
               }
             ],
             series: {
-              data: this.comArray(newVal.data, "value")
+              name: Dataconfig.dataname,
+              data: this.comArray(newVal.data, Dataconfig.baryname)
             }
           });
         }
@@ -183,23 +188,25 @@ export default {
       },
       deep: true
     },
-    dataMap:{
-      handler(newVal){
-        if (newVal.id ==this.id) {
+    dataMap: {
+      handler(newVal) {
+        if (newVal.id == this.id) {
           if (newVal.datamappers === undefined) {
-            this.baseData.datamappers = datamapper
+            this.baseData.datamappers = datamapper;
           } else {
-            this.baseData.datamappers = newVal.datamappers
+            this.baseData.datamappers = newVal.datamappers;
           }
 
-
-          if (newVal.datamappers[0].Alias != null && newVal.datamappers[1].Alias != null) {
-            let a = [newVal.datamappers[0].Alias, newVal.datamappers[1].Alias]
-            this.$store.commit("commitDataMapper", a)
+          if (
+            newVal.datamappers[0].Alias != null &&
+            newVal.datamappers[1].Alias != null
+          ) {
+            let a = [newVal.datamappers[0].Alias, newVal.datamappers[1].Alias];
+            this.$store.commit("commitDataMapper", a);
           }
         }
       },
-      deep:true
+      deep: true
     }
   }
 };
