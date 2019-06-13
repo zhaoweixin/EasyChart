@@ -27,7 +27,7 @@
       <el-button type="info" size="small" icon="el-icon-edit"></el-button>
       </el-tooltip>
       <el-tooltip effect="dark" content="edit interaction" placement="bottom">
-      <el-button type="info" size="small" icon="el-icon-pie-chart"></el-button>
+      <el-button type="info" size="small" icon="el-icon-pie-chart" @click="popUp"></el-button>
       </el-tooltip>
       <el-tooltip effect="dark" content="Save As Template" placement="bottom">
         <el-button type="info" @click="open" icon="el-icon-folder-checked" size="small"></el-button>
@@ -44,6 +44,7 @@
     </el-menu>
 </template>
 <script>
+var htmlToImage = require("html-to-image");
 export default {
     name: "navmenue",
     data() {
@@ -58,6 +59,40 @@ export default {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
+      popUp: function() {
+      this.$store.commit("editInteraction");
+    },
+    saveOption: function() {
+      let that = this;
+      htmlToImage
+        .toPng(document.getElementById("screenShot"))
+        .then(function(dataUrl) {
+          var img = dataUrl,
+            data = img.replace(/^data:image\/\w+;base64,/, ""),
+            buf = new Buffer(data, "base64"),
+            random = Math.floor(Math.random() * 100);
+
+          var sendData = {
+            image: {
+              name: "image" + random + ".png",
+              data: buf
+            },
+            chartIdArray: {
+              name: "chartIdArray" + random + ".json",
+              data: that.$store.state.chartIdArray
+            }
+          };
+
+          axios.post("http://localhost:3000/saveOption", sendData, function(
+            callback
+          ) {
+            console.log(callback);
+          });
+        })
+        .catch(function(error) {
+          console.error("oops, something went wrong!", error);
+        });
+    },
       open() {
       // console.log("hhhahahahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
         this.$prompt('请输入模板名称','Save' ,{

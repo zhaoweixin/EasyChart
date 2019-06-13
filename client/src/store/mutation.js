@@ -16,9 +16,8 @@ const mutation = {
         state.chartY = payload.y;
     },
     pushDataSetToState(state, dataset) {
-        //state.chartComponetArray.push(dataset);
-        //state.charttest = dataset;
         state.chartComponentArray.push(dataset);
+        //state.charttest = dataset;
     },
     addIdToArray(state, id) {
         state.chartIdArray.push(id);
@@ -48,13 +47,11 @@ const mutation = {
         state.dataMapper = JSON.parse(JSON.stringify(payload))
     },
   commitWeatherData(state,payload){
-
-        state.weatherData.baseData = payload
-        state.weatherData.barData = Data(payload, "bar")
-        state.weatherData.pieData = Data(payload, "pie")
-        state.weatherData.canlenderData = Data(payload, "canlender")
-        state.weatherData.pointData = Data(payload, "point")
-
+    state.weatherData.baseData=payload
+    state.weatherData.barData = Data(payload,"bar")
+    state.weatherData.pieData = Data(payload,"pie")
+    state.weatherData.canlenderData = Data(payload,"canlender")
+    state.weatherData.pointData = Data(payload,"point")
   },
   commitInteracBarData(state,payload){
     state.interacBarData =interationData(state.weatherData.baseData,"bar" ,payload)
@@ -70,6 +67,7 @@ const mutation = {
     state.interacCanlendarData =  state.weatherData.canlenderData
     state.interacScatterData = state.weatherData.pointData
   },
+
   commitDataMapper(state,payload){
       console.log(payload)
       if (payload[0]=='precipitation'&&payload[1]=='date') {
@@ -96,8 +94,15 @@ const mutation = {
         }
       }
   },
-  changeStatic(state,id){
-    state.chartIdArray[id].static = !state.chartIdArray[id].static;
+  changeStatic(state,payload){
+    console.log(payload.value)
+    console.log(payload.value%2==1)
+    if(payload.value%2==1){
+      state.chartIdArray[payload.index].static = true;
+    }
+    else{
+      state.chartIdArray[payload.index].static = false;
+    }
   }
 }
 
