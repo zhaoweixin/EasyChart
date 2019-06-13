@@ -1,8 +1,8 @@
 <template>
   <div id="Store">
     <el-collapse>
-      <el-collapse-item title=" Echart Img example">
-        <div>
+      <el-collapse-item title=" Echart Img example" style="padding-left:20px">
+        <div >
           <el-carousel :interval="4000" type="card" height="70px">
             <el-carousel-item v-for="item in imgArray" :key="item.id">
               <el-row>
@@ -19,7 +19,7 @@
           </el-carousel>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="D3 Img example">
+      <el-collapse-item title="D3 Img example" style="padding-left:20px">
         <div>
           <el-carousel :interval="4000" type="card" height="70px">
             <el-carousel-item v-for="item in imgArray" :key="item.id">
@@ -37,7 +37,7 @@
           </el-carousel>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="Data Drag">
+      <el-collapse-item title="Data Drag" style="padding-left:20px">
         <div>
           <div id="staticdata">
             <ul></ul>
@@ -46,8 +46,8 @@
       </el-collapse-item>
     </el-collapse>
     <div>
-      <el-button size="small" type="primary" @click="saveOption">click save</el-button>
-      <el-button size="small" type="primary" @click="popUp">edit interaction</el-button>
+      <!--<el-button size="small" type="primary" @click="saveOption">click save</el-button>-->
+      <!--<el-button size="small" type="primary" @click="popUp">edit interaction</el-button>-->
     </div>
   </div>
 </template>
@@ -64,7 +64,6 @@ import modeConfig from "../../assets/modelConfig2.json";
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
 
-console.log(modeConfig);
 var htmlToImage = require("html-to-image");
 
 const MaxLength = 2;
@@ -454,7 +453,7 @@ export default {
             i: stores.state.chartIdArray.length,
             static: false,
             j: "item" + stores.state.chartIdArray.length,
-            color: "#828C88"
+            color: "#F7F7F7"
           };
           mutations.addIdToArray(stores.state, item);
         }
@@ -463,40 +462,37 @@ export default {
     deletClone: function(e) {
       d3.selectAll("#clone").remove();
     },
-    saveOption: function() {
-      let that = this;
-      htmlToImage
-        .toPng(document.getElementById("screenShot"))
-        .then(function(dataUrl) {
-          var img = dataUrl,
-            data = img.replace(/^data:image\/\w+;base64,/, ""),
-            buf = new Buffer(data, "base64"),
-            random = Math.floor(Math.random() * 100);
+    // saveOption: function() {
+    //   let that = this;
+    //   htmlToImage
+    //     .toPng(document.getElementById("screenShot"))
+    //     .then(function(dataUrl) {
+    //       var img = dataUrl,
+    //         data = img.replace(/^data:image\/\w+;base64,/, ""),
+    //         buf = new Buffer(data, "base64"),
+    //         random = Math.floor(Math.random() * 100);
 
-          var sendData = {
-            image: {
-              name: "image" + random + ".png",
-              data: buf
-            },
-            chartIdArray: {
-              name: "chartIdArray" + random + ".json",
-              data: that.$store.state.chartIdArray
-            }
-          };
+    //       var sendData = {
+    //         image: {
+    //           name: "image" + random + ".png",
+    //           data: buf
+    //         },
+    //         chartIdArray: {
+    //           name: "chartIdArray" + random + ".json",
+    //           data: that.$store.state.chartIdArray
+    //         }
+    //       };
 
-          axios.post("http://localhost:3000/saveOption", sendData, function(
-            callback
-          ) {
-            console.log(callback);
-          });
-        })
-        .catch(function(error) {
-          console.error("oops, something went wrong!", error);
-        });
-    },
-    popUp: function() {
-      this.$store.commit("editInteraction");
-    }
+    //       axios.post("http://localhost:3000/saveOption", sendData, function(
+    //         callback
+    //       ) {
+    //         console.log(callback);
+    //       });
+    //     })
+    //     .catch(function(error) {
+    //       console.error("oops, something went wrong!", error);
+    //     });
+    // },
   },
   watch: {}
 };

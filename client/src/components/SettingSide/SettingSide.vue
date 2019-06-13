@@ -1,8 +1,14 @@
 <template>
-  <el-collapse v-model="activeNames">
-    <el-collapse-item v-for="(value, key) in baseData" :key="key" :title="key" :name="key">
+  <el-collapse v-model="activeNames" style="padding-left:20px; padding-right:20px">
+    <el-collapse-item
+      v-for="(value, key) in baseData"
+      :key="key"
+      :title="key"
+      :name="key"
+      v-show="collapseShow(key)"
+    >
       <div v-for="(val, k) in value" :key="k">
-        <div v-if="key =='metaConfig'">
+        <div v-if="key =='metaConfig'" >
           <span>{{k}}</span>
           <el-input v-model="value.title" size="mini" v-if="value.hasOwnProperty('title')"></el-input>
         </div>
@@ -71,9 +77,17 @@
           :cell-edit-done="cellEditDone"
           style="width:100%"
         ></v-table>
+        <v-table
+          v-if="value[0].hasOwnProperty('date')"
+          column-width-drag
+          :table-data="value"
+          :columns="columnsDate"
+          :cell-edit-done="cellEditDone"
+          style="width:100%"
+        ></v-table>
       </div>
-      <div v-if="key == 'button'">
-        <el-button v-on:click="sendIsActive">{{value}}</el-button>
+      <div v-if="key == 'button'" style="padding-left:20px; padding-right:20px">
+        <el-button v-on:click="sendIsActive(value.method)">{{value.title}}</el-button>
       </div>
     </el-collapse-item>
   </el-collapse>
@@ -81,6 +95,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import mapperdataM from "../../store/MapperDataManage.js";
 export default {
   name: "settingside",
   data() {
@@ -170,6 +185,26 @@ export default {
           isEdit: true,
           isResize: true
         }
+      ],
+      columnsDate: [
+        {
+          field: "date",
+          title: "date",
+          width: 100,
+          titleAlign: "center",
+          columnAlign: "center",
+          isEdit: true,
+          isResize: true
+        },
+        {
+          field: "value",
+          title: "value",
+          width: 100,
+          titleAlign: "center",
+          columnAlign: "center",
+          isEdit: true,
+          isResize: true
+        }
       ]
     };
   },
@@ -190,7 +225,7 @@ export default {
     },
     storeBaseData: {
       handler(newVal) {
-        console.log(newVal)
+        console.log(newVal);
         this.baseData = newVal;
       },
       deep: true
@@ -208,23 +243,30 @@ export default {
     cellEditDone(newValue, oldValue, rowIndex, rowData, field) {
       this.baseData.data[rowIndex][field] = newValue;
     },
-    sendIsActive() {
-      this.$store.commit("commitIsActive", !this.isClick);
+    sendIsActive(key) {
+      if (key == "dashboard") {
+        this.$store.commit("commitIsActive", !this.isClick);
+      } else if (key == "startanalyzedata") {
+        mapperdataM.startanalyzedata(); //不知道是否在这里用
+      }
     },
     getDatamappersId(a) {
       if (a % 2) return "y";
       else return "x";
+    },
+    collapseShow(key) {
+      return (
+        key == "metaConfig" ||
+        key == "style" ||
+        key == "data" ||
+        key == "button" ||
+        key == "datamappers"
+      );
     }
   }
 };
 </script>
 <style>
-.item {
-  float: right;
-}
-.itemName {
-  float: left;
-}
 .el-input {
   width: 100%;
   /* float: right; */

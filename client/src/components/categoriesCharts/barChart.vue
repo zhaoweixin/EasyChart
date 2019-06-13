@@ -68,7 +68,7 @@ export default {
       getWeatInterData: "getWeatherBarData"
     }),
     dataMap(){
-      return this.storeBaseData.datamappers
+      return this.storeBaseData
     },
 
     t() {
@@ -187,11 +187,18 @@ export default {
     },
     dataMap:{
       handler(newVal){
-        this.baseData.datamappers=newVal
+        if (newVal.id ==this.id) {
+          if (newVal.datamappers === undefined) {
+            this.baseData.datamappers = datamapper
+          } else {
+            this.baseData.datamappers = newVal.datamappers
+          }
 
-        if (newVal[0].Alias != null && newVal[1].Alias!=null){
-          let a  = [newVal[0].Alias,newVal[1].Alias]
-          this.$store.commit("commitDataMapper", a)
+
+          if (newVal.datamappers[0].Alias != null && newVal.datamappers[1].Alias != null) {
+            let a = [newVal.datamappers[0].Alias, newVal.datamappers[1].Alias]
+            this.$store.commit("commitDataMapper", a)
+          }
         }
       },
       deep:true

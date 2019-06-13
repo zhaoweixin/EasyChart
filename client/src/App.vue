@@ -5,22 +5,18 @@
         <NavMenu></NavMenu>
       </el-header>
       <el-container>
-          <el-aside width="200px">
-            <el-divider><i class="el-icon-upload"></i></el-divider>
-            <div>
-              <Upload></Upload>
-            </div>
-            <el-divider><i class="el-icon-toilet-paper"></i></el-divider>
-              <div>drag chart store</div>
+          <el-aside width="200px" style="border-right: 2px solid #eee9e9">
+            <el-divider><i class="el-icon-setting"></i></el-divider>
+              <h3>drag chart store</h3>
               <chartStore></chartStore>
           </el-aside>
           <el-main>
             <dashboard>
-                          <dragResize/>
+              <dragResize/>
             </dashboard>
             <blueEditor></blueEditor>
           </el-main>
-          <el-aside width="200px">
+          <el-aside width="200px" style="border-left: 2px solid #eee9e9">
             <SettingSide></SettingSide>
           </el-aside>
 
@@ -83,7 +79,7 @@ export default {
   .el-aside {
     color: #333;
     text-align: center;
-    height: 1020px;
+    height: 1180px;
   }
 
   .el-main {

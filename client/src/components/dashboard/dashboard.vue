@@ -1,10 +1,10 @@
-<template>
+ <template>
   <div>
     <div id="preview" style="background:rgba(0,255,0,0.05)">
       <div id="box" style="position:absolute;">
         <svg id="editorborad" v-on:click="getData"></svg>
       </div>
-      <el-button class='popup' type="text" @click="open">Save As Template</el-button>
+      <!--<el-button class='popup' type="text" @click="open">Save As Template</el-button>-->
     </div>
     <div class="test" v-on:click="getData">
       <grid-layout
@@ -74,7 +74,10 @@ export default {
           fontColor: "" //字体颜色
         },
         data: [],
-        button:'apply to all charts'
+        button: {
+            method: "dashboard",
+            title: "apply to all charts"
+          }
       },
       show: false,
       changeColor: false,
@@ -107,7 +110,7 @@ export default {
        let i = event.path[3].id;
        i = i.charAt(i.length - 1);
        that.j = that.j + 1;
-       let count = that.j 
+       let count = that.j
        console.log(count)
        this.$store.commit("changeStatic",{'index':i,'value':count});
       //  console.log(i)
@@ -123,31 +126,12 @@ export default {
           return item.color = that.baseData.style.backgroundColor
         });
     },
-    open() {
-        this.$prompt('请输入模板名称','Save' ,{
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-          // inputErrorMessage: '模板名称不正确'
-        }).then(({ value }) => {
-          this.$message({
-            type: 'success',
-            message: '模板名是: ' + value
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          });
-        });
-      },
-
     chartInit(container) {
       let that = this;
       this.container = d3.select("#editorborad");
       this.container.append("g").attr("id", that.gridLayer);
       this.$store.commit("setChartLayer", { chartLayer: that.chartLayer });
-      this.chartResize(window.innerWidth * 0.77, window.innerHeight);
+      this.chartResize(window.innerWidth * 0.82, window.innerHeight);
     },
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
         console.log("RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx);

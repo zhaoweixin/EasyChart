@@ -76,7 +76,7 @@ export default {
       getWeatPieData:"getWeatherPrData"
     }),
     dataMap(){
-      return this.storeBaseData.datamappers
+      return this.storeBaseData
     },
   },
   watch: {
@@ -89,9 +89,12 @@ export default {
     // },
     storeBaseData: {
       handler(newVal) {
+
+        console.log(newVal)
         if (newVal.id == this.id) {
           this.chart.repaint();
           this.chart.changeData(newVal.data)
+
         }
       },
       deep:true
@@ -106,10 +109,16 @@ export default {
     dataMap:{
       handler(newVal){
 
-        console.log(newVal)
-        this.baseData.datamappers = newVal
-        if (newVal[0].Alias != null){
-          this.$store.commit("commitPieData",newVal[0].Alias)
+        if (newVal.id == this.id) {
+          if (newVal.datamappers === undefined) {
+            this.baseData.datamappers = datamapper
+          } else {
+            this.baseData.datamappers = newVal.datamappers
+          }
+
+          if (newVal.datamappers[0].Alias != null) {
+            this.$store.commit("commitPieData", newVal.datamappers[0].Alias)
+          }
         }
       },
       deep:true

@@ -163,7 +163,7 @@
       },
       weatherCanlIntData:{
         handler(newVal){
-          this.baseData.data = newVal
+          this.baseData.data = this.changeObject(newVal)
           this.$store.commit("commitPropsData",this.baseData)
         },
         deep:true

@@ -1,16 +1,16 @@
 <template>
     <div id="blueEditor">
-        <vs-popup fullscreen title="Preview" :active.sync="popupActivo4">
-            <div>
+        <vs-popup title="Edit Interaction" fullscreen :active.sync="popupActivo4" :button-close-hidden="buttonclosehidden">
+            <div >
                 <el-header style="height:auto;">
                     <div>
-                        <p>Edit Interaction</p>
-                    </div>
-                    <div>
                         <el-button size="small" type="primary" @click="calculator('Filter')" class="buttonInner">Filter</el-button>
+                        <el-button size="small" type="primary" @click="close" class="buttonInner">Highlight</el-button>
+                        <el-button size="small" type="primary" @click="close" class="buttonInner">UpdateSubChart</el-button>
                         <el-button size="small" type="primary" @click="calculator('Sum')" class="buttonInner">Sum</el-button>
                         <el-button size="small" type="primary" @click="calculator('Reduce')" class="buttonInner">Reduce</el-button>
                         <el-button size="small" type="primary" @click="calculator('Multi')" class="buttonInner">Multi</el-button>
+                        <el-button size="small" type="primary" @click="close" class="buttonInner">Multi</el-button>
                         <el-button size="small" type="primary" @click="close" class="buttonInner">Close</el-button>
                     </div>
                 </el-header>
@@ -76,7 +76,8 @@ export default {
                 "curled": 0
             },
             componentGraph:[],
-            dataMapper:{}
+            dataMapper:{},
+            buttonclosehidden:true
 
         }
     },
@@ -660,7 +661,7 @@ export default {
 </script>
 <style>
 .el-header {
-    background-color: rgb(229, 235, 241);
+    background-color: rgba(0,0,0,0.05);
     color: #333;
     text-align: center;
     line-height: 40px !important
@@ -670,5 +671,8 @@ export default {
 }
 .el-main{
     padding: 5px !important
+}
+.vs-popup--content{
+    padding: 0px !important
 }
 </style>
