@@ -17,7 +17,7 @@
         :vertical-compact="true"
         :use-css-transforms="true"
       >
-        <div @click.stop v-on:dblclick="changeStatic">
+        <div @click.stop>
           <grid-item
             v-for="(item,index) in chartArray"
             :key="index"
@@ -30,6 +30,7 @@
             :id="index"
             :style="{backgroundColor:item.color}"
             @resized="resizedEvent"
+            @dblclick.native="changeStatic(item.i)"
           >
             <component :is="item.chartname" :id="item.j" :props="item.props" ></component>
           </grid-item>
@@ -52,7 +53,7 @@ import mapBoxView from "../categoriesCharts/mapBoxView.vue";
 import piechart from "../categoriesCharts/piechart.vue";
 import radarChart from "../categoriesCharts/radarChart.vue";
 import ratiochart from "../categoriesCharts/ratiochart.vue";
-import testChart from "../categoriesCharts/testChart.vue";
+import funnelPlot from "../categoriesCharts/funnelPlot.vue";
 import barChart from "../categoriesCharts/barChart.vue";
 import linechart_vega from "../categoriesCharts/linechart_vega.vue";
 import scatter_vega from "../categoriesCharts/scatter_vega.vue"
@@ -105,15 +106,15 @@ export default {
     }
   },
   methods: {
-     changeStatic(event){
+     changeStatic(id){
+      //  console.log("得到ID了"+ item);
        let that=this;
-       let i = event.path[3].id;
-       i = i.charAt(i.length - 1);
+       let i = id;
        that.j = that.j + 1;
        let count = that.j
        console.log(count)
        this.$store.commit("changeStatic",{'index':i,'value':count});
-      //  console.log(i)
+       console.log(i)
     },
     getData() { //获取baseData里的内容，并传进state里
       this.$store.commit("commitPropsData", this.baseData);
@@ -131,7 +132,7 @@ export default {
       this.container = d3.select("#editorborad");
       this.container.append("g").attr("id", that.gridLayer);
       this.$store.commit("setChartLayer", { chartLayer: that.chartLayer });
-      this.chartResize(window.innerWidth * 0.82, window.innerHeight);
+      this.chartResize(window.innerWidth * 0.75, window.innerHeight);
     },
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
         console.log("RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx);
@@ -174,9 +175,6 @@ export default {
         drawGrids(width, height);
       }
     },
-    // getId(item){
-    //   console.log("得到ID了"+ item);
-    // }
   },
   components: {
     bubblechart,
@@ -189,7 +187,7 @@ export default {
     piechart,
     radarChart,
     ratiochart,
-    testChart,
+    funnelPlot,
     barChart,
     linechart_vega,
     scatter_vega,
