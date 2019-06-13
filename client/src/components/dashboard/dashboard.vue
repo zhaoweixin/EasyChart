@@ -4,7 +4,6 @@
       <div id="box" style="position:absolute;">
         <svg id="editorborad" v-on:click="getData"></svg>
       </div>
-      <el-button class='popup' type="text" @click="open">Save As Template</el-button>
     </div>
     <div class="test" v-on:click="getData">
       <grid-layout
@@ -126,25 +125,6 @@ export default {
           return item.color = that.baseData.style.backgroundColor
         });
     },
-    open() {
-        this.$prompt('请输入模板名称','Save' ,{
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-          // inputErrorMessage: '模板名称不正确'
-        }).then(({ value }) => {
-          this.$message({
-            type: 'success',
-            message: '模板名是: ' + value
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          });
-        });
-      },
-
     chartInit(container) {
       let that = this;
       this.container = d3.select("#editorborad");
