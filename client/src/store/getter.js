@@ -36,6 +36,9 @@ const getter = {
   getWeatherScatterData: state => {
     return state.interacScatterData
   },
+  getWeatherLineData:state=>{
+      return state.interacLineData
+  },
   getInteractionData:state=>{
       return state.interactionData
   },

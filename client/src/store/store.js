@@ -27,6 +27,7 @@ const state = {
   interacScatterData:[],   //交互Point
   interacWeatherData:[],   //交互总的数据
   interacPieData:[],   //交互pie
+  interacLineData:[],   //交互先
   dataMapper:[],
   weatherData:{},
   chartCategory: [

@@ -246,14 +246,12 @@ export default {
   watch: {
     baseData: {
       handler(newVal) {
-        console.log(newVal);
         this.$store.commit("commitPropsData", newVal);
       },
       deep: true
     },
     storeBaseData: {
       handler(newVal) {
-        console.log(newVal);
         this.baseData = newVal;
       },
       deep: true

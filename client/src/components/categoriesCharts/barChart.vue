@@ -67,9 +67,9 @@ export default {
       storeBaseData: "getPropsData",
       getWeatInterData: "getWeatherBarData"
     }),
-    dataMap(){
-      return this.storeBaseData
-    },
+    // dataMap(){
+    //   return this.storeBaseData
+    // },
 
     t() {
       return {
@@ -150,8 +150,6 @@ export default {
     //野
     storeBaseData: {
       handler(newVal) {
-
-        console.log(newVal)
         if (newVal.id == this.id) {
           this.myChart.setOption({
             title: {
