@@ -2,7 +2,7 @@
 
   <div v-bind:id="id" class='container' @click="selectChart">
     <div v-bind:id="g2id" class="container_2">
-      <div class="title">{{ baseData.metaConfig.title }}</div>
+      <H3 class="title">{{ baseData.metaConfig.title }}</H3>
       <div id="linechart_top">
       </div>
       <div id="slider" class="slider_1"></div>
@@ -30,7 +30,7 @@ export default {
           default: function() {
             let a= {
               metaConfig: {
-                title:'琦玉老师'
+                title:'温度变化'
               },
               style:{
                 color:['#35c17c','#af7eff']
@@ -217,7 +217,7 @@ export default {
           //   if (element == endValue) {
           //     end == index;
           //   }
-            
+
           // }
           // this.chart.changeData(this.baseData.data.slice(start,end));
         }
@@ -241,7 +241,7 @@ export default {
         if (element == filterTime[1]) {
           end == index;
         }
-        
+
       }
       this.chart.changeData(this.baseData.data.slice(start,end));
     }
@@ -266,7 +266,7 @@ export default {
 .title {
   text-align: left;
   padding-left: 10px;
-  padding-top: 5px; 
+  padding-top: 5px;
 }
 #linechart_top {
   position: relative;

@@ -77,7 +77,7 @@
 
         this.option = {
           title:{
-            text:'2012年降雨分布'
+            text:'Temp_max'
           },
           tooltip: {
             position: 'top',
@@ -151,9 +151,9 @@
                 }
               },
 
-              // title:{
-              //   text: newVal.metaConfig.title
-              // },
+              title:{
+                text: newVal.metaConfig.title
+              },
               series:{
                 data:this.changeArray(newVal.data)
               }

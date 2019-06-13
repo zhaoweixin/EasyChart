@@ -432,11 +432,11 @@ var imgArrayone = [
   }
 ];
 var imgArraytwo = [
-  {
-    id: 3,
-    idView: require("../../../static/Image/Funnelplot.png"),
-    chartType: "funnelPlot"
-  },
+  // {
+  //   id: 3,
+  //   idView: require("../../../static/Image/Funnelplot.png"),
+  //   chartType: "funnelPlot"
+  // },
   {
     id: 4,
     idView: require("../../../static/Image/scatter_vega.png"),

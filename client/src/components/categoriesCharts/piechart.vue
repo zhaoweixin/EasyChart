@@ -1,6 +1,6 @@
 <template>
   <div v-bind:id="id" class='container' @click="selectChart">
-    <div class="title">{{ baseData.metaConfig.title }}</div>
+    <H3 class="title">{{ baseData.metaConfig.title }}</H3>
     <div v-bind:id="g2id" class='container'>
     </div>
     </div>
@@ -30,7 +30,7 @@ export default {
           default: function() {
             let a= {
               metaConfig: {
-                title:'扶贫'
+                title:'柱状图'
               },
               style:{
                 color:['#35c17c','#af7eff',

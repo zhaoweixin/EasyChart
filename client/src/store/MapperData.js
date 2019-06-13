@@ -65,12 +65,10 @@ function count(data, countfield, group) {
       if (field[j][countfield] != null) count++;
     }
     if (!result[i]) result[i] = {};
-    result[i]["count(" + countfield + ")"] = count;
-    result[i][group] = keys[i];
+    result[i]["value"] = count;
+    result[i]["name"] = keys[i];
   }
-  Dataconfig.barxname = group;
-  Dataconfig.baryname = "count(" + countfield + ")";
-  Dataconfig.dataname = "count(" + countfield + ")";
+
   store.state.propsData.data = result;
   console.log(result);
 }
@@ -87,12 +85,9 @@ function sum(data, sumfield, group) {
       }
     }
     if (!result[i]) result[i] = {};
-    result[i]["sum(" + sumfield + ")"] = sum;
-    result[i][group] = keys[i];
+    result[i]["value"]= sum;
+    result[i]["name"] = keys[i];
   }
-  Dataconfig.barxname = group;
-  Dataconfig.baryname = "sum(" + sumfield + ")";
-  Dataconfig.dataname = "sum(" + sumfield + ")";
   store.state.propsData.data = result;
   console.log(result);
 }
@@ -109,12 +104,10 @@ function avg(data, avgfield, group) {
       }
     }
     if (!result[i]) result[i] = {};
-    result[i]["avg(" + avgfield + ")"] = avg / field.length;
-    result[i][group] = keys[i];
+    result[i]["value"] = avg / field.length;
+    result[i]["name"] = keys[i];
   }
-  Dataconfig.barxname = group;
-  Dataconfig.baryname = "avg(" + avgfield + ")";
-  Dataconfig.dataname = "avg(" + avgfield + ")";
+
   store.state.propsData.data = result;
   console.log(result);
 }
@@ -123,12 +116,13 @@ function all(data, fieldnames) {
   for (var i = 0; i < data.length; i++) {
     for (var j = 0; j < fieldnames.length; j++) {
       if (!result[i]) result[i] = {};
-      result[i][fieldnames[j]] = data[i][fieldnames[j]];
+      if(j==0)
+      result[i]["name"] = data[i][fieldnames[j]];
+      if(j==1)
+        result[i]["value"] = data[i][fieldnames[j]];
     }
   }
-  Dataconfig.barxname = fieldnames[0];
-  Dataconfig.baryname = fieldnames[1];
-  Dataconfig.dataname = fieldnames[1];
+
   store.state.propsData.data = result;
   console.log(result);
 }

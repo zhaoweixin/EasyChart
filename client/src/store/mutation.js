@@ -131,7 +131,7 @@ let arr_point = []
         }
       )
       arrpie.push(payload[i].weather) //圆环
-      arr_canlender.push([payload[i].date,payload[i].precipitation])   //日历图数据
+      arr_canlender.push([payload[i].date,payload[i].temp_max])   //日历图数据
       arr_point.push(  //散点数据
         {
           x:payload[i].date,
@@ -183,7 +183,8 @@ function interationData(payload,type,factor) {
         }
       )
       arrpie.push(payload[i].weather) //圆环
-      arr_canlender.push([payload[i].date,payload[i].precipitation])   //日历图数据
+      arr_canlender.push([payload[i].date,
+        payload[i].temp_max])   //日历图数据
 
       arr_point.push(  //散点数据
         {

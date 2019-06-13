@@ -7,11 +7,11 @@
                         <el-button size="small" type="primary" @click="calculator('Filter')" class="buttonInner">Filter</el-button>
                         <el-button size="small" type="primary" @click="close" class="buttonInner">Highlight</el-button>
                         <el-button size="small" type="primary" @click="close" class="buttonInner">UpdateSubChart</el-button>
-                        <el-button size="small" type="primary" @click="calculator('Sum')" class="buttonInner">Sum</el-button>
-                        <el-button size="small" type="primary" @click="calculator('Reduce')" class="buttonInner">Reduce</el-button>
-                        <el-button size="small" type="primary" @click="calculator('Multi')" class="buttonInner">Multi</el-button>
-                        <el-button size="small" type="primary" @click="close" class="buttonInner">Multi</el-button>
-                        <el-button size="small" type="primary" @click="close" class="buttonInner">Close</el-button>
+                        <!--<el-button size="small" type="primary" @click="calculator('Sum')" class="buttonInner">Sum</el-button>-->
+                        <!--<el-button size="small" type="primary" @click="calculator('Reduce')" class="buttonInner">Reduce</el-button>-->
+                        <!--<el-button size="small" type="primary" @click="calculator('Multi')" class="buttonInner">Multi</el-button>-->
+                        <!--<el-button size="small" type="primary" @click="close" class="buttonInner">Multi</el-button>-->
+                        <el-button size="small" type="primary" @click="close" class="buttonInner" style="position: absolute;right: 100px;top: 65px;">Close</el-button>
                     </div>
                 </el-header>
                 <el-main>

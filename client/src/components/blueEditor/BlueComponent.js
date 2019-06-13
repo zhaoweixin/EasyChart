@@ -3,13 +3,13 @@ import * as d3 from 'd3'
 export default class BlueComponent {
 
     constructor(canvas, options) {
-        
+
         let that = this
         this.frame = 2
         this.fill = '#F6BB42'
         this.stroke = 'none'
         this.name = 'UNAMED'
-        this.type = 'default' 
+        this.type = 'default'
         this.inPorts = [] //Inports of component
         this.outPorts = [] //Outports of component
         this.property = {}
@@ -18,7 +18,7 @@ export default class BlueComponent {
         this.dy = 0 //Vertical delta
         this.x = null //Init horizonal position
         this.y = null //Init vertical position
-        this.dimPreview = '' 
+        this.dimPreview = ''
         this.filterRange = [] //If there have a filter plug in component
         this.isDelete = false
         this.delta = 0.1
@@ -41,8 +41,8 @@ export default class BlueComponent {
             }
              //Set the initial parameter 设置初始参数
         }
-        
-        this.width = this.name.length > 15 ? this.name.length * 10 : 180 
+
+        this.width = this.name.length > 15 ? this.name.length * 10 : 180
         this.height = this.inPorts.length > this.outPorts.length ? 50 + this.inPorts.length * 30 : 50 + this.outPorts.length * 30
 
         this.canvas = canvas
@@ -60,7 +60,7 @@ export default class BlueComponent {
         ////////////////////////////////
         ///Add drag event to component
         ///////////////////////////////
-        
+
         this.container.call(d3.drag()
             .on("start", function(d){
                 that.dragstarted(this, d)
@@ -71,16 +71,16 @@ export default class BlueComponent {
             .on("end", function(d){
                 that.dragended(this, d)
             }));
-        
+
         this.draw(this.type)
-        
+
     }
     //force to solve the unknown error through deep copy
     getParmas() {
         let that = this
         let paramslist = ["frame", "fill", "stroke", "name",
          "type", "width", "dx", "dy", "x", "y", "dimPreview",
-        "filterRange", "isDelete", "delta", "dividingLine", 
+        "filterRange", "isDelete", "delta", "dividingLine",
         "time", "isLoading", "id"]
         let params = {
             inPorts: [...that.inPorts],
@@ -134,7 +134,7 @@ export default class BlueComponent {
 
         this.dividingLine
             .attr('d',lineGenerator(linePoint))
-        
+
     }
     //reset the delta translation
     resetDeltaPos(){
@@ -142,7 +142,7 @@ export default class BlueComponent {
         this.dx = 0
         this.dy = 0
     }
-    //After been connected by curve, the port name 
+    //After been connected by curve, the port name
     setFieldName(name){
         if(this.outPorts.length > 0){
             this.outPorts[0].name = name
@@ -247,7 +247,7 @@ export default class BlueComponent {
             return 30
         })
         .attr('y', function(d,i){
-            return d.y 
+            return d.y
         })
         .attr('fill','white')
         .attr('font-size','14')
@@ -268,14 +268,14 @@ export default class BlueComponent {
         .attr('stroke-width', '2')
         .attr('cx', function(d,i){
             d.x = that.width - 20
-            return d.x 
+            return d.x
         })
         .attr('cy', function(d,i){
             d.y = 20 + (i+1) * 30
             return d.y
         })
         .attr('r', 6)
-        
+
         this.container
         .selectAll('portname')
         .data(this.outPorts)
@@ -322,7 +322,7 @@ export default class BlueComponent {
         .attr('stroke','#fff')
         .attr('fill','none')
         .attr('stroke-width','2')
-       
+
     }
     drawTemp(){
         let that = this;
@@ -350,7 +350,7 @@ export default class BlueComponent {
         let data11 = [[startX,(endY-startY)*3/4+startY],[endX,(endY-startY)*3/4+startY]];
         let data22 = [[(endX-startX)*2/3+startX,startY],[(endX-startX)*2/3+startX,(endY-startY)*3/4+startY]];
         let data33 = [[(endX-startX)*2/3+startX,startY+(endY-startY)*3/8],[endX,startY+(endY-startY)*3/8]];
-        
+
         let lineGenerator = d3.line()
             .x(function(d){
                 return d[0];
@@ -358,7 +358,7 @@ export default class BlueComponent {
             .y(function(d){
                 return d[1];
             });
-        
+
         if(name === 'Template A'){
             this.container
         .append("path")
@@ -413,13 +413,13 @@ export default class BlueComponent {
         .attr('fill','none')
         .attr('stroke-width','2')
         .attr('d',lineGenerator(data22));
-       
+
         this.container.append("path")
         .attr('stroke','#fff')
         .attr('fill','none')
         .attr('stroke-width','2')
         .attr('d',lineGenerator(data33));
-        
+
         this.container.selectAll(".info")
             .data(dataTodraw)
             .enter()
@@ -457,13 +457,16 @@ export default class BlueComponent {
             .text(function(d,i){
                 return d
             })
-    
-    
+
+
     }
 
     }
     draw(type){
-       
+
+
+      console.log(this.inPorts)
+
         if(type === 'Layout'){
             this.width *= 1.5
             this.drawBack()
@@ -483,9 +486,9 @@ export default class BlueComponent {
     }
     dragged(node, d){
         let that = this
-        
+
         d3.select(node).attr("transform", function(q){
-            
+
             that.dx = d3.event.x - that.x
             that.dy = d3.event.y - that.y
             that.x  = d3.event.x
@@ -494,14 +497,14 @@ export default class BlueComponent {
             d.y = d3.event.y
             return 'translate(' + d.x + ',' + d.y + ')'
         });
-        
-        
+
+
         this.container.selectAll('.port')
             .attr('none', function(d){
             d.parentX = that.x
             d.parentY = that.y
         })
-        
+
     }
     dragended(node,d) {
         //d3.select(node).classed("active", false);
@@ -527,16 +530,16 @@ export default class BlueComponent {
         //console.log(data)
         if(!this.container.select('#showPanel').empty()){
 
-            return 
+            return
         }
 
         let showPanel = this.container.append('g').attr('id','showPanel')
 
         this.dimPreview = dim
-             
+
         let that = this
         let bins = {}
-        
+
         let data_max = d3.max(data, d => parseFloat(d[dim]))
         let data_min = d3.min(data, d => parseFloat(d[dim]))
 
@@ -547,7 +550,7 @@ export default class BlueComponent {
             .on("brush end", function(d){
                 brushed(that)
             });
-  
+
         data.forEach(function(d){
 
             let q = parseInt((d[dim] - data_min) / factor)
@@ -616,7 +619,7 @@ export default class BlueComponent {
         let binsChart = showPanel
         .append('g')
        // .attr('transform', function(d){
-       // //    return 'translate(' + that.width * 0.1 + ',0' + ')' 
+       // //    return 'translate(' + that.width * 0.1 + ',0' + ')'
        /// })
         .selectAll('bins')
         .data(bins_array)
@@ -684,7 +687,7 @@ export default class BlueComponent {
 
         return {'range':this.filterRange, 'dim':this.dimPreview}
     }
-    //After data joined, add the data name to the ports' name 
+    //After data joined, add the data name to the ports' name
     addDataName2Ports(){
         this.outPorts.forEach(d => {
             d.name = d.parent + '&' + d.name;
