@@ -1,5 +1,6 @@
 <template>
   <div v-bind:id="id" class='container' @click="selectChart">
+    <div class="title">{{ baseData.metaConfig.title }}</div>
     <div v-bind:id="g2id" class='container'>
     </div>
     </div>
@@ -150,6 +151,7 @@ export default {
         container: this.g2id,
         width: this.baseData.width,
         height: this.baseData.height,
+        padding:['8%','15%','25%','15%']
       })
       this.chart.source(this.baseData.data, {
         percent: {
@@ -163,7 +165,7 @@ export default {
         radius: 0.75,
         innerRadius: 0.6
       })
-      this.chart.legend(false)
+      this.chart.legend(true)
       // this.chart.coord('theta', {
       //   radius: 1
       // })
@@ -220,11 +222,16 @@ export default {
 
 
 <style scoped>
-
+  .title {
+    position: relative;
+    padding-left: 10px;
+    padding-top: 5px;
+    text-align: left;
+  }
   .container {
+    position: relative;
     height: 100%;
     width: 100%;
-    border: 3px solid white;
   }
 </style>
 

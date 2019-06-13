@@ -2,6 +2,7 @@
 
   <div v-bind:id="id" class='container' @click="selectChart">
     <div v-bind:id="g2id" class="container_2">
+      <div class="title">{{ baseData.metaConfig.title }}</div>
       <div id="linechart_top">
       </div>
       <div id="slider" class="slider_1"></div>
@@ -29,7 +30,7 @@ export default {
           default: function() {
             let a= {
               metaConfig: {
-                title:''
+                title:'琦玉老师'
               },
               style:{
                 color:['#35c17c','#af7eff']
@@ -94,7 +95,6 @@ export default {
           var height = element.offsetHeight
 
           this.$nextTick(function () {
-            console.log("实现了");
             //that.chart.changeSize(width,height);
             //echarts.init(document.getElementById(this.id)).resize()
             that.chart.changeSize(width,height - 30);
@@ -201,10 +201,25 @@ export default {
         onChange: function onChange(_ref) {
           var startValue = _ref.startValue,
             endValue = _ref.endValue;
+            var start = 0;
+            var end = this.baseData.data.length - 1;
           ds.setState("start", startValue);
           ds.setState("end", endValue);
           let data_time=[startValue,endValue]
+          console.log(data_time);
+          //refreshFilterData(data_time);
           //Pubsub.publish("getTimeData",data_time)
+          // for (let index = 0; index < this.baseData.data.length; index++) {
+          //   const element = array[index];
+          //   if (element == startValue) {
+          //     start = index;
+          //   }
+          //   if (element == endValue) {
+          //     end == index;
+          //   }
+            
+          // }
+          // this.chart.changeData(this.baseData.data.slice(start,end));
         }
       })
 
@@ -214,7 +229,23 @@ export default {
       })
       this.slider.render();
 
+    },
+    refreshFilterData(filterTime) {
+      var start = 0;
+      var end = this.baseData.data.length - 1;
+      for (let index = 0; index < this.baseData.data.length; index++) {
+        const element = array[index];
+        if (element == filterTime[0]) {
+          start = index;
+        }
+        if (element == filterTime[1]) {
+          end == index;
+        }
+        
+      }
+      this.chart.changeData(this.baseData.data.slice(start,end));
     }
+
   }
 
 };
@@ -232,6 +263,11 @@ export default {
     height: 100%;
     width: 100%;
 }
+.title {
+  text-align: left;
+  padding-left: 10px;
+  padding-top: 5px; 
+}
 #linechart_top {
   position: relative;
     height: 80%;
@@ -242,7 +278,7 @@ export default {
   width: 100%;
   left: 1px;
   right: -1px;
-  top: 20px;
+  top: 0px;
   bottom: 0px;
   text-align: center;
 }
