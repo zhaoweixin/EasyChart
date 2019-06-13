@@ -7,7 +7,7 @@
       <el-container>
           <el-aside width="200px" style="border-right: 2px solid #eee9e9">
             <el-divider><i class="el-icon-setting"></i></el-divider>
-              <h3>drag chart store</h3>
+             
               <chartStore></chartStore>
           </el-aside>
           <el-main>
