@@ -29,7 +29,7 @@ export default {
           default: function() {
             let a= {
               metaConfig: {
-                title:'扶贫'
+                title:''
               },
               style:{
                 color:['#35c17c','#af7eff']
