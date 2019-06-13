@@ -8,9 +8,9 @@
     text-color="grey"
     active-text-color="#fff">
     
-    <el-menu-item ></el-menu-item>
+    <!-- <el-menu-item style="width:10px"></el-menu-item> -->
     <div style="padding-top:10px">
-      <p style="color:white; text-align:left; font-weight:600; font-size:25px">Openvis</p>
+      <p style="color:white; text-align:left; font-weight:600; font-size:20px">OpenVisConnector</p>
     </div>
     <div calss="left-button" style="width:300px;position: absolute;top:14%;left:11%">
       <el-tooltip effect="dark" content="undo" placement="bottom">
