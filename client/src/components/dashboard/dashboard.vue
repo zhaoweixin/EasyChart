@@ -53,7 +53,7 @@ import mapBoxView from "../categoriesCharts/mapBoxView.vue";
 import piechart from "../categoriesCharts/piechart.vue";
 import radarChart from "../categoriesCharts/radarChart.vue";
 import ratiochart from "../categoriesCharts/ratiochart.vue";
-import testChart from "../categoriesCharts/testChart.vue";
+import funnelPlot from "../categoriesCharts/funnelPlot.vue";
 import barChart from "../categoriesCharts/barChart.vue";
 import linechart_vega from "../categoriesCharts/linechart_vega.vue";
 import scatter_vega from "../categoriesCharts/scatter_vega.vue"
@@ -187,7 +187,7 @@ export default {
     piechart,
     radarChart,
     ratiochart,
-    testChart,
+    funnelPlot,
     barChart,
     linechart_vega,
     scatter_vega,
