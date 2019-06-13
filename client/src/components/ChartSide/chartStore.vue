@@ -1,10 +1,18 @@
 <template>
   <div id="Store">
     <el-collapse>
-      <el-collapse-item title=" Echart Img example">
+      <el-collapse-item title="Data Store">
+        <div>
+          <div id="staticdata">
+            <ul></ul>
+          </div>
+        </div>
+        <div class="el-icon-plus"></div>
+      </el-collapse-item>
+      <el-collapse-item title=" Chart Store">
         <div>
           <el-carousel :interval="4000" type="card" height="70px">
-            <el-carousel-item v-for="item in imgArray" :key="item.id">
+            <el-carousel-item v-for="item in imgArrayone" :key="item.id">
               <el-row>
                 <el-col :span="24">
                   <img
@@ -18,11 +26,9 @@
             </el-carousel-item>
           </el-carousel>
         </div>
-      </el-collapse-item>
-      <el-collapse-item title="D3 Img example">
         <div>
           <el-carousel :interval="4000" type="card" height="70px">
-            <el-carousel-item v-for="item in imgArray" :key="item.id">
+            <el-carousel-item v-for="item in imgArraytwo" :key="item.id">
               <el-row>
                 <el-col :span="24">
                   <img
@@ -37,17 +43,8 @@
           </el-carousel>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="Data Drag">
-        <div>
-          <div id="staticdata">
-            <ul></ul>
-          </div>
-        </div>
-      </el-collapse-item>
+      <el-collapse-item title="Template Store"></el-collapse-item>
     </el-collapse>
-    <div>
-      <el-button size="small" type="primary" @click="saveOption">click save</el-button>
-    </div>
   </div>
 </template>
 <script>
@@ -116,16 +113,12 @@ $.extend({
   }
 });
 $.csvtitle("../../../static/data/seattle-weather.csv", function(datas) {
-  datamap.set("weather", datas);
-  add(datas.title, "weather");
+  datamap.set("Weather", datas);
+  add(datas.title, "Weather");
 });
 $.csvtitle("../../../static/data/testdata.csv", function(datas) {
-  datamap.set("data1", datas);
-  add(datas.title, "data1");
-});
-$.csvtitle("../../../static/data/ctestdata.csv", function(datas) {
-  datamap.set("data2", datas);
-  add(datas.title, "data2");
+  datamap.set("Week", datas);
+  add(datas.title, "Week");
 });
 //name为表名，或者state存储的data数据昵称
 function add(data, name) {
@@ -421,7 +414,7 @@ function add(data, name) {
     });
   clickdata();
 }
-var imgArray = [
+var imgArrayone = [
   {
     id: 0,
     idView: require("../../../static/Image/barchart.png"),
@@ -436,12 +429,14 @@ var imgArray = [
     id: 2,
     idView: require("../../../static/Image/piechart.png"),
     chartType: "piechart"
+  }
+];
+var imgArraytwo = [
+  {
+    id: 3,
+    idView: require("../../../static/Image/Funnelplot.png"),
+    chartType: "Funnelplot"
   },
-  // {
-  //   id: 3,
-  //   idView: require("../../../static/Image/line_vega.png"),
-  //   chartType: "linechart_vega"
-  // },
   {
     id: 4,
     idView: require("../../../static/Image/scatter_vega.png"),
@@ -456,7 +451,10 @@ var imgArray = [
 export default {
   name: "ChartStore",
   data() {
-    return { imgArray };
+    return {
+      imgArrayone,
+      imgArraytwo
+    };
   },
   methods: {
     createClone: function(e, chartType, type) {
