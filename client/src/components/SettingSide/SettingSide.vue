@@ -1,5 +1,5 @@
 <template>
-  <el-collapse v-model="activeNames">
+  <el-collapse v-model="activeNames" style="padding-left:20px; padding-right:20px">
     <el-collapse-item
       v-for="(value, key) in baseData"
       :key="key"
@@ -8,7 +8,7 @@
       v-show="collapseShow(key)"
     >
       <div v-for="(val, k) in value" :key="k">
-        <div v-if="key =='metaConfig'">
+        <div v-if="key =='metaConfig'" >
           <span>{{k}}</span>
           <el-input v-model="value.title" size="mini" v-if="value.hasOwnProperty('title')"></el-input>
         </div>
@@ -86,7 +86,7 @@
           style="width:100%"
         ></v-table>
       </div>
-      <div v-if="key == 'button'">
+      <div v-if="key == 'button'" style="padding-left:20px; padding-right:20px">
         <el-button v-on:click="sendIsActive(value.method)">{{value.title}}</el-button>
       </div>
     </el-collapse-item>
