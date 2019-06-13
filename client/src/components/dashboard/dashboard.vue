@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div>
     <div id="preview" style="background:rgba(0,255,0,0.05)">
       <div id="box" style="position:absolute;">
@@ -110,7 +110,7 @@ export default {
        let i = event.path[3].id;
        i = i.charAt(i.length - 1);
        that.j = that.j + 1;
-       let count = that.j 
+       let count = that.j
        console.log(count)
        this.$store.commit("changeStatic",{'index':i,'value':count});
       //  console.log(i)

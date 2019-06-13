@@ -71,13 +71,13 @@ const mutation = {
     state.interacScatterData = state.weatherData.pointData
   },
   commitDataMapper(state,payload){
-      if (payload[0]=='date'&&payload[1]=='wind') {
+      console.log(payload)
+      if (payload[0]=='precipitation'&&payload[1]=='date') {
         state.interacBarData = state.weatherData.barData
       }
   },
   commitPieData(state,payload){
     if (payload == 'weather') {
-      console.log("aaa")
       state.interacPieData =state.weatherData.pieData
     }
   },
