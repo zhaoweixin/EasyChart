@@ -4,10 +4,7 @@
       <div id="box" style="position:absolute;">
         <svg id="editorborad" v-on:click="getData"></svg>
       </div>
-<<<<<<< HEAD
       <!--<el-button class='popup' type="text" @click="open">Save As Template</el-button>-->
-=======
->>>>>>> 0fe56a3225db4ed18a959863c8264435a2bf8e35
     </div>
     <div class="test" v-on:click="getData">
       <grid-layout

@@ -28,13 +28,8 @@
       <el-tooltip effect="dark" content="Click Save" placement="bottom">
         <el-button type="info" @click="saveOption" size="small" icon="el-icon-edit"></el-button>
       </el-tooltip>
-<<<<<<< HEAD
       <el-tooltip effect="dark" content="Edit Interaction" placement="bottom">
         <el-button type="info"  @click="popUp" size="small" icon="el-icon-pie-chart"></el-button>
-=======
-      <el-tooltip effect="dark" content="edit interaction" placement="bottom">
-      <el-button type="info" size="small" icon="el-icon-pie-chart" @click="popUp"></el-button>
->>>>>>> 0fe56a3225db4ed18a959863c8264435a2bf8e35
       </el-tooltip>
       <el-tooltip effect="dark" content="Save As Template" placement="bottom">
         <el-button type="info" @click="open" icon="el-icon-folder-checked" size="small"></el-button>

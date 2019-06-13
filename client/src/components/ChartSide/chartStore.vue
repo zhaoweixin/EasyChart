@@ -45,17 +45,10 @@
         </div>
       </el-collapse-item>
     </el-collapse>
-<<<<<<< HEAD
     <div>
       <!--<el-button size="small" type="primary" @click="saveOption">click save</el-button>-->
       <!--<el-button size="small" type="primary" @click="popUp">edit interaction</el-button>-->
     </div>
-=======
-    <!-- <div>
-      <el-button size="small" type="primary" @click="saveOption">click save</el-button>
-
-    </div> -->
->>>>>>> 0fe56a3225db4ed18a959863c8264435a2bf8e35
   </div>
 </template>
 <script>
