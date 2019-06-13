@@ -83,7 +83,7 @@ export default {
   .el-aside {
     color: #333;
     text-align: center;
-    height: 1020px;
+    height: 1180px;
   }
 
   .el-main {

@@ -130,7 +130,7 @@ export default {
       this.container = d3.select("#editorborad");
       this.container.append("g").attr("id", that.gridLayer);
       this.$store.commit("setChartLayer", { chartLayer: that.chartLayer });
-      this.chartResize(window.innerWidth * 0.77, window.innerHeight);
+      this.chartResize(window.innerWidth * 0.82, window.innerHeight);
     },
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
         console.log("RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx);

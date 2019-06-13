@@ -45,9 +45,10 @@
         </div>
       </el-collapse-item>
     </el-collapse>
-    <div>
+    <!-- <div>
       <el-button size="small" type="primary" @click="saveOption">click save</el-button>
-    </div>
+
+    </div> -->
   </div>
 </template>
 <script>
@@ -462,37 +463,37 @@ export default {
     deletClone: function(e) {
       d3.selectAll("#clone").remove();
     },
-    saveOption: function() {
-      let that = this;
-      htmlToImage
-        .toPng(document.getElementById("screenShot"))
-        .then(function(dataUrl) {
-          var img = dataUrl,
-            data = img.replace(/^data:image\/\w+;base64,/, ""),
-            buf = new Buffer(data, "base64"),
-            random = Math.floor(Math.random() * 100);
+    // saveOption: function() {
+    //   let that = this;
+    //   htmlToImage
+    //     .toPng(document.getElementById("screenShot"))
+    //     .then(function(dataUrl) {
+    //       var img = dataUrl,
+    //         data = img.replace(/^data:image\/\w+;base64,/, ""),
+    //         buf = new Buffer(data, "base64"),
+    //         random = Math.floor(Math.random() * 100);
 
-          var sendData = {
-            image: {
-              name: "image" + random + ".png",
-              data: buf
-            },
-            chartIdArray: {
-              name: "chartIdArray" + random + ".json",
-              data: that.$store.state.chartIdArray
-            }
-          };
+    //       var sendData = {
+    //         image: {
+    //           name: "image" + random + ".png",
+    //           data: buf
+    //         },
+    //         chartIdArray: {
+    //           name: "chartIdArray" + random + ".json",
+    //           data: that.$store.state.chartIdArray
+    //         }
+    //       };
 
-          axios.post("http://localhost:3000/saveOption", sendData, function(
-            callback
-          ) {
-            console.log(callback);
-          });
-        })
-        .catch(function(error) {
-          console.error("oops, something went wrong!", error);
-        });
-    },
+    //       axios.post("http://localhost:3000/saveOption", sendData, function(
+    //         callback
+    //       ) {
+    //         console.log(callback);
+    //       });
+    //     })
+    //     .catch(function(error) {
+    //       console.error("oops, something went wrong!", error);
+    //     });
+    // },
   },
   watch: {}
 };
