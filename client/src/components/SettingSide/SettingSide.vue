@@ -1,6 +1,12 @@
 <template>
   <el-collapse v-model="activeNames">
-    <el-collapse-item v-for="(value, key) in baseData" :key="key" :title="key" :name="key" v-show="collapseShow(key)">
+    <el-collapse-item
+      v-for="(value, key) in baseData"
+      :key="key"
+      :title="key"
+      :name="key"
+      v-show="collapseShow(key)"
+    >
       <div v-for="(val, k) in value" :key="k">
         <div v-if="key =='metaConfig'">
           <span>{{k}}</span>
@@ -89,7 +95,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { startanalyzedata } from "../../store/MapperDataManage";
+import mapperdataM from "../../store/MapperDataManage.js";
 export default {
   name: "settingside",
   data() {
@@ -219,7 +225,7 @@ export default {
     },
     storeBaseData: {
       handler(newVal) {
-        console.log(newVal)
+        console.log(newVal);
         this.baseData = newVal;
       },
       deep: true
@@ -238,20 +244,24 @@ export default {
       this.baseData.data[rowIndex][field] = newValue;
     },
     sendIsActive(key) {
-      if(key=="dashboard"){
+      if (key == "dashboard") {
         this.$store.commit("commitIsActive", !this.isClick);
+      } else if (key == "startanalyzedata") {
+        mapperdataM.startanalyzedata(); //不知道是否在这里用
       }
-      else if(key=="startanalyzedata"){
-        startanalyzedata();//不知道是否在这里用
-      }
-
     },
     getDatamappersId(a) {
       if (a % 2) return "y";
       else return "x";
     },
-    collapseShow(key){
-      return key=="metaConfig"||key=="style"||key== "data"||key=="button"||key=="datamappers";
+    collapseShow(key) {
+      return (
+        key == "metaConfig" ||
+        key == "style" ||
+        key == "data" ||
+        key == "button" ||
+        key == "datamappers"
+      );
     }
   }
 };
