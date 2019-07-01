@@ -12,7 +12,7 @@ var elementResizeDetectorMaker = require("element-resize-detector")
 import G2 from "@antv/g2";
 import { mapState,mapGetters } from 'vuex';
 import $ from "jquery";
-
+import defaultData from "../../assets/baseData"
 var datamapper = [
   {
     Fieldname: "name",
@@ -25,46 +25,47 @@ export default {
   name: "pieChart",
   props:{
         id:String,
-        baseData: {
-          type:Object,
-          default: function() {
-            let a= {
-              metaConfig: {
-                title:'柱状图'
-              },
-              style:{
-                color:['#35c17c','#af7eff',
-                  '#3bcaff','#27C181',
-                  '#FE902D','#FCCA74']
-              },
-              id:this.id,
-              data : [{
-                "item":"高血压","count":3228,"percent":0.13568726355611602
-              },{
-                "item":"糖尿病","count":880,"percent":0.036990332072299285
-              },{
-                "item":"老人","count":16376,"percent":0.6883564522908785
-              },{
-                "item":"残疾人","count":190,"percent":0.007986548970155528
-              },{
-                "item":"儿童","count":2765,"percent":0.11622530474989491
-              },{
-                "item":"精神病","count":351,"percent":0.014754098360655738
-              }],
-              datamappers: datamapper,
-              width: 484,
-              height: 310,
-          }
-              return a;
+        // baseData: {
+        //   type:Object,
+        //   default: function() {
+        //     let a= {
+        //       metaConfig: {
+        //         title:'柱状图'
+        //       },
+        //       style:{
+        //         color:['#35c17c','#af7eff',
+        //           '#3bcaff','#27C181',
+        //           '#FE902D','#FCCA74']
+        //       },
+        //       id:this.id,
+        //       data : [{
+        //         "item":"高血压","count":3228,"percent":0.13568726355611602
+        //       },{
+        //         "item":"糖尿病","count":880,"percent":0.036990332072299285
+        //       },{
+        //         "item":"老人","count":16376,"percent":0.6883564522908785
+        //       },{
+        //         "item":"残疾人","count":190,"percent":0.007986548970155528
+        //       },{
+        //         "item":"儿童","count":2765,"percent":0.11622530474989491
+        //       },{
+        //         "item":"精神病","count":351,"percent":0.014754098360655738
+        //       }],
+        //       datamappers: datamapper,
+        //       width: 484,
+        //       height: 310,
+        //   }
+        //       return a;
 
-          }
-        }
+        //   }
+        // }
       },
   data() {
     return {
       isInit:false,
       name: "lineChart",
       chart:{},
+      baseData:defaultData.piechart.baseData,
       g2id: this.id + "_g2"
     };
   },

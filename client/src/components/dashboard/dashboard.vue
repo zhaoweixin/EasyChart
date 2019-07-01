@@ -30,6 +30,7 @@
             :id="index"
             :style="{backgroundColor:item.color}"
             @resized="resizedEvent"
+            @click.native="getData(item.i)"
             @dblclick.native="changeStatic(item.i)"
           >
             <component :is="item.chartname" :id="item.j" :props="item.props" ></component>
@@ -116,9 +117,10 @@ export default {
        this.$store.commit("changeStatic",{'index':i,'value':count});
        console.log(i)
     },
-    getData() { //获取baseData里的内容，并传进state里
+    getData(id) { //获取baseData里的内容，并传进state里
       this.$store.commit("commitPropsData", this.baseData);
       console.log("hahhahahahhahahh")
+      console.log(id)
     },
     applyColor(){
       let that = this

@@ -1,29 +1,102 @@
 {
-
-    "barChart": {
-        "baseData":{
-        "metaConfig": {
-            "title": "降雨量"
+  "barChart": {
+      "baseData": {
+          "metaConfig": {
+              "title": "降雨量"
           },
           "style": {
-            "color": ["#69C0FF"]
+              "color": [
+                  "#69C0FF"
+              ]
           },
           "id": "this.id",
           "data": [
-            { "name": "Mon", "value": "10" },
-            { "name": "Tue", "value": "706" },
-            {
-              "name": "Wed",
-              "value": "239"
-            },
-            { "name": "Thu", "value": 172 }
+              {
+                  "name": "Mon",
+                  "value": "10"
+              },
+              {
+                  "name": "Tue",
+                  "value": "706"
+              },
+              {
+                  "name": "Wed",
+                  "value": "239"
+              },
+              {
+                  "name": "Thu",
+                  "value": 172
+              }
           ],
           "datamappers": "datamapper",
           "button": {
-            "method": "startanalyzedata",
-            "title": "Apply"
+              "method": "startanalyzedata",
+              "title": "Apply"
           }
-    }
-}
-    
+      }
+  },
+  "piechart": {
+      "baseData": {
+          "metaConfig": {
+              "title":"饼状图"
+            },
+            "style":{
+              "color":["#35c17c","#af7eff",
+                "#3bcaff","#27C181",
+                "#FE902D","#FCCA74"]
+            },
+            "id":"this.id",
+            "data" : [{
+              "item":"高血压","count":3228,"percent":0.13568726355611602
+            },{
+              "item":"糖尿病","count":880,"percent":0.036990332072299285
+            },{
+              "item":"老人","count":16376,"percent":0.6883564522908785
+            },{
+              "item":"残疾人","count":190,"percent":0.007986548970155528
+            },{
+              "item":"儿童","count":2765,"percent":0.11622530474989491
+            },{
+              "item":"精神病","count":351,"percent":0.014754098360655738
+            }],
+            "datamappers": "datamapper",
+            "width": 484,
+            "height": 310
+      }
+  },
+  "canlendar":{
+      "baseData": {
+          "metaConfig":{
+              "title":"日历图"
+            },
+            "style":{
+              "color":["#e0ffff", "#006edd"]
+            },
+            "id":"this.id"
+      }
+  },
+  "lineChart":{
+      "baseData": {
+          "metaConfig": {
+              "title":"温度变化"
+            },
+            "style":{
+              "color":["#35c17c","#af7eff"]
+            },
+            "id":"this.id"
+      }
+  },
+  "scatter_vega":{
+      "baseData": {
+          "metaConfig": {
+              "title": "scatter_vega"
+          },
+          "style":{
+              "color":["#ffffff"]
+          },
+          "id": "this.id",
+          "width": 200,
+          "height": 200
+      }
+  }
 }

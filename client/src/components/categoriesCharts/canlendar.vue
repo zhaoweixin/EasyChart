@@ -7,8 +7,9 @@
   var elementResizeDetectorMaker = require("element-resize-detector")
   import { mapGetters} from 'vuex'
   import echarts from 'echarts'
+  import defaultData from "../../assets/baseData"
   export default {
-        name: "canlendar",
+      name: "canlendar",
       props:{
           id:String
       },
@@ -16,6 +17,7 @@
         return {
           myChart:"",
           option:"",
+          // baseData:baseData.piechart.baseData,
           baseData:{
                 metaConfig:{
                   title:"日历图",

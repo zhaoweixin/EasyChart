@@ -1,5 +1,5 @@
 <template>
-  <div v-bind:id="id" class="container" @click="selectChart"></div>
+  <div v-bind:id="id" class="container"></div>
 </template>
 
 <script>
@@ -8,8 +8,8 @@ import Dataconfig from "../../store/dataconfig.js";
 var elementResizeDetectorMaker = require("element-resize-detector");
 import { mapState, mapGetters } from "vuex";
 import echarts from "echarts";
-import baseData from "../../assets/baseData"
-console.log(baseData.barChart.baseData)
+import defaultData from "../../assets/baseData"
+console.log(defaultData.barChart.baseData)
 var datamapper = [
   {
     Fieldname: "value",
@@ -63,7 +63,7 @@ export default {
     return {
       myChart: null,
       option: null,
-      baseData:baseData.barChart.baseData
+      baseData:defaultData.barChart.baseData
     };
   },
   computed: {
