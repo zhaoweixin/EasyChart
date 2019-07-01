@@ -8,7 +8,8 @@ import Dataconfig from "../../store/dataconfig.js";
 var elementResizeDetectorMaker = require("element-resize-detector");
 import { mapState, mapGetters } from "vuex";
 import echarts from "echarts";
-
+import baseData from "../../assets/baseData"
+console.log(baseData.barChart.baseData)
 var datamapper = [
   {
     Fieldname: "value",
@@ -27,40 +28,42 @@ export default {
   name: "LiZi",
   props: {
     id: String,
-    baseData: {
-      type: Object,
-      default: function() {
-        let a = {
-          metaConfig: {
-            title: "降雨量"
-          },
-          style: {
-            color: ["#69C0FF"]
-          },
-          id: this.id,
-          data: [
-            { name: "Mon", value: "10" },
-            { name: "Tue", value: "706" },
-            {
-              name: "Wed",
-              value: "239"
-            },
-            { name: "Thu", value: 172 }
-          ],
-          datamappers: datamapper,
-          button: {
-            method: "startanalyzedata",
-            title: "Apply"
-          }
-        };
-        return a;
-      }
-    }
+    // baseData: {
+    //   "type": Object,
+    //   "default": function() {
+    //     let a = {
+    //       metaConfig: {
+    //         title: "降雨量"
+    //       },
+    //       "style": {
+    //         color: ["#69C0FF"]
+    //       },
+    //       id: this.id,
+    //       data: [
+    //         { name: "Mon", value: "10" },
+    //         { name: "Tue", value: "706" },
+    //         {
+    //           name: "Wed",
+    //           value: "239"
+    //         },
+    //         { name: "Thu", value: 172 }
+    //       ],
+    //       datamappers: datamapper,
+    //       button: {
+    //         method: "startanalyzedata",
+    //         title: "Apply"
+    //       }
+    //     };
+    //     return a;
+    //   }
+    // }
+    
   },
   data() {
     return {
       myChart: null,
-      option: null
+      option: null,
+      baseData:baseData.barChart.baseData
     };
   },
   computed: {

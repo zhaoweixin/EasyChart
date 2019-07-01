@@ -1,0 +1,29 @@
+{
+
+    "barChart": {
+        "baseData":{
+        "metaConfig": {
+            "title": "降雨量"
+          },
+          "style": {
+            "color": ["#69C0FF"]
+          },
+          "id": "this.id",
+          "data": [
+            { "name": "Mon", "value": "10" },
+            { "name": "Tue", "value": "706" },
+            {
+              "name": "Wed",
+              "value": "239"
+            },
+            { "name": "Thu", "value": 172 }
+          ],
+          "datamappers": "datamapper",
+          "button": {
+            "method": "startanalyzedata",
+            "title": "Apply"
+          }
+    }
+}
+    
+}

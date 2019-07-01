@@ -118,6 +118,7 @@ export default {
     },
     getData() { //获取baseData里的内容，并传进state里
       this.$store.commit("commitPropsData", this.baseData);
+      console.log("hahhahahahhahahh")
     },
     applyColor(){
       let that = this

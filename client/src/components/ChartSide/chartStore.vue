@@ -56,7 +56,7 @@ import store from "../../store/store.js";
 import axios from "axios";
 import mapperdataM from "../../store/MapperDataManage.js";
 import modeConfig from "../../assets/modelConfig2.json";
-
+import baseData from "../../assets/baseData"
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
 
@@ -512,9 +512,11 @@ export default {
             $(".el-aside").width();
 
           console.log(chartType);
+          console.log(baseData[chartType].baseData)
           var item = {
             // chartname:chartType,
             chartname: chartType,
+            baseData:baseData[chartType].baseData,
             x: 0,
             y: 0,
             w: 4,
@@ -525,6 +527,7 @@ export default {
             color: "#f7f7f7"
           };
           mutations.addIdToArray(stores.state, item);
+          
         }
       });
     },
