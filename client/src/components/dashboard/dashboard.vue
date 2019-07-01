@@ -2,7 +2,7 @@
   <div>
     <div id="preview" style="background:rgba(0,255,0,0.05)">
       <div id="box" style="position:absolute;">
-        <svg id="editorborad" v-on:click="getData"></svg>
+        <svg id="editorborad" v-on:click="getData" />
       </div>
       <!--<el-button class='popup' type="text" @click="open">Save As Template</el-button>-->
     </div>
@@ -33,7 +33,7 @@
             @click.native="getData(item.i)"
             @dblclick.native="changeStatic(item.i)"
           >
-            <component :is="item.chartname" :id="item.j" :props="item.props" ></component>
+            <component :is="item.chartname" :id="item.j" :props="item.props"></component>
           </grid-item>
         </div>
       </grid-layout>
@@ -57,8 +57,8 @@ import ratiochart from "../categoriesCharts/ratiochart.vue";
 import funnelPlot from "../categoriesCharts/funnelPlot.vue";
 import barChart from "../categoriesCharts/barChart.vue";
 import linechart_vega from "../categoriesCharts/linechart_vega.vue";
-import scatter_vega from "../categoriesCharts/scatter_vega.vue"
-import canlendar from  "../categoriesCharts/canlendar.vue"
+import scatter_vega from "../categoriesCharts/scatter_vega.vue";
+import canlendar from "../categoriesCharts/canlendar.vue";
 
 import * as d3 from "d3";
 export default {
@@ -67,7 +67,8 @@ export default {
       container: "", //canvas to drawing blueprint
       gridLayer: "gridLayer",
       chartLayer: "preview",
-      baseData: {  //基本配置
+      baseData: {
+        //基本配置
         metaConfig: {
           title: ""
         },
@@ -77,58 +78,72 @@ export default {
         },
         data: [],
         button: {
-            method: "dashboard",
-            title: "apply to all charts"
-          }
+          method: "dashboard",
+          title: "apply to all charts"
+        }
       },
       show: false,
       changeColor: false,
-      j:0,
+      j: 0
     };
   },
   mounted() {
+    console.log(this.baseData)
+    this.$store.commit("pushDataToArray", {base:this.baseData, i:0});
     this.chartInit("#preview");
   },
   computed: {
-    ...mapGetters(['getIsActive','chartArray']),
-    ...mapGetters({ 'storeBaseData': "getPropsData" }),
+    ...mapGetters(["getIsActive", "chartArray"]),
+    ...mapGetters({ storeBaseData: "getPropsData" })
   },
   watch: {
-    storeBaseData: {   //将改变的颜色赋值给背景色
-      handler(newVal){
-        document.getElementById("box").style.backgroundColor=newVal.style.backgroundColor;
-      },
-      deep:true
-    },
-    'getIsActive':{  //点击apply to all charts就将改变的颜色赋给所有子图
-      handler(newVal){
-          this.applyColor();
-      },
+    // storeBaseData: {
+    //   //将改变的颜色赋值给背景色
+      
+    //   handler(newVal) {
+    //     console.log(newVal)
+    //     document.getElementById("box").style.backgroundColor =
+    //       newVal.style.backgroundColor;
+    //   },
+    //   deep: true
+    // },
+    //背景颜色修改
+    getIsActive: {
+      //点击apply to all charts就将改变的颜色赋给所有子图
+      handler(newVal) {
+        this.applyColor();
+      }
     }
   },
   methods: {
-     changeStatic(id){
+    changeStatic(id) {
       //  console.log("得到ID了"+ item);
-       let that=this;
-       let i = id;
-       that.j = that.j + 1;
-       let count = that.j
-       console.log(count)
-       this.$store.commit("changeStatic",{'index':i,'value':count});
-       console.log(i)
+      let that = this;
+      let i = id;
+      that.j = that.j + 1;
+      let count = that.j;
+      console.log(count);
+      this.$store.commit("changeStatic", { index: i, value: count });
+      console.log(i);
     },
-    getData(id) { //获取baseData里的内容，并传进state里
+    getData(id) {
+      //获取baseData里的内容，并传进state里
       this.$store.commit("commitPropsData", this.baseData);
-      console.log("hahhahahahhahahh")
-      console.log(id)
+      var re = /^[0-9]+.?[0-9]*/; //判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
+      if (!re.test(id)) {
+        console.log("dash")
+        this.$store.commit("changeSelectId", "dashboard");
+      } else {
+        console.log(id)
+        this.$store.commit("changeSelectId", id);
+      }
     },
-    applyColor(){
-      let that = this
-      var chartArray =that.chartArray.map(
-        function(item,index,array){
-          console.log(that.getIsActive)
-          return item.color = that.baseData.style.backgroundColor
-        });
+    applyColor() {
+      let that = this;
+      var chartArray = that.chartArray.map(function(item, index, array) {
+        console.log(that.getIsActive);
+        return (item.color = that.baseData.style.backgroundColor);
+      });
     },
     chartInit(container) {
       let that = this;
@@ -137,9 +152,12 @@ export default {
       this.$store.commit("setChartLayer", { chartLayer: that.chartLayer });
       this.chartResize(window.innerWidth * 0.75, window.innerHeight);
     },
-    resizedEvent: function(i, newH, newW, newHPx, newWPx){
-        console.log("RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx);
-        this.$store.commit('commitChange',{newWidth:newWPx,newHeight:newHPx});
+    resizedEvent: function(i, newH, newW, newHPx, newWPx) {
+      console.log( "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx );
+      this.$store.commit("commitChange", {
+        newWidth: newWPx,
+        newHeight: newHPx
+      });
     },
     chartResize(width, height) {
       let that = this;
@@ -174,10 +192,11 @@ export default {
       d3.select("#editorborad")
         .attr("width", width)
         .attr("height", height);
-      if (this.show) { //是否绘制网格
+      if (this.show) {
+        //是否绘制网格
         drawGrids(width, height);
       }
-    },
+    }
   },
   components: {
     bubblechart,
@@ -196,17 +215,17 @@ export default {
     scatter_vega,
     canlendar,
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem,
+    GridItem: VueGridLayout.GridItem
   }
 };
 </script>
 <style>
-.popup{
+.popup {
   height: 10px;
   width: 50px;
   position: absolute;
-  top:50px;
-  left:1625px;
+  top: 50px;
+  left: 1625px;
 }
 .gridLayout {
   /* background: #00f; */
