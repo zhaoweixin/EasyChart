@@ -154,29 +154,28 @@ export default {
   },
   watch: {
     //野
-    storeBaseData: {
-      handler(newVal) {
-        console.log(newVal);
-        if (newVal.id == this.id) {
-          this.myChart.setOption({
-            title: {
-              text: newVal.metaConfig.title
-            },
-            color: newVal.style.color,
-            xAxis: [
-              {
-                data: this.comArray(newVal.data, Dataconfig.barxname)
-              }
-            ],
-            series: {
-              name: Dataconfig.dataname,
-              data: this.comArray(newVal.data, Dataconfig.baryname)
-            }
-          });
-        }
-      },
-      deep: true
-    },
+    // storeBaseData: {
+    //   handler(newVal) {
+    //     if (newVal.id == this.id) {
+    //       this.myChart.setOption({
+    //         title: {
+    //           text: newVal.metaConfig.title
+    //         },
+    //         color: newVal.style.color,
+    //         xAxis: [
+    //           {
+    //             data: this.comArray(newVal.data, Dataconfig.barxname)
+    //           }
+    //         ],
+    //         series: {
+    //           name: Dataconfig.dataname,
+    //           data: this.comArray(newVal.data, Dataconfig.baryname)
+    //         }
+    //       });
+    //     }
+    //   },
+    //   deep: true
+    // },
     getInterData: {
       handler(newVal) {
         // this.baseData.data = newVal;

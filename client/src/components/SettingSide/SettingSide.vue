@@ -240,7 +240,7 @@ export default {
     // this.selectChartId = "dashboard"
   },
   computed: {
-    ...mapGetters({ storeBaseData: "getPropsData" }),
+    // ...mapGetters({ storeBaseData: "getPropsData" }),
     ...mapGetters({ isClick: "getIsActive" }),
     ...mapGetters({ selectChartId: "getSelectChartId"}),
   },
@@ -251,16 +251,16 @@ export default {
       },
       deep: true
     },
-    storeBaseData: {
-      handler(newVal) {
-        this.baseData = newVal;
-      },
-      deep: true
-    },
+    // storeBaseData: {
+    //   handler(newVal) {
+    //     this.baseData = newVal;
+    //   },
+    //   deep: true
+    // },
     selectChartId: {
       handler(newVal){
         var chartsList = this.$store.state.chartArray;
-        
+        console.log(newVal)
         if(newVal === "dashboard"){
           this.baseData = chartsList[0].baseData
         } else {

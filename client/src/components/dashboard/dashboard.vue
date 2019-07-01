@@ -88,8 +88,8 @@ export default {
     };
   },
   mounted() {
-    console.log(this.baseData)
-    this.$store.commit("pushDataToArray", {base:this.baseData, i:0});
+    // console.log(this.baseData)
+    this.$store.commit("pushDataToArray", {baseData:this.baseData, i:0});
     this.chartInit("#preview");
   },
   computed: {
@@ -128,13 +128,13 @@ export default {
     },
     getData(id) {
       //获取baseData里的内容，并传进state里
-      this.$store.commit("commitPropsData", this.baseData);
+      // this.$store.commit("commitPropsData", this.baseData);
       var re = /^[0-9]+.?[0-9]*/; //判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
       if (!re.test(id)) {
-        console.log("dash")
+        // console.log("dash")
         this.$store.commit("changeSelectId", "dashboard");
       } else {
-        console.log(id)
+        // console.log(id)
         this.$store.commit("changeSelectId", id);
       }
     },
