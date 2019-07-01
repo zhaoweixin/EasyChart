@@ -236,12 +236,13 @@ export default {
       ]
     };
   },
-
+  mounted(){
+    // this.selectChartId = "dashboard"
+  },
   computed: {
     ...mapGetters({ storeBaseData: "getPropsData" }),
-    ...mapGetters({ isClick: "getIsActive" })
-    // ...mapGetters({'storeBaseData': 'getBarData'}),
-    // ...mapGetters({'storeBaseData':'getBarData'}),
+    ...mapGetters({ isClick: "getIsActive" }),
+    ...mapGetters({ selectChartId: "getSelectChartId"}),
   },
   watch: {
     baseData: {
@@ -255,15 +256,20 @@ export default {
         this.baseData = newVal;
       },
       deep: true
+    },
+    selectChartId: {
+      handler(newVal){
+        var chartsList = this.$store.state.chartArray;
+        
+        if(newVal === "dashboard"){
+          this.baseData = chartsList[0].baseData
+        } else {
+          this.baseData = chartsList[newVal].baseData
+        }
+          console.log(this.baseData);
+        
+      }
     }
-    // storeBarData:{
-    //   handler(newVal){
-    //
-    //     console.log("bar"+newVal)
-    //     this.baseData=newVal
-    //   },
-    //   deep:true
-    // }
   },
   methods: {
     cellEditDone(newValue, oldValue, rowIndex, rowData, field) {

@@ -17,6 +17,8 @@ const state = {
   dashboardId:"",
   chartComponentArray: [], //图表组件数组
   chartIdArray: [],
+  chartArray: [], //所有图的basedata
+  selectChartId: "", //选中图表的ID
   charttest: "ww",
   chartSizeChange: {},
   propsData:'',

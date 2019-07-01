@@ -512,7 +512,7 @@ export default {
             $(".el-aside").width();
 
           console.log(chartType);
-          console.log(baseData[chartType].baseData)
+          // console.log(baseData[chartType].baseData)
           var item = {
             // chartname:chartType,
             chartname: chartType,
@@ -521,13 +521,13 @@ export default {
             y: 0,
             w: 4,
             h: 8,
-            i: stores.state.chartIdArray.length,
+            i: stores.state.chartArray.length,
             static: false,
-            j: "item" + stores.state.chartIdArray.length,
+            j: "item" + stores.state.chartArray.length,
             color: "#f7f7f7"
           };
           mutations.addIdToArray(stores.state, item);
-          
+          mutations.pushDataToArray(store.state, item);
         }
       });
     },

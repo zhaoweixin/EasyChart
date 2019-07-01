@@ -22,6 +22,12 @@ const mutation = {
     addIdToArray(state, id) {
         state.chartIdArray.push(id);
     },
+    pushDataToArray(state, payload) {
+        state.chartArray[payload.i] = payload;
+    },
+    changeSelectId(state, payload) {
+        state.selectChartId = payload;
+    },
     // 右侧栏提交改变的数据
     reChartData(state, payload) {
         state.chartComponentArray[parseInt(payload.id)-1] = payload;
@@ -54,7 +60,7 @@ const mutation = {
     state.weatherData.pointData = Data(payload,"point")
     state.weatherData.lineData = Data(payload,"line")
 
-    console.log(state.weatherData.lineData)
+    // console.log(state.weatherData.lineData)
   },
   commitInteracBarData(state,payload){
     state.interacBarData =interationData(state.weatherData.baseData,"bar" ,payload)

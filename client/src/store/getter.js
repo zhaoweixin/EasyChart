@@ -44,6 +44,12 @@ const getter = {
   },
   getChartComponentArray: state=>{
       return state.chartComponentArray
+  },
+  getSelectChartId:state=>{
+      return state.selectChartId
+  },
+  getChartDataArray:state=>{
+      return state.chartArray
   }
   // getBarData:state=>{
   //     return state.barData
