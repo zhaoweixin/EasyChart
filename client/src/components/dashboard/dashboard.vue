@@ -33,7 +33,7 @@
             @click.native="getData(item.i)"
             @dblclick.native="changeStatic(item.i)"
           >
-            <component :is="item.chartname" :id="item.j" :props="item.props"></component>
+            <component :is="item.chartname" :ref="item.i" :id="item.j" :props="item.props"></component>
           </grid-item>
         </div>
       </grid-layout>
@@ -106,8 +106,8 @@ export default {
     //背景颜色修改
     selectChart: {
       handler(newVal) {
-        // console.log("hahaha");
-        this.callReDraw(newVal.i);
+        console.log(newVal)
+        this.callReDraw(newVal.i,newVal);
       },
       deep: true
     },
@@ -143,6 +143,18 @@ export default {
         this.selectChart = this.$store.state.chartArray[id];
       }
       console.log(this.charts);
+    },
+    callReDraw(id,newVal) {
+      let that = this;
+      if (id > 0) {
+        console.log(that.$refs[id][0])
+        console.log(that.$refs[id][0].reDraw)
+        that.$refs[id][0].reDraw(newVal); 
+        console.log("修改子图")
+      } else {
+        // this.;
+        console.log("修改dashboard")
+      }
     },
     applyColor() {
       let that = this;
@@ -201,15 +213,6 @@ export default {
       if (this.show) {
         //是否绘制网格
         drawGrids(width, height);
-      }
-    },
-    callReDraw(id) {
-      if (id > 0) {
-        // this.$refs[id].reDraw(); 
-        console.log("修改子图")
-      } else {
-        // this.;
-        console.log("修改dashboard")
       }
     }
   },

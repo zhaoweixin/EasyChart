@@ -127,24 +127,25 @@ export default {
         interaction: "controler"
       });
     },
-    redraw(newVal){
+    reDraw(newVal){
+      console.log("进入到子组件来了")
+      console.log(newVal)
       this.myChart.setOption({
             title: {
-              text: newVal.metaConfig.title
+              text: newVal.baseData.metaConfig.title
             },
-            color: newVal.style.color,
+            color: newVal.baseData.style.color,
             xAxis: [
               {
-                data: this.comArray(newVal.data, Dataconfig.barxname)
+                data: this.comArray(newVal.baseData.data, Dataconfig.barxname)
               }
             ],
             series: {
               name: Dataconfig.dataname,
-              data: this.comArray(newVal.data, Dataconfig.baryname)
+              data: this.comArray(newVal.baseData.data, Dataconfig.baryname)
             }
           });
-      echarts.init(document.getElementById(this.id)).resize();
-
+      // echarts.init(document.getElementById(this.id)).resize();
     },
     comArray(data, name) {
       let arr = [];

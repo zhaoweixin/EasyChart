@@ -103,10 +103,10 @@ const mutation = {
     console.log(payload.value)
     console.log(payload.value%2==1)
     if(payload.value%2==1){
-      state.chartIdArray[payload.index].static = true;
+      state.chartArray[payload.index].static = true;
     }
     else{
-      state.chartIdArray[payload.index].static = false;
+      state.chartArray[payload.index].static = false;
     }
   }
 }
