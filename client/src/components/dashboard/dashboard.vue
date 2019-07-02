@@ -44,16 +44,9 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 import VueGridLayout from "vue-grid-layout";
-import bubblechart from "../categoriesCharts/bubblechart.vue";
-import bubbleFrequencyChar from "../categoriesCharts/bubbleFrequencyChart.vue";
-import gaugechart from "../categoriesCharts/gaugechart.vue";
 import groupBarChart from "../categoriesCharts/groupBarChart.vue";
-import groupPieChart from "../categoriesCharts/groupPieChart.vue";
 import lineChart from "../categoriesCharts/linechart.vue";
-import mapBoxView from "../categoriesCharts/mapBoxView.vue";
 import piechart from "../categoriesCharts/piechart.vue";
-import radarChart from "../categoriesCharts/radarChart.vue";
-import ratiochart from "../categoriesCharts/ratiochart.vue";
 import funnelPlot from "../categoriesCharts/funnelPlot.vue";
 import barChart from "../categoriesCharts/barChart.vue";
 import linechart_vega from "../categoriesCharts/linechart_vega.vue";
@@ -84,22 +77,25 @@ export default {
       },
       show: false,
       changeColor: false,
-      j: 0
+      j: 0,
+      selectChart: {}
     };
   },
   mounted() {
     // console.log(this.baseData)
-    this.$store.commit("pushDataToArray", {baseData:this.baseData, i:0});
+    this.$store.commit("pushDataToArray", { baseData: this.baseData, i: 0 });
+    this.$store.commit("changeSelectId", "dashboard");
     this.chartInit("#preview");
   },
   computed: {
     ...mapGetters(["getIsActive", "chartArray"]),
-    ...mapGetters({ storeBaseData: "getPropsData" })
+    ...mapGetters({ storeBaseData: "getPropsData" }),
+    ...mapGetters({ charts: "getChartDataArray" })
   },
   watch: {
     // storeBaseData: {
     //   //将改变的颜色赋值给背景色
-      
+
     //   handler(newVal) {
     //     console.log(newVal)
     //     document.getElementById("box").style.backgroundColor =
@@ -108,6 +104,13 @@ export default {
     //   deep: true
     // },
     //背景颜色修改
+    selectChart: {
+      handler(newVal) {
+        // console.log("hahaha");
+        this.callReDraw(newVal.i);
+      },
+      deep: true
+    },
     getIsActive: {
       //点击apply to all charts就将改变的颜色赋给所有子图
       handler(newVal) {
@@ -133,10 +136,13 @@ export default {
       if (!re.test(id)) {
         // console.log("dash")
         this.$store.commit("changeSelectId", "dashboard");
+        this.selectChart = this.$store.state.chartArray[0];
       } else {
         // console.log(id)
         this.$store.commit("changeSelectId", id);
+        this.selectChart = this.$store.state.chartArray[id];
       }
+      console.log(this.charts);
     },
     applyColor() {
       let that = this;
@@ -196,19 +202,21 @@ export default {
         //是否绘制网格
         drawGrids(width, height);
       }
+    },
+    callReDraw(id) {
+      if (id > 0) {
+        // this.$refs[id].reDraw(); 
+        console.log("修改子图")
+      } else {
+        // this.;
+        console.log("修改dashboard")
+      }
     }
   },
   components: {
-    bubblechart,
-    bubbleFrequencyChar,
-    gaugechart,
     groupBarChart,
-    groupPieChart,
     lineChart,
-    mapBoxView,
     piechart,
-    radarChart,
-    ratiochart,
     funnelPlot,
     barChart,
     linechart_vega,

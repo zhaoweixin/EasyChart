@@ -9,7 +9,7 @@ var elementResizeDetectorMaker = require("element-resize-detector");
 import { mapState, mapGetters } from "vuex";
 import echarts from "echarts";
 import defaultData from "../../assets/baseData"
-console.log(defaultData.barChart.baseData)
+// console.log(defaultData.barChart.baseData)
 var datamapper = [
   {
     Fieldname: "value",
@@ -68,7 +68,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      storeBaseData: "getPropsData",
       getWeatInterData: "getWeatherBarData"
     }),
     // dataMap(){
@@ -120,9 +119,6 @@ export default {
     }
   },
   methods: {
-    selectChart() {
-      this.$store.commit("commitPropsData", this.baseData);
-    },
     draw() {
       this.myChart = echarts.init(document.getElementById(this.id));
       this.myChart.setOption(this.t);
@@ -130,6 +126,25 @@ export default {
         name: "Barchart",
         interaction: "controler"
       });
+    },
+    redraw(newVal){
+      this.myChart.setOption({
+            title: {
+              text: newVal.metaConfig.title
+            },
+            color: newVal.style.color,
+            xAxis: [
+              {
+                data: this.comArray(newVal.data, Dataconfig.barxname)
+              }
+            ],
+            series: {
+              name: Dataconfig.dataname,
+              data: this.comArray(newVal.data, Dataconfig.baryname)
+            }
+          });
+      echarts.init(document.getElementById(this.id)).resize();
+
     },
     comArray(data, name) {
       let arr = [];
@@ -154,28 +169,29 @@ export default {
   },
   watch: {
     //野
-    // storeBaseData: {
-    //   handler(newVal) {
-    //     if (newVal.id == this.id) {
-    //       this.myChart.setOption({
-    //         title: {
-    //           text: newVal.metaConfig.title
-    //         },
-    //         color: newVal.style.color,
-    //         xAxis: [
-    //           {
-    //             data: this.comArray(newVal.data, Dataconfig.barxname)
-    //           }
-    //         ],
-    //         series: {
-    //           name: Dataconfig.dataname,
-    //           data: this.comArray(newVal.data, Dataconfig.baryname)
-    //         }
-    //       });
-    //     }
-    //   },
-    //   deep: true
-    // },
+    storeBaseData: {
+      handler(newVal) {
+
+        if (newVal.id == this.id) {
+          this.myChart.setOption({
+            title: {
+              text: newVal.metaConfig.title
+            },
+            color: newVal.style.color,
+            xAxis: [
+              {
+                data: this.comArray(newVal.data, Dataconfig.barxname)
+              }
+            ],
+            series: {
+              name: Dataconfig.dataname,
+              data: this.comArray(newVal.data, Dataconfig.baryname)
+            }
+          });
+        }
+      },
+      deep: true
+    },
     getInterData: {
       handler(newVal) {
         // this.baseData.data = newVal;

@@ -237,7 +237,6 @@ export default {
     };
   },
   mounted(){
-    // this.selectChartId = "dashboard"
   },
   computed: {
     // ...mapGetters({ storeBaseData: "getPropsData" }),
@@ -245,12 +244,12 @@ export default {
     ...mapGetters({ selectChartId: "getSelectChartId"}),
   },
   watch: {
-    baseData: {
-      handler(newVal) {
-        this.$store.commit("commitPropsData", newVal);
-      },
-      deep: true
-    },
+    // baseData: {
+    //   handler(newVal) {
+    //     this.$store.commit("commitPropsData", newVal);
+    //   },
+    //   deep: true
+    // },
     // storeBaseData: {
     //   handler(newVal) {
     //     this.baseData = newVal;
@@ -260,13 +259,13 @@ export default {
     selectChartId: {
       handler(newVal){
         var chartsList = this.$store.state.chartArray;
-        console.log(newVal)
+        // console.log(newVal)
         if(newVal === "dashboard"){
           this.baseData = chartsList[0].baseData
         } else {
           this.baseData = chartsList[newVal].baseData
         }
-          console.log(this.baseData);
+          // console.log(this.baseData);
         
       }
     }
@@ -287,13 +286,7 @@ export default {
       else return "x";
     },
     collapseShow(key) {
-      return (
-        key == "metaConfig" ||
-        key == "style" ||
-        (key == "data" && this.baseData.data.length != 0)||
-        key == "button" ||
-        key == "datamappers"
-      );
+      return (key == "metaConfig" ||key == "style" ||(key == "data" && this.baseData.data.length != 0)||key == "button" ||key == "datamappers");
     }
   }
 };

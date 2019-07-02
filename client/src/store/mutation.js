@@ -5,19 +5,11 @@ const mutation = {
     createChartComponet(state,chartobj){
         state.chartComponetArray.push(chartobj);
     },
-    toDrawChart(state, payload){
-        state.toDrawChart = payload.toDrawChart;
-    },
     setChartLayer(state, payload){
         state.chartLayer = payload.chartLayer
     },
-    setChartXY(state, payload){
-        state.chartX = payload.x;
-        state.chartY = payload.y;
-    },
     pushDataSetToState(state, dataset) {
         state.chartComponentArray.push(dataset);
-        //state.charttest = dataset;
     },
     addIdToArray(state, id) {
         state.chartIdArray.push(id);
