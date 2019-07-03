@@ -11,6 +11,7 @@
 var elementResizeDetectorMaker = require("element-resize-detector")
 import G2 from "@antv/g2";
 import { mapState,mapGetters } from 'vuex';
+import { DataSet } from "@antv/data-set";
 import $ from "jquery";
 import defaultData from "../../assets/baseData"
 var datamapper = [
@@ -108,23 +109,23 @@ export default {
       },
       deep:true
     },
-    // dataMap:{
-    //   handler(newVal){
+    dataMap:{
+      handler(newVal){
 
-    //     if (newVal.id == this.id) {
-    //       if (newVal.datamappers === undefined) {
-    //         this.baseData.datamappers = datamapper
-    //       } else {
-    //         this.baseData.datamappers = newVal.datamappers
-    //       }
+        if (newVal.id == this.id) {
+          if (newVal.datamappers === undefined) {
+            this.baseData.datamappers = datamapper
+          } else {
+            this.baseData.datamappers = newVal.datamappers
+          }
 
-    //       if (newVal.datamappers[0].Alias != null) {
-    //         this.$store.commit("commitPieData", newVal.datamappers[0].Alias)
-    //       }
-    //     }
-    //   },
-    //   deep:true
-    // }
+          if (newVal.datamappers[0].Alias != null) {
+            this.$store.commit("commitPieData", newVal.datamappers[0].Alias)
+          }
+        }
+      },
+      deep:true
+    }
   },
   mounted() {
     let that = this;
@@ -148,15 +149,21 @@ export default {
       this.$store.commit("commitPropsData", this.baseData);
     },
     reDraw(newVal){
-     if (newVal.baseData.datamappers === undefined) {
-            this.baseData.datamappers = datamapper
-          } else {
-            this.baseData.datamappers = newVal.baseData.datamappers
-          }
-
-          if (newVal.baseData.datamappers[0].Alias != null) {
-            this.$store.commit("commitPieData", newVal.baseData.datamappers[0].Alias)
-          }
+      let reData= newVal.baseData.data;
+      for(let i=0;i<reData.length;i++){
+        reData[i].count=parseInt(reData[i].count)
+      }
+      // console.log(reData);
+        var dv = new DataSet().createView().source(reData);
+        dv.transform({
+          type: 'percent',
+          field: 'count',
+          dimension: 'item',
+          as: 'percent'
+        });
+        // console.log(dv.rows)
+        this.chart.repaint();
+        this.chart.changeData(dv);
     },
     initChart() {
       this.chart = new G2.Chart({
