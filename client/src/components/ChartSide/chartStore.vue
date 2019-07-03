@@ -423,7 +423,7 @@ var imgArrayone = [
   {
     id: 1,
     idView: require("../../../static/Image/linechart.png"),
-    chartType: "lineChart"
+    chartType: "linechart"
   },
   {
     id: 2,

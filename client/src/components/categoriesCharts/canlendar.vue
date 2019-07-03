@@ -17,24 +17,23 @@
         return {
           myChart:"",
           option:"",
-          // baseData:baseData.piechart.baseData,
-          baseData:{
-                metaConfig:{
-                  title:"日历图",
-                },
-                style:{
-                  color:['#e0ffff', '#006edd']
-                },
-                id:this.id,
-                data:this.$store.state.weatherData.canlenderData
-                // data:this.getVirtulData(2017)
-              }
+          // baseData:{
+          //       metaConfig:{
+          //         title:"日历图",
+          //       },
+          //       style:{
+          //         color:['#e0ffff', '#006edd']
+          //       },
+          //       id:this.id,
+          //       data:this.$store.state.weatherData.canlenderData
+          //       // data:this.getVirtulData(2017)
+          //     }
+          baseData:defaultData.canlendar.baseData,
           }
       },
       computed:{
         ...mapGetters({'storeBaseData': 'getPropsData'}),
-        ...mapGetters({'weatherCanlIntData': 'getWeatherCanlendarData'})
-
+        ...mapGetters({'weatherCanlIntData': 'getWeatherCanlendarData'}),
       },
       methods:{
         selectChart(){
@@ -51,6 +50,24 @@
           }
           return a
         },
+        reDraw(newVal){
+      // console.log("进入到子组件来了")
+      // console.log(newVal)
+      this.myChart.setOption({
+              visualMap:{
+                inRange:{
+                  color:newVal.baseData.style.color,
+                }
+              },
+
+              title:{
+                text: newVal.baseData.metaConfig.title
+              },
+              series:{
+                data:this.changeArray(newVal.baseData.data)
+              }
+            })
+    },
 
         changeArray(data){
           let a=[]
@@ -72,11 +89,12 @@
             ]);
           }
           return data;
-        }
+        },
+        // eval(newbaseData){
+        // },
       },
       mounted(){
-        this.myChart=echarts.init(document.getElementById(this.id))
-
+        this.myChart=echarts.init(document.getElementById(this.id));
         this.option = {
           title:{
             text:'Temp_max'

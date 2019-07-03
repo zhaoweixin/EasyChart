@@ -94,7 +94,7 @@ export default {
 
         console.log(newVal)
         if (newVal.id == this.id) {
-          this.chart.repaint();
+          // this.chart.repaint();
           this.chart.changeData(newVal.data)
 
         }
@@ -108,23 +108,23 @@ export default {
       },
       deep:true
     },
-    dataMap:{
-      handler(newVal){
+    // dataMap:{
+    //   handler(newVal){
 
-        if (newVal.id == this.id) {
-          if (newVal.datamappers === undefined) {
-            this.baseData.datamappers = datamapper
-          } else {
-            this.baseData.datamappers = newVal.datamappers
-          }
+    //     if (newVal.id == this.id) {
+    //       if (newVal.datamappers === undefined) {
+    //         this.baseData.datamappers = datamapper
+    //       } else {
+    //         this.baseData.datamappers = newVal.datamappers
+    //       }
 
-          if (newVal.datamappers[0].Alias != null) {
-            this.$store.commit("commitPieData", newVal.datamappers[0].Alias)
-          }
-        }
-      },
-      deep:true
-    }
+    //       if (newVal.datamappers[0].Alias != null) {
+    //         this.$store.commit("commitPieData", newVal.datamappers[0].Alias)
+    //       }
+    //     }
+    //   },
+    //   deep:true
+    // }
   },
   mounted() {
     let that = this;
@@ -146,6 +146,17 @@ export default {
   methods: {
     selectChart() {
       this.$store.commit("commitPropsData", this.baseData);
+    },
+    reDraw(newVal){
+     if (newVal.baseData.datamappers === undefined) {
+            this.baseData.datamappers = datamapper
+          } else {
+            this.baseData.datamappers = newVal.baseData.datamappers
+          }
+
+          if (newVal.baseData.datamappers[0].Alias != null) {
+            this.$store.commit("commitPieData", newVal.baseData.datamappers[0].Alias)
+          }
     },
     initChart() {
       this.chart = new G2.Chart({

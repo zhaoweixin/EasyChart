@@ -10,35 +10,37 @@ import * as vega from 'vega';
 import {mapGetters} from 'vuex';
 import vegaEmbed from "vega-embed";
 var elementResizeDetectorMaker = require("element-resize-detector")
+import defaultData from "../../assets/baseData"
 export default {
     name: "scatter_vega",
     props:{
         id:String,
-        baseData:{
-            type:Object,
-            default: function(){
-                let data = {
-                    metaConfig: {
-                        title: "scatter_vega"
-                    },
-                    style:{
-                        color:['#ffffff']
-                    },
-                    id: this.id,
-                    data: this.$store.state.weatherData.pointData,
-                    width: 200,
-                    height: 200
-                }
-                return data
-            }
-        }
+        // baseData:{
+        //     type:Object,
+        //     default: function(){
+        //         let data = {
+        //             metaConfig: {
+        //                 title: "scatter_vega"
+        //             },
+        //             style:{
+        //                 color:['#ffffff']
+        //             },
+        //             id: this.id,
+        //             data: this.$store.state.weatherData.pointData,
+        //             width: 200,
+        //             height: 200
+        //         }
+        //         return data
+        //     }
+        // }
     },
     data(){
         return {
             myChart: null,
             app: {},
             option: "",
-            vegaid: this.id + "_vega"
+            vegaid: this.id + "_vega",
+            baseData:defaultData.scatter_vega.baseData,
         }
     },
     computed:{
@@ -87,20 +89,26 @@ export default {
         },
         selectChart(){
             this.$store.commit("commitPropsData",this.baseData)
-        }
+        },
+        reDraw(newVal){
+                    this.baseData.style.color = newVal.baseData.style.color,
+                    this.baseData.metaConfig.title = newVal.baseData.metaConfig.title
+                    this.baseData.data = newVal.baseData.data
+                    this.draw()
+    },
     },
     watch:{
-        storeBaseData: {
-            handler(newVal){
-                if (newVal.id==this.id){
-                    this.baseData.style.color = newVal.style.color,
-                    this.baseData.metaConfig.title = newVal.metaConfig.title
-                    this.baseData.data = newVal.data
-                    this.draw()
-                }
-            },
-          deep:true
-        },
+        // storeBaseData: {
+        //     handler(newVal){
+        //         if (newVal.id==this.id){
+        //             this.baseData.style.color = newVal.style.color,
+        //             this.baseData.metaConfig.title = newVal.metaConfig.title
+        //             this.baseData.data = newVal.data
+        //             this.draw()
+        //         }
+        //     },
+        //   deep:true
+        // },
       WeatherScatterData:{
 
           // console.log()

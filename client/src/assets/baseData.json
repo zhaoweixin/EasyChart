@@ -28,7 +28,20 @@
                   "value": 172
               }
           ],
-          "datamappers": "datamapper",
+          "datamappers": [
+            {
+              "Fieldname": "value",
+              "Fieldtype": "num",
+              "Mapfrom": null,
+              "Alias": null
+            },
+            {
+              "Fieldname": "name",
+              "Fieldtype": "string",
+              "Mapfrom": null,
+              "Alias": null
+            }
+          ],
           "button": {
               "method": "startanalyzedata",
               "title": "Apply"
@@ -59,7 +72,14 @@
             },{
               "item":"精神病","count":351,"percent":0.014754098360655738
             }],
-            "datamappers": "datamapper",
+            "datamappers": [
+              {
+                "Fieldname": "value",
+                "Fieldtype": "num",
+                "Mapfrom": null,
+                "Alias": null
+              }
+            ],
             "width": 484,
             "height": 310
       }
@@ -72,10 +92,12 @@
             "style":{
               "color":["#e0ffff", "#006edd"]
             },
-            "id":"this.id"
+            "id":"this.id",
+            "data":[["2012/08/05","33"],["2012/09/05","58"]]
+          
       }
   },
-  "lineChart":{
+  "linechart":{
       "baseData": {
           "metaConfig": {
               "title":"温度变化"
@@ -83,7 +105,27 @@
             "style":{
               "color":["#35c17c","#af7eff"]
             },
-            "id":"this.id"
+            "id":"this.id",
+            "data":[{
+              "time":"2012/09/23",
+              "city":"max",
+              "temperature":23
+            },
+            {
+              "time":"2012/09/23",
+              "city":"min",
+              "temperature":3
+            },
+            {
+              "time":"2012/09/24",
+              "city":"max",
+              "temperature":10
+            },
+            {
+              "time":"2012/09/24",
+              "city":"min",
+              "temperature":10
+            }]
       }
   },
   "scatter_vega":{
@@ -96,7 +138,8 @@
           },
           "id": "this.id",
           "width": 200,
-          "height": 200
+          "height": 200,
+          "data":[{"x":"2012/09/24","y":"45"}]
       }
   }
 }

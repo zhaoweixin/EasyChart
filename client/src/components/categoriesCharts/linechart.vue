@@ -21,34 +21,36 @@ import { mapState, mapGetters } from 'vuex';
 import $ from "jquery";
 import linechart_vegaVue from './linechart_vega.vue';
 import { autoMaxBins } from 'vega-lite/build/src/bin';
+import defaultData from "../../assets/baseData"
 export default {
   name: "lineChart",
   props:{
         id:String,
-        baseData: {
-          type:Object,
-          default: function() {
-            let a= {
-              metaConfig: {
-                title:'温度变化'
-              },
-              style:{
-                color:['#35c17c','#af7eff']
-              },
-              id:this.id,
-              data:this.$store.state.weatherData.lineData
-            }
-              return a;
+        // baseData: {
+        //   type:Object,
+        //   default: function() {
+        //     let a= {
+        //       metaConfig: {
+        //         title:'温度变化'
+        //       },
+        //       style:{
+        //         color:['#35c17c','#af7eff']
+        //       },
+        //       id:this.id,
+        //       data:this.$store.state.weatherData.lineData
+        //     }
+        //       return a;
 
-          }
-        }
+        //   }
+        // }
       },
   data() {
     return {
       isInit:false,
       name: "lineChart",
       chart:{},
-      g2id: this.id + "_g2"
+      g2id: this.id + "_g2",
+      baseData:defaultData.linechart.baseData,
     };
   },
   computed: {
@@ -229,6 +231,12 @@ export default {
       })
       this.slider.render();
 
+    },
+     reDraw(newVal){
+      // console.log("进入到子组件来了")
+      // console.log(newVal)
+      this.chart.repaint();
+          this.chart.changeData(newVal.baseData.data)
     },
     refreshFilterData(filterTime) {
       var start = 0;

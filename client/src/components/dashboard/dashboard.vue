@@ -45,7 +45,7 @@
 import { mapState, mapGetters } from "vuex";
 import VueGridLayout from "vue-grid-layout";
 import groupBarChart from "../categoriesCharts/groupBarChart.vue";
-import lineChart from "../categoriesCharts/linechart.vue";
+import linechart from "../categoriesCharts/linechart.vue";
 import piechart from "../categoriesCharts/piechart.vue";
 import funnelPlot from "../categoriesCharts/funnelPlot.vue";
 import barChart from "../categoriesCharts/barChart.vue";
@@ -218,7 +218,7 @@ export default {
   },
   components: {
     groupBarChart,
-    lineChart,
+    linechart,
     piechart,
     funnelPlot,
     barChart,
