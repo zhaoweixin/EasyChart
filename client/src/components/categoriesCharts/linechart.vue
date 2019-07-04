@@ -236,7 +236,7 @@ export default {
       // console.log("进入到子组件来了")
       // console.log(newVal)
       this.chart.repaint();
-          this.chart.changeData(newVal.baseData.data)
+          this.chart.changeData(newVal.data)
     },
     refreshFilterData(filterTime) {
       var start = 0;

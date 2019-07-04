@@ -149,7 +149,7 @@ export default {
       this.$store.commit("commitPropsData", this.baseData);
     },
     reDraw(newVal){
-      let reData= newVal.baseData.data;
+      let reData= newVal.data;
       for(let i=0;i<reData.length;i++){
         reData[i].count=parseInt(reData[i].count)
       }

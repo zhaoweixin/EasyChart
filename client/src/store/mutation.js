@@ -29,9 +29,9 @@ const mutation = {
         state.popUp = !state.popUp
     },
     // 提交更改视图的类型
-    commitChange(state, payload){
-        state.chartSizeChange = payload;
-    },
+    // commitChange(state, payload){
+    //     state.chartSizeChange = payload;
+    // },
     commitDashboardId(state,payload){
         state.dashboardId = payload;
     },

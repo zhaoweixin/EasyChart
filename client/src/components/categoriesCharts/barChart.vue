@@ -132,17 +132,17 @@ export default {
       // console.log(newVal)
       this.myChart.setOption({
             title: {
-              text: newVal.baseData.metaConfig.title
+              text: newVal.metaConfig.title
             },
-            color: newVal.baseData.style.color,
+            color: newVal.style.color,
             xAxis: [
               {
-                data: this.comArray(newVal.baseData.data, Dataconfig.barxname)
+                data: this.comArray(newVal.data, Dataconfig.barxname)
               }
             ],
             series: {
               name: Dataconfig.dataname,
-              data: this.comArray(newVal.baseData.data, Dataconfig.baryname)
+              data: this.comArray(newVal.data, Dataconfig.baryname)
             }
           });
       // echarts.init(document.getElementById(this.id)).resize();

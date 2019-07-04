@@ -29,7 +29,6 @@
             :i="item.i"
             :id="index"
             :style="{backgroundColor:item.color}"
-            @resized="resizedEvent"
             @click.native="getData(item.i)"
             @dblclick.native="changeStatic(item.i)"
           >
@@ -107,7 +106,7 @@ export default {
     selectChart: {
       handler(newVal) {
         console.log(newVal)
-        this.callReDraw(newVal.i,newVal);
+        this.callReDraw(newVal.i,newVal.baseData);
       },
       deep: true
     },
@@ -152,8 +151,9 @@ export default {
         that.$refs[id][0].reDraw(newVal); 
         console.log("修改子图")
       } else {
-        // this.;
-        console.log("修改dashboard")
+        console.log("修改dashboard");
+        document.getElementById("box").style.backgroundColor = newVal.style.backgroundColor;
+        
       }
     },
     applyColor() {
@@ -170,13 +170,13 @@ export default {
       this.$store.commit("setChartLayer", { chartLayer: that.chartLayer });
       this.chartResize(window.innerWidth * 0.75, window.innerHeight);
     },
-    resizedEvent: function(i, newH, newW, newHPx, newWPx) {
-      console.log( "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx );
-      this.$store.commit("commitChange", {
-        newWidth: newWPx,
-        newHeight: newHPx
-      });
-    },
+    // resizedEvent: function(i, newH, newW, newHPx, newWPx) {
+    //   console.log( "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx );
+    //   this.$store.commit("commitChange", {
+    //     newWidth: newWPx,
+    //     newHeight: newHPx
+    //   });
+    // },
     chartResize(width, height) {
       let that = this;
       let drawGrids = function(width, height) {

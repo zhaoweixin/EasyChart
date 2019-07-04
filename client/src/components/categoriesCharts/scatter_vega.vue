@@ -91,9 +91,9 @@ export default {
             this.$store.commit("commitPropsData",this.baseData)
         },
         reDraw(newVal){
-                    this.baseData.style.color = newVal.baseData.style.color,
-                    this.baseData.metaConfig.title = newVal.baseData.metaConfig.title
-                    this.baseData.data = newVal.baseData.data
+                    this.baseData.style.color = newVal.style.color,
+                    this.baseData.metaConfig.title = newVal.metaConfig.title
+                    this.baseData.data = newVal.data
                     this.draw()
     },
     },

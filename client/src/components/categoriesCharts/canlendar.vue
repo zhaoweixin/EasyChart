@@ -56,15 +56,15 @@
       this.myChart.setOption({
               visualMap:{
                 inRange:{
-                  color:newVal.baseData.style.color,
+                  color:newVal.style.color,
                 }
               },
 
               title:{
-                text: newVal.baseData.metaConfig.title
+                text: newVal.metaConfig.title
               },
               series:{
-                data:this.changeArray(newVal.baseData.data)
+                data:this.changeArray(newVal.data)
               }
             })
     },
@@ -161,29 +161,29 @@
         })
       },
     watch:{
-      storeBaseData:{
-        handler(newVal){
-          if (newVal.id==this.id){
-            this.myChart.setOption({
-              visualMap:{
-                inRange:{
-                  color:newVal.style.color,
-                }
-              },
+      // storeBaseData:{
+      //   handler(newVal){
+      //     if (newVal.id==this.id){
+      //       this.myChart.setOption({
+      //         visualMap:{
+      //           inRange:{
+      //             color:newVal.style.color,
+      //           }
+      //         },
 
-              title:{
-                text: newVal.metaConfig.title
-              },
-              series:{
-                data:this.changeArray(newVal.data)
-              }
-            })
-          }
+      //         title:{
+      //           text: newVal.metaConfig.title
+      //         },
+      //         series:{
+      //           data:this.changeArray(newVal.data)
+      //         }
+      //       })
+      //     }
 
-          // console.log(newVal)
-        },
-        deep:true
-      },
+      //     // console.log(newVal)
+      //   },
+      //   deep:true
+      // },
       weatherCanlIntData:{
         handler(newVal){
           this.baseData.data = this.changeObject(newVal)
