@@ -56,7 +56,7 @@ import store from "../../store/store.js";
 import axios from "axios";
 import mapperdataM from "../../store/MapperDataManage.js";
 import modeConfig from "../../assets/modelConfig2.json";
-import baseData from "../../assets/baseData"
+import baseData from "../../assets/baseData";
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
 
@@ -460,7 +460,7 @@ export default {
     createClone: function(e, chartType, type) {
       $(e.currentTarget)
         .clone(true)
-        .appendTo(".el-main")
+        .appendTo("#app .el-main")
         .attr("id", "clone")
         .css("position", "absolute")
         .css("height", "200px")
@@ -471,28 +471,28 @@ export default {
         })
         .css("left", "15%");
       $(e.currentTarget).draggable({
-        appendTo: ".el-main",
+        appendTo: "#app .el-main",
         start: function() {
-          $(".el-main .ui-draggable")
+          $("#app .el-main .ui-draggable")
             .css("width", "200px")
             .css("height", "200px");
         },
         drag: function(event, ui) {
-          var maxleft = $(".el-main").width();
+          var maxleft = $("#app .el-main").width();
           var top =
-            $(".el-main .ui-draggable-dragging").position().top -
-            $(".el-menu-demo").height();
+            $("#app .el-main .ui-draggable-dragging").position().top -
+            $("#app .el-menu-demo").height();
           var left =
-            $(".el-main .ui-draggable-dragging").position().left -
-            $(".el-aside").width();
-          d3.select(".el-main .ui-draggable-dragging").style(
+            $("#app .el-main .ui-draggable-dragging").position().left -
+            $("#app .el-aside").width();
+          d3.select("#app .el-main .ui-draggable-dragging").style(
             "z-index",
             function() {
               if (top < 0 || left < 0) {
                 return -1;
               }
               if (
-                left + $(".el-main .ui-draggable-dragging").width() >
+                left + $("#app .el-main .ui-draggable-dragging").width() >
                 maxleft
               ) {
                 return -1;
@@ -505,18 +505,18 @@ export default {
         scope: "ss",
         stop: function(e) {
           var top =
-            $(".el-main .ui-draggable-dragging").position().top -
-            $(".el-menu-demo").height();
+            $("#app .el-main .ui-draggable-dragging").position().top -
+            $("#app .el-menu-demo").height();
           var left =
-            $(".el-main .ui-draggable-dragging").position().left -
-            $(".el-aside").width();
+            $("#app .el-main .ui-draggable-dragging").position().left -
+            $("#app .el-aside").width();
 
           console.log(chartType);
           // console.log(baseData[chartType].baseData)
           var item = {
             // chartname:chartType,
             chartname: chartType,
-            baseData:baseData[chartType].baseData,
+            baseData: baseData[chartType].baseData,
             x: 0,
             y: 0,
             w: 4,
