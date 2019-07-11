@@ -8,7 +8,7 @@ import Dataconfig from "../../store/dataconfig.js";
 var elementResizeDetectorMaker = require("element-resize-detector");
 import { mapState, mapGetters } from "vuex";
 import echarts from "echarts";
-import defaultData from "../../assets/baseData"
+import defaultData from "../../assets/baseData";
 // console.log(defaultData.barChart.baseData)
 var datamapper = [
   {
@@ -27,7 +27,7 @@ var datamapper = [
 export default {
   name: "LiZi",
   props: {
-    id: String,
+    id: String
     // baseData: {
     //   "type": Object,
     //   "default": function() {
@@ -57,13 +57,12 @@ export default {
     //     return a;
     //   }
     // }
-    
   },
   data() {
     return {
       myChart: null,
       option: null,
-      baseData:defaultData.barChart.baseData
+      baseData: defaultData.barChart.baseData
     };
   },
   computed: {
@@ -127,24 +126,24 @@ export default {
         interaction: "controler"
       });
     },
-    reDraw(newVal){
+    reDraw(newVal) {
       // console.log("进入到子组件来了")
       // console.log(newVal)
       this.myChart.setOption({
-            title: {
-              text: newVal.metaConfig.title
-            },
-            color: newVal.style.color,
-            xAxis: [
-              {
-                data: this.comArray(newVal.data, Dataconfig.barxname)
-              }
-            ],
-            series: {
-              name: Dataconfig.dataname,
-              data: this.comArray(newVal.data, Dataconfig.baryname)
-            }
-          });
+        title: {
+          text: newVal.metaConfig.title
+        },
+        color: newVal.style.color,
+        xAxis: [
+          {
+            data: this.comArray(newVal.data, Dataconfig.barxname)
+          }
+        ],
+        series: {
+          name: Dataconfig.dataname,
+          data: this.comArray(newVal.data, Dataconfig.baryname)
+        }
+      });
       // echarts.init(document.getElementById(this.id)).resize();
     },
     comArray(data, name) {

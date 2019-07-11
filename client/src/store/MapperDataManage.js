@@ -1,4 +1,5 @@
 import mapperdata from "./MapperData.js";
+import store from "./store.js";
 var mapperdatas = null;
 var datamap = null;
 const mapperdatamanage = {
@@ -6,7 +7,10 @@ const mapperdatamanage = {
     datamap = data;
   },
   setmapperdata(data) {
-    mapperdatas = data;
+    store.state.chartArray[
+      store.state.selectChartId
+    ].baseData.mapperdatas = data;
+    //mapperdatas = data;
   },
   getmapperdata() {
     return mapperdatas != null ? mapperdata : null;
@@ -16,7 +20,10 @@ const mapperdatamanage = {
   },
   startanalyzedata() {
     if (mapperdata != null && datamap != null) {
-      mapperdata.analyzedata(datamap, mapperdatas);
+      mapperdata.analyzedata(
+        datamap,
+        store.state.chartArray[store.state.selectChartId].baseData.mapperdatas
+      );
     }
   }
 };

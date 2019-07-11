@@ -20,7 +20,7 @@
                     :src="item.idView"
                     @mouseover="createClone($event,item.chartType,'echarts')"
                     @mouseout="deletClone($event)"
-                  >
+                  />
                 </el-col>
               </el-row>
             </el-carousel-item>
@@ -36,7 +36,7 @@
                     :src="item.idView"
                     @mouseover="createClone($event,item.chartType,'D3')"
                     @mouseout="deletClone($event)"
-                  >
+                  />
                 </el-col>
               </el-row>
             </el-carousel-item>
@@ -57,6 +57,7 @@ import axios from "axios";
 import mapperdataM from "../../store/MapperDataManage.js";
 import modeConfig from "../../assets/modelConfig2.json";
 import baseData from "../../assets/baseData";
+import Tool from "../../store/DataMapperTools.js";
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
 
@@ -64,7 +65,7 @@ console.log(modeConfig);
 var htmlToImage = require("html-to-image");
 
 const MaxLength = 2;
-var MapperDatas = d3.map();
+var MapperDatas = Tool.CreatNewMapperDatas();
 var datamap = d3.map();
 $.extend({
   //读取指定csv文件的字段名
@@ -223,8 +224,14 @@ function add(data, name) {
         var height = $("body .ui-draggable-dragging").height();
         var maxleft = left + width;
         var maxtop = top + height;
-        console.log(oper);
 
+        console.log(oper);
+        console.log(store.state);
+
+        store.state.propsData =
+          store.state.chartArray[store.state.selectChartId].baseData;
+        if(store.state.chartArray[store.state.selectChartId].baseData.mapperdatas!=null)
+        MapperDatas=store.state.chartArray[store.state.selectChartId].baseData.mapperdatas;
         if (!$("#y").is(":visible") && !$("#x").is(":visible")) {
           return;
         } else {
@@ -248,37 +255,19 @@ function add(data, name) {
               twotargetMaxTop > top &&
               (twotargetleft >= left && twotargetleft < maxleft)
             ) {
-              var Mapperdata = {
-                tablename: tablename,
-                fieldname: dragclass, //字段名
-                pre: oper,
-                groub: gro
-              };
+              var Mapperdata = Tool.getDataMapper(
+                tablename,
+                dragclass,
+                oper,
+                gro
+              );
               if (dragtype.search(twotype[1]) == 0) {
                 MapperDatas.set(twotype[1], Mapperdata);
-                twoinputf.val(
-                  Mapperdata.tablename +
-                    ":" +
-                    Mapperdata.fieldname +
-                    "," +
-                    Mapperdata.pre +
-                    "," +
-                    Mapperdata.groub
-                );
+                Tool.SetInputval(twoinputf, Mapperdata);
                 if (store.state.propsData.datamappers != null) {
                   var set = store.state.propsData.datamappers[0];
-
-                  set.Mapfrom =
-                    Mapperdata.tablename +
-                    ":" +
-                    Mapperdata.fieldname +
-                    "," +
-                    Mapperdata.pre +
-                    "," +
-                    Mapperdata.groub;
-                  set.Alias = Mapperdata.fieldname;
+                  Tool.SetMapfromAndAlias(set, Mapperdata);
                 }
-
                 twoinputs.val(Mapperdata.fieldname);
               }
               if (twoinputf.val().length > 0) {
@@ -324,37 +313,21 @@ function add(data, name) {
               onetargetMaxtop > maxtop &&
               (onetargetleft >= left && onetargetleft < maxleft)
             ) {
-              var Mapperdata = {
-                tablename: tablename,
-                fieldname: dragclass, //字段名
-                pre: oper,
-                groub: gro
-              };
+              var Mapperdata = Tool.getDataMapper(
+                tablename,
+                dragclass,
+                oper,
+                gro
+              );
 
               if (dragtype.search(onetype[1]) == 0) {
                 MapperDatas.set(onetype[1], Mapperdata);
-                oneinputf.val(
-                  Mapperdata.tablename +
-                    ":" +
-                    Mapperdata.fieldname +
-                    "," +
-                    Mapperdata.pre +
-                    "," +
-                    Mapperdata.groub
-                );
+                Tool.SetInputval(oneinputf, Mapperdata);
                 if (store.state.propsData.datamappers != null) {
                   var set = store.state.propsData.datamappers[0];
                   if (set.Fieldtype != onetype)
                     set = store.state.propsData.datamappers[1];
-                  set.Mapfrom =
-                    Mapperdata.tablename +
-                    ":" +
-                    Mapperdata.fieldname +
-                    "," +
-                    Mapperdata.pre +
-                    "," +
-                    Mapperdata.groub;
-                  set.Alias = Mapperdata.fieldname;
+                  Tool.SetMapfromAndAlias(set, Mapperdata);
                 }
 
                 oneinputs.val(Mapperdata.fieldname);
@@ -366,36 +339,21 @@ function add(data, name) {
               twotargetMaxTop > top &&
               (twotargetleft >= left && twotargetleft < maxleft)
             ) {
-              var Mapperdata = {
-                tablename: tablename,
-                fieldname: dragclass, //字段名
-                pre: oper,
-                groub: gro
-              };
+              var Mapperdata = Tool.getDataMapper(
+                tablename,
+                dragclass,
+                oper,
+                gro
+              );
               if (dragtype.search(twotype[1]) == 0) {
                 MapperDatas.set(twotype[1], Mapperdata);
-                twoinputf.val(
-                  Mapperdata.tablename +
-                    ":" +
-                    Mapperdata.fieldname +
-                    "," +
-                    Mapperdata.pre +
-                    "," +
-                    Mapperdata.groub
-                );
+                Tool.SetInputval(twoinputf, Mapperdata);
+
                 if (store.state.propsData.datamappers != null) {
                   var set = store.state.propsData.datamappers[1];
                   if (set.Fieldtype != twotype)
                     set = store.state.propsData.datamappers[0];
-                  set.Mapfrom =
-                    Mapperdata.tablename +
-                    ":" +
-                    Mapperdata.fieldname +
-                    "," +
-                    Mapperdata.pre +
-                    "," +
-                    Mapperdata.groub;
-                  set.Alias = Mapperdata.fieldname;
+                  Tool.SetMapfromAndAlias(set, Mapperdata);
                 }
 
                 twoinputs.val(Mapperdata.fieldname);
@@ -406,6 +364,7 @@ function add(data, name) {
               console.log("拖拽完成:");
               mapperdataM.setdatamap(datamap);
               mapperdataM.setmapperdata(MapperDatas);
+              MapperDatas = Tool.CreatNewMapperDatas();
               //  mapperdataM.startanalyzedata();
             }
           }
