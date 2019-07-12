@@ -90,7 +90,7 @@ const mutation = {
     //     }
     //   }
     // }
-      // console.log(payload)
+      console.log(payload)
     state.interacCanlendarData =interationData(state.weatherData.baseData,"canlender" ,payload)
 
   },
@@ -210,9 +210,8 @@ function interationData(payload,type,factor) {
   let arr_line = []
   for (let i=0;i<payload.length;i++){
 
-
     if ((payload[i].date.indexOf("2012")>-1)&&
-      (payload[i].weather==factor)) {    //控制字段名和选择的值
+      (payload[i][factor.fieldname]==factor.select_data)) {    //控制字段名和选择的值
       arr_bar.push(   //柱状图
         {
           name:payload[i].date,
@@ -221,7 +220,7 @@ function interationData(payload,type,factor) {
       )
       arrpie.push(payload[i].weather) //圆环
       arr_canlender.push([payload[i].date,
-        payload[i].temp_max])   //日历图数据
+        payload[i].precipitation])   //日历图数据
 
       arr_point.push(  //散点数据
         {
@@ -250,6 +249,8 @@ function interationData(payload,type,factor) {
       "percent":a[i][1]/payload.length
     })
   }
+
+  console.log(arr_canlender)
   switch (type){
     case 'bar':return arr_bar;
     case 'pie':return arr_pie;

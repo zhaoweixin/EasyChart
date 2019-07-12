@@ -135,13 +135,11 @@ export default {
         interaction: "controler"
       });
       this.myChart.on('click', (d)=>{
-
-        console.log(this.baseData.datamappers)
         if (select_config.controller==this.name) {
           for (let i=0;i<select_config.controllee.length;i++){
             let inter_chart = select_config.controllee[i]
             select_config.fieldname = this.baseData.datamappers[1].Alias    //字段名
-            select_config.select_data =d.name
+            select_config.select_data =d.name.replace("\r",'')
             this.$store.commit("commitInterac"+inter_chart+"Data", select_config)
 
           }

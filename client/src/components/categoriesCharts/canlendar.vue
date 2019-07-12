@@ -163,8 +163,6 @@
     watch:{
       storeBaseData:{
         handler(newVal){
-
-          console.log(newVal)
             this.myChart.setOption({
               visualMap:{
                 inRange:{
