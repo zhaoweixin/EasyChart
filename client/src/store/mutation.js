@@ -1,3 +1,8 @@
+var interactive_config =require('../assets/interactive.json');
+
+
+console.log(interactive_config)
+
 const mutation = {
     increment(state, payload) {
         state.count += payload.step || 1;
@@ -44,6 +49,8 @@ const mutation = {
     updateDataMapper(state,payload){
         state.dataMapper = JSON.parse(JSON.stringify(payload))
     },
+
+  //天气数据
   commitWeatherData(state,payload){
     state.weatherData.baseData=payload
     state.weatherData.barData = Data(payload,"bar")
@@ -54,8 +61,23 @@ const mutation = {
 
     // console.log(state.weatherData.lineData)
   },
+
+  //根据payload过滤天气数据
   commitInteracBarData(state,payload){
-    state.interacBarData =interationData(state.weatherData.baseData,"bar" ,payload)
+
+    console.log(payload)
+    for (let i=0;i<interactive_config.length;i++){
+      if (payload.controller==interactive_config[i].controller){
+        for (let j=0;j<payload.controllee.length;j++){
+          let interact_chart_data = payload.controllee[j].replace('chart','')
+
+          state["interac"+interact_chart_data+"Data"] =interationData(state.weatherData.baseData,
+            interact_chart_data.toLowerCase() ,payload.select_data)
+        }
+      }
+    }
+
+    // state.interacBarData =interationData(state.weatherData.baseData,"bar" ,payload)
   },
   commitInteracCanlendarData(state,payload){
     state.interacCanlendarData =interationData(state.weatherData.baseData,"canlender" ,payload)
@@ -71,6 +93,8 @@ const mutation = {
     state.interacCanlendarData =  state.weatherData.canlenderData
     state.interacScatterData = state.weatherData.pointData
     state.interacLineData = state.weatherData.lineData
+
+    console.log('ddd')
   },
 
   commitDataMapper(state,payload){

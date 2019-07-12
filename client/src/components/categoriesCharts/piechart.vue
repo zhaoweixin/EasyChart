@@ -21,8 +21,14 @@ var datamapper = [
     Alias: null
   }
 ];
+var select_config = {
+  "controller":'Piechart',
+  "controllee":["Barchart"],
+  'action':'filter',
+  'data':'weather'
+}
 export default {
-  name: "pieChart",
+  name: "Piechart",
   props: {
     id: String
     // baseData: {
@@ -63,7 +69,7 @@ export default {
   data() {
     return {
       isInit: false,
-      name: "lineChart",
+      name: "Piechart",
       chart: {},
       baseData: defaultData.piechart.baseData,
       g2id: this.id + "_g2"
@@ -218,15 +224,32 @@ export default {
 
       //点击交互
       this.chart.on("click", ev => {
-        if (typeof ev.data != "undefined" ? true : false) {
-          const data = ev.data._origin;
-          this.$store.commit("commitInteracBarData", data.item);
-          this.$store.commit("commitInteracCanlendarData", data.item);
-          this.$store.commit("commitInteracScatterData", data.item);
-          this.$store.commit("commitInteracLineData", data.item);
-        } else {
-          this.$store.commit("commitZongWeatherData", 1);
+        if (select_config.controller==this.name){
+          if (typeof ev.data != "undefined" ? true : false) {
+            const data = ev.data._origin;
+            for (let i=0;i<select_config.controllee.length;i++) {
+              let inter_chart = select_config.controllee[i].replace("chart",'')
+              select_config.select_data =data.item
+              this.$store.commit("commitInteracBarData", select_config)
+
+              // this.$store.commit("commitInteracBarData", data.item);
+              // this.$store.commit("commitInteracCanlendarData", data.item);
+              // this.$store.commit("commitInteracScatterData", data.item);
+              // this.$store.commit("commitInteracLineData", data.item);
+            }
+          } else {
+            this.$store.commit("commitZongWeatherData", 1);
+          }
         }
+        // if (typeof ev.data != "undefined" ? true : false) {
+        //   const data = ev.data._origin;
+        //   this.$store.commit("commitInteracBarData", data.item);
+        //   this.$store.commit("commitInteracCanlendarData", data.item);
+        //   this.$store.commit("commitInteracScatterData", data.item);
+        //   this.$store.commit("commitInteracLineData", data.item);
+        // } else {
+        //   this.$store.commit("commitZongWeatherData", 1);
+        // }
       });
       this.chart.render();
 

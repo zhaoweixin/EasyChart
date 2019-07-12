@@ -1,0 +1,67 @@
+[
+  {
+    "controller": "Piechart",
+    "controllee": {
+      "Barchart": {
+        "action": [
+          "filter"
+        ]
+      },
+      "Linechart": {
+        "action": [
+          "filter"
+        ]
+      },
+      "Bubblechart": {
+        "action": [
+          "filter"
+        ]
+      }
+    }
+  },
+  {
+    "controller": "Barchart",
+    "controllee": {
+      "Piechart": {
+        "action": [
+          "filter","connect"
+        ]
+      },
+      "Linechart": {
+        "action": [
+          "filter","connect"
+        ]
+      },
+      "Bubblechart": {
+        "action": [
+          "filter","connect"
+        ]
+      }
+    }
+  },
+  {
+    "controller": "Scatter_vega",
+    "controllee": {
+      "Piechart": {
+        "action": [
+          "filter","connect"
+        ]
+      },
+      "Linechart": {
+        "action": [
+          "filter","connect"
+        ]
+      },
+      "Bubblechart": {
+        "action": [
+          "filter","connect"
+        ]
+      },
+      "Barchart": {
+        "action": [
+          "filter","connect"
+        ]
+      }
+    }
+  }
+]
