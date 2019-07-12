@@ -2,10 +2,10 @@ import * as d3 from "d3";
 import store from "./store.js";
 import Dataconfig from "./dataconfig.js";
 import $ from "jquery";
-var cnull = 0;
 const mapperdata = {
   analyzedata(datamap, mapperdatas) {
-    console.log(mapperdatas);
+    var cnull = 0;
+
     var mapperkeys = mapperdatas.keys();
     var fieldnames = [];
     var ctable = false;
@@ -19,7 +19,10 @@ const mapperdata = {
       }
     }
     if (ctable) return;
-    if (store.state.propsData.datamappers.length > 1) {
+    if (
+      store.state.chartArray[store.state.selectChartId].baseData.datamappers
+        .length > 1
+    ) {
       for (var i = 0; i < mapperkeys.length; i++) {
         var pre = mapperdatas.get(mapperkeys[i]).pre;
         var data = datamap.get(mapperdatas.get(mapperkeys[i]).tablename).data;
@@ -44,6 +47,7 @@ const mapperdata = {
               !$("#y").is(":visible")
             ) {
               piedata(data, fieldname);
+              cnull = 0;
             }
             if (cnull >= 2) {
               all(data, fieldnames);
@@ -68,11 +72,9 @@ function count(data, countfield, group) {
     if (!result[i]) result[i] = {};
     gettype(result[i], count, countfield);
     gettype(result[i], keys[i], group);
-    // result[i]["value"] = count;
-    // result[i]["name"] = keys[i];
   }
 
-  store.state.propsData.data = result;
+  store.state.chartArray[store.state.selectChartId].baseData.data = result;
   console.log(result);
 }
 function sum(data, sumfield, group) {
@@ -90,10 +92,8 @@ function sum(data, sumfield, group) {
     if (!result[i]) result[i] = {};
     gettype(result[i], sum, sumfield);
     gettype(result[i], keys[i], group);
-    // result[i]["value"] = sum;
-    // result[i]["name"] = keys[i];
   }
-  store.state.propsData.data = result;
+  store.state.chartArray[store.state.selectChartId].baseData.data = result;
   console.log(result);
 }
 function avg(data, avgfield, group) {
@@ -111,25 +111,24 @@ function avg(data, avgfield, group) {
     if (!result[i]) result[i] = {};
     gettype(result[i], avg / field.length, avgfield);
     gettype(result[i], keys[i], group);
-    // result[i]["value"] = avg / field.length;
-    // result[i]["name"] = keys[i];
   }
 
-  store.state.propsData.data = result;
+  store.state.chartArray[store.state.selectChartId].baseData.data = result;
   console.log(result);
 }
 function all(data, fieldnames) {
+  console.log("所有字段:");
+  console.log(fieldnames.length);
   var result = [];
   for (var i = 0; i < data.length; i++) {
     for (var j = 0; j < fieldnames.length; j++) {
       if (!result[i]) result[i] = {};
+
       gettype(result[i], data[i][fieldnames[j]], fieldnames[j]);
-      // if (j == 0) result[i]["name"] = data[i][fieldnames[j]];
-      // if (j == 1) result[i]["value"] = data[i][fieldnames[j]];
     }
   }
 
-  store.state.propsData.data = result;
+  store.state.chartArray[store.state.selectChartId].baseData.data = result;
   console.log(result);
 }
 function piedata(data, fieldname) {
@@ -137,7 +136,7 @@ function piedata(data, fieldname) {
   for (var i = 0; i < data.length; i++) {
     result[i][fieldname] = data[i][fieldname];
   }
-  store.state.propsData.data = result;
+  store.state.chartArray[store.state.selectChartId].baseData.data = result;
 }
 function publicopre(data, group) {
   var map = d3.map(
