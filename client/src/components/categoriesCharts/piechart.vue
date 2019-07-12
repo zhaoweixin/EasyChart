@@ -230,7 +230,7 @@ export default {
             for (let i=0;i<select_config.controllee.length;i++) {
               let inter_chart = select_config.controllee[i].replace("chart",'')
               select_config.select_data =data.item
-              this.$store.commit("commitInteracBarData", select_config)
+              this.$store.commit("commitInterac"+inter_chart+"Data", select_config)
 
               // this.$store.commit("commitInteracBarData", data.item);
               // this.$store.commit("commitInteracCanlendarData", data.item);

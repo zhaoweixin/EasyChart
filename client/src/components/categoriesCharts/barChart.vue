@@ -24,8 +24,16 @@ var datamapper = [
     Alias: null
   }
 ];
+
+var select_config = {
+  "controller":'Barchart',
+  "controllee":["Canlendar"],
+  'action':'filter',
+  'data':'weather',
+  'fieldname':'date'
+}
 export default {
-  name: "LiZi",
+  name: "Barchart",
   props: {
     id: String
     // baseData: {
@@ -60,6 +68,7 @@ export default {
   },
   data() {
     return {
+      name: "Barchart",
       myChart: null,
       option: null,
       baseData: defaultData.barChart.baseData
@@ -125,6 +134,19 @@ export default {
         name: "Barchart",
         interaction: "controler"
       });
+      this.myChart.on('click', (d)=>{
+
+        console.log(this.baseData.datamappers)
+        if (select_config.controller==this.name) {
+          for (let i=0;i<select_config.controllee.length;i++){
+            let inter_chart = select_config.controllee[i]
+            select_config.fieldname = this.baseData.datamappers[1].Alias    //字段名
+            select_config.select_data =d.name
+            this.$store.commit("commitInterac"+inter_chart+"Data", select_config)
+
+          }
+        }
+      })
     },
     reDraw(newVal) {
       // console.log("进入到子组件来了")

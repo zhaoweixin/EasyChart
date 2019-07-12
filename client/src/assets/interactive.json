@@ -36,6 +36,11 @@
         "action": [
           "filter","connect"
         ]
+      },
+      "Canlendar": {
+        "action": [
+          "filter","connect"
+        ]
       }
     }
   },
