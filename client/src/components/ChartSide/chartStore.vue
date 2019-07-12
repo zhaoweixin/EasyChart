@@ -81,11 +81,22 @@ $.extend({
       for (var i = 0; i < record.length; i++) {
         var t = record[i].split(",");
         for (var y = 0; y < t.length; y++) {
+          if (title[y] == "date") {
+            var sure = false;
+            if (new Date(t[y]).getFullYear() == 2012) {
+              sure = true;
+            }
+            if (!sure) {
+              break;
+            }
+          }
           if (!data[i]) data[i] = {};
           data[i][title[y].trim()] = t[y]; //不添加trim函数将导致出现第二个属性名存在空格，trim将前后空格去掉
         }
       }
 
+      console.log(data);
+      ``;
       var titlemap = d3.map();
       for (var i = 0; i < title.length; i++) {
         titlemap.set(
@@ -230,8 +241,13 @@ function add(data, name) {
 
         store.state.propsData =
           store.state.chartArray[store.state.selectChartId].baseData;
-        if(store.state.chartArray[store.state.selectChartId].baseData.mapperdatas!=null)
-        MapperDatas=store.state.chartArray[store.state.selectChartId].baseData.mapperdatas;
+        if (
+          store.state.chartArray[store.state.selectChartId].baseData
+            .mapperdatas != null
+        )
+          MapperDatas =
+            store.state.chartArray[store.state.selectChartId].baseData
+              .mapperdatas;
         if (!$("#y").is(":visible") && !$("#x").is(":visible")) {
           return;
         } else {
