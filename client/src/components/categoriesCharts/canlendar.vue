@@ -161,29 +161,26 @@
         })
       },
     watch:{
-      // storeBaseData:{
-      //   handler(newVal){
-      //     if (newVal.id==this.id){
-      //       this.myChart.setOption({
-      //         visualMap:{
-      //           inRange:{
-      //             color:newVal.style.color,
-      //           }
-      //         },
+      storeBaseData:{
+        handler(newVal){
+            this.myChart.setOption({
+              visualMap:{
+                inRange:{
+                  color:newVal.style.color,
+                }
+              },
 
-      //         title:{
-      //           text: newVal.metaConfig.title
-      //         },
-      //         series:{
-      //           data:this.changeArray(newVal.data)
-      //         }
-      //       })
-      //     }
-
-      //     // console.log(newVal)
-      //   },
-      //   deep:true
-      // },
+              title:{
+                text: newVal.metaConfig.title
+              },
+              series:{
+                data:this.changeArray(newVal.data)
+              }
+            })
+          // console.log(newVal)
+        },
+        deep:true
+      },
       weatherCanlIntData:{
         handler(newVal){
           this.baseData.data = this.changeObject(newVal)
