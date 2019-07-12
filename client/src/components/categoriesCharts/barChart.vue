@@ -27,7 +27,7 @@ var datamapper = [
 
 var select_config = {
   "controller":'Barchart',
-  "controllee":["Canlendar"],
+  "controllee":["Canlendar","Linechart"],
   'action':'filter',
   'data':'weather',
   'fieldname':'date'
@@ -138,9 +138,13 @@ export default {
         if (select_config.controller==this.name) {
           for (let i=0;i<select_config.controllee.length;i++){
             let inter_chart = select_config.controllee[i]
+            if (inter_chart.indexOf('chart')>-1){
+              inter_chart=inter_chart.replace('chart','')
+            }
             select_config.fieldname = this.baseData.datamappers[1].Alias    //字段名
             select_config.select_data =d.name.replace("\r",'')
-            this.$store.commit("commitInterac"+inter_chart+"Data", select_config)
+            select_config.index = i
+            this.$store.commit("commitInteracWeatherData", select_config)
 
           }
         }

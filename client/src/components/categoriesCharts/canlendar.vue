@@ -163,6 +163,7 @@
     watch:{
       storeBaseData:{
         handler(newVal){
+          console.log(newVal)
             this.myChart.setOption({
               visualMap:{
                 inRange:{
@@ -183,7 +184,11 @@
       },
       weatherCanlIntData:{
         handler(newVal){
+
+          console.log(this.baseData.data)
           this.baseData.data = this.changeObject(newVal)
+
+          console.log(this.baseData.data)
           this.$store.commit("commitPropsData",this.baseData)
         },
         deep:true
