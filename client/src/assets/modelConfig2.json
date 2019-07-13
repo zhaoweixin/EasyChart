@@ -5,8 +5,8 @@
             {"name":"y","text":"Y","attr":"encoding","type":"in"}
         ],
         "outPorts": [
-            {"name":"x","text":"X","attr":"encoding","type":"in"},
-            {"name":"y","text":"Y","attr":"encoding","type":"in"}
+            {"name":"x","text":"X","attr":"encoding","type":"out"},
+            {"name":"y","text":"Y","attr":"encoding","type":"out"}
         ],
         "type": "Chart",
         "maker": "bar",

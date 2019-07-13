@@ -19,7 +19,7 @@
     "element-ui": "^2.8.2",
     "es6-promise": "^4.2.6",
     "fs": "0.0.1-security",
-    "html-to-image": "^0.1.0",
+    "html-to-image": "^0.1.1",
     "jquery": "^3.4.1",
     "material-icons": "^0.3.1",
     "tslib": "^1.9.3",
@@ -28,7 +28,7 @@
     "vega-lite": "^3.3.0",
     "vue": "^2.5.2",
     "vue-grid-layout": "^2.3.4",
-    "vuesax": "^3.8.74",
+    "vuesax": "^3.9.0",
     "vuex": "^3.1.0",
     "webpack-jquery-ui": "^2.0.1"
   },

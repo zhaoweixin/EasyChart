@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 
-let TextBlueLine = function(container, parent, point, source, sourceid){
+let TextBlueLine = function(container, parent, point, source, sourceid, coverColor){
     //私有属性
     var attribu = {
         sourcePoint : '',
@@ -23,7 +23,9 @@ let TextBlueLine = function(container, parent, point, source, sourceid){
         targetParent : '',
         targetId : '',
         sourceId : '',
-        isDeleted : false
+        isDeleted : false,
+        coverColor : "#808080",
+        randomCoverId: ''
     }
     //私有方法
 
@@ -97,8 +99,11 @@ let TextBlueLine = function(container, parent, point, source, sourceid){
             attribu.baseLine = attribu.container.append('path')
                 .attr('d', pathData)
                 .style('fill', 'none')
-                .style('stroke', '#808080')
+                .style('stroke', '#dcdcdc')
                 .attr('stroke-width', curveWidth)
+                .on("mouseover", baseLine_handleMouseOver)
+                .on("mouseout", baseLine_handleMouseOut)
+                .on('click', clickLineDelete)
         }
         else {
             //存在待绘制路径,反复绘制实现路径预览
@@ -126,7 +131,7 @@ let TextBlueLine = function(container, parent, point, source, sourceid){
         //生成渐变
         let defs = attribu.container.append('defs')
         let linearGradient = defs.append('linearGradient')
-            .attr('id', 'linearColor')
+            .attr('id', attribu.randomCoverId)
             .attr('x1', '0%')
             .attr('y1', '0%')
             .attr('x2', '100%')
@@ -134,7 +139,7 @@ let TextBlueLine = function(container, parent, point, source, sourceid){
 
         linearGradient.append("stop")
             .attr("offset", "0%")
-            .style("stop-color", '#0DFF9F');
+            .style("stop-color", attribu.coverColor);
 
        /* linearGradient.append("stop")
             .attr("offset", "50%")
@@ -146,13 +151,13 @@ let TextBlueLine = function(container, parent, point, source, sourceid){
 
         linearGradient.append("stop")
             .attr("offset", "100%") 
-            .style("stop-color", '#0DFF9F')
+            .style("stop-color", attribu.coverColor)
 
         //绘制cover曲线
         attribu.coverLine = attribu.container.append('path')
             .attr('d', pathData)
             .style('fill', 'none')
-            .style('stroke', "url(#" + linearGradient.attr("id") + ")")
+            .style('stroke', "url(#" + attribu.randomCoverId + ")")
             .attr('class', 'rgbLine')
             .attr('stroke-width', curveWidth)
 
@@ -215,6 +220,43 @@ let TextBlueLine = function(container, parent, point, source, sourceid){
             that.isWaitPath == false
         }
     }
+    function baseLine_handleMouseOver(d, i){
+        d3.select(this)
+            .transition()
+            .duration(200)
+            .style("opacity", 0.1);
+        if(attribu.coverLine != ''){
+            attribu.coverLine
+                .transition()
+                .duration(200)
+                .attr("stroke-width", '7px');
+        }
+    }
+
+    function baseLine_handleMouseOut(d, i){
+        d3.select(this)
+            .transition()
+            .duration(500)
+            .style("opacity", 1);
+
+        if(attribu.coverLine != ''){
+            attribu.coverLine
+                .transition()
+                .duration(500)
+                .attr("stroke-width", '3px');
+        }
+    }
+
+    function clickLineDelete(){
+        console.log('click line')
+        forceRemove()
+        //this.forceRemove();
+    }
+
+    function forceRemove(){
+        attribu.container.remove()
+        attribu.isDeleted = true
+    }
 
     //特权方法
     this.setAttributions = function(){
@@ -225,6 +267,8 @@ let TextBlueLine = function(container, parent, point, source, sourceid){
         attribu.container = container
         attribu.sourceParent = parent
         attribu.sourceId = sourceid
+        attribu.coverColor = coverColor
+        attribu.randomCoverId = "linearColor" + String(new Date()-0)
     }
     this.parentPosUpdated = function(dx, dy, inPorts, outPorts, curEleid) {
         
@@ -241,36 +285,6 @@ let TextBlueLine = function(container, parent, point, source, sourceid){
             updateCoverLine()
         }
 
-        /*
-        let inPortsNames = {}
-        let outPortsNames = {}
-        inPorts.forEach(function (port) {
-            inPortsNames[port.parent + '_' + port.name] = 1
-        })
-
-        outPorts.forEach(function (port) {
-            outPortsNames[port.parent + '_' + port.name] = 1
-        })
-
-        let sourcePortKey = attribu.sourcePort.parent + '_' + attribu.sourcePort.name
-        let targetPortKey = attribu.targetPort.parent + '_' + attribu.targetPort.name
-
-        if (sourcePortKey in inPortsNames || sourcePortKey in outPortsNames) {
-
-            attribu.storePoints[0][0] += dx
-            attribu.storePoints[0][1] += dy
-            this.dynamicGenerateCurveLine()
-            updateCoverLine()
-        }
-        else if (targetPortKey in outPortsNames || targetPortKey in inPortsNames) {
-
-            attribu.storePoints[1][0] += dx
-            attribu.storePoints[1][1] += dy
-            this.dynamicGenerateCurveLine()
-            updateCoverLine()
-       
-        }
-        */
         
     }
     this.dynamicGenerateCurveLine = function(coordinates){
@@ -339,19 +353,8 @@ let TextBlueLine = function(container, parent, point, source, sourceid){
                 .style('stroke-dashoffset', attribu.count)
         }
     }
-    this.remove = function(parent){
-        if(attribu.targetParent == parent || attribu.sourceParent == parent){
-            attribu.baseLine.remove()
-            attribu.coverLine.remove()
-            attribu.isDeleted = true
-            return true
-        }
-        return false
-    }
-    this.forceRemove = function(){
-        attribu.baseLine.remove()
-        attribu.coverLine.remove()
-        attribu.isDeleted = true
+    this.remove = function(){
+        forceRemove()
     }
     this.setExstingPorts = function(ports){
         attribu.existingPort = ports;
@@ -361,7 +364,8 @@ let TextBlueLine = function(container, parent, point, source, sourceid){
             "source": attribu.sourcePort,
             "target": attribu.targetPort,
             "sourceId": attribu.sourceId,
-            "targetId": attribu.targetId
+            "targetId": attribu.targetId,
+            "isDeleted": attribu.isDeleted
         }
         return re
     }
