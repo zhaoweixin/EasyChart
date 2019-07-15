@@ -9,55 +9,54 @@ const mapperdata = {
     var mapperkeys = mapperdatas.keys();
     var fieldnames = [];
     var ctable = false;
-    for (var i = 0; i < mapperkeys.length - 1; i++) {
-      //判断数据是否来自于同一张表
-      var f = mapperdatas.get(mapperkeys[i]).tablename;
-      var s = mapperdatas.get(mapperkeys[i + 1]).tablename;
-      if (f != s) {
-        ctable = true;
-        break;
-      }
-    }
-    if (ctable) return;
-    if (
-      store.state.chartArray[store.state.selectChartId].baseData.datamappers
-        .length > 1
-    ) {
-      for (var i = 0; i < mapperkeys.length; i++) {
-        var pre = mapperdatas.get(mapperkeys[i]).pre;
-        var data = datamap.get(mapperdatas.get(mapperkeys[i]).tablename).data;
-        var fieldname = mapperdatas.get(mapperkeys[i]).fieldname;
-        var group = mapperdatas.get(mapperkeys[i]).groub;
-        switch (pre) {
-          case "count":
-            count(data, fieldname, group);
-            break;
-          case "avg":
-            avg(data, fieldname, group);
-            break;
-          case "sum":
-            sum(data, fieldname, group);
-            break;
-          default:
-            cnull++;
-            fieldnames.push(fieldname);
-            if (
-              cnull == 1 &&
-              $("#x").is(":visible") &&
-              !$("#y").is(":visible")
-            ) {
-              piedata(data, fieldname);
-              cnull = 0;
-            }
-            if (cnull >= 2) {
-              all(data, fieldnames);
-              cnull = 0;
-            }
-            break;
+    if (mapperkeys.length > 1) {
+      for (var i = 0; i < mapperkeys.length - 1; i++) {
+        //判断数据是否来自于同一张表
+        var f = mapperdatas.get(mapperkeys[i]).tablename;
+        var s = mapperdatas.get(mapperkeys[i + 1]).tablename;
+        if (f != s) {
+          ctable = true;
+          break;
         }
       }
     }
+    if (ctable) return;
+    // if (
+    //   store.state.chartArray[store.state.selectChartId].baseData.datamappers
+    //     .length > 1
+    // )
+    // {
+    for (var i = 0; i < mapperkeys.length; i++) {
+      var pre = mapperdatas.get(mapperkeys[i]).pre;
+      var data = datamap.get(mapperdatas.get(mapperkeys[i]).tablename).data;
+      var fieldname = mapperdatas.get(mapperkeys[i]).fieldname;
+      var group = mapperdatas.get(mapperkeys[i]).groub;
+      switch (pre) {
+        case "count":
+          count(data, fieldname, group);
+          break;
+        case "avg":
+          avg(data, fieldname, group);
+          break;
+        case "sum":
+          sum(data, fieldname, group);
+          break;
+        default:
+          cnull++;
+          fieldnames.push(fieldname);
+          if (cnull == 1 && $("#x").is(":visible") && !$("#y").is(":visible")) {
+            piedata(data, fieldname);
+            cnull = 0;
+          }
+          if (cnull >= 2) {
+            all(data, fieldnames);
+            cnull = 0;
+          }
+          break;
+      }
+    }
   }
+  // }
 };
 function count(data, countfield, group) {
   var map = publicopre(data, group);
@@ -132,10 +131,21 @@ function all(data, fieldnames) {
   console.log(result);
 }
 function piedata(data, fieldname) {
+  console.log(data);
+  // var result = [];
+  // for (var i = 0; i < data.length; i++) {
+  //   result[i][fieldname] = data[i][fieldname];
+  // }
   var result = [];
-  for (var i = 0; i < data.length; i++) {
-    result[i][fieldname] = data[i][fieldname];
+  var map = publicopre(data, fieldname);
+  var keys = map.keys();
+  for (var i = 0; i < keys.length; i++) {
+    if (!result[i]) result[i] = {};
+
+    gettype(result[i], keys[i], fieldname);
+    gettype(result[i], map.get(keys[i]).length, fieldname);
   }
+  console.log(result);
   store.state.chartArray[store.state.selectChartId].baseData.data = result;
 }
 function publicopre(data, group) {
