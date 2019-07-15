@@ -22,8 +22,9 @@ import $ from "jquery";
 import linechart_vegaVue from './linechart_vega.vue';
 import { autoMaxBins } from 'vega-lite/build/src/bin';
 import defaultData from "../../assets/baseData"
+
 export default {
-  name: "lineChart",
+  name: "Linechart",
   props:{
         id:String,
         // baseData: {
@@ -47,10 +48,17 @@ export default {
   data() {
     return {
       isInit:false,
-      name: "lineChart",
+      name: "Linechart",
       chart:{},
       g2id: this.id + "_g2",
       baseData:defaultData.linechart.baseData,
+      select_config:{
+      "controller":'Linechart',
+        "controllee":["Scatter"],
+        'action':'filter',
+        'data':'weather',
+        'fieldname':'date'
+    }
     };
   },
   computed: {
@@ -169,6 +177,32 @@ export default {
       //this.chart.point().position('time*temperature').color('city').
       this.chart.legend(false);
       this.chart.render();
+
+      this.chart.on('click',ev=>{
+
+        if (this.select_config.controller==this.name) {
+          if (typeof ev.data != "undefined" ? true : false) {
+            let data1 = ev.data[0]._origin;
+
+            console.log(data1.time)
+            for (let i = 0; i < this.select_config.controllee.length; i++) {
+              let inter_chart = this.select_config.controllee[i]
+              if (inter_chart.indexOf('chart')>-1){
+                inter_chart=inter_chart.replace('chart','')
+              }
+              if (this.baseData.datamappers[1].Alias != null) {
+                this.select_config.fieldname = this.baseData.datamappers[1].Alias    //字段名
+              }
+              this.select_config.select_data =data1.time
+              this.select_config.index = i
+
+              console.log(this.select_config)
+              this.$store.commit("commitInteracWeatherData", this.select_config)
+            }
+          }
+        }
+
+      })
 
       // slider
       if (this.slider != null){
