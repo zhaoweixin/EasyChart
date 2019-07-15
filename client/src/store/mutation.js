@@ -56,7 +56,7 @@ const mutation = {
     state.weatherData.barData = Data(payload,"bar")
     state.weatherData.pieData = Data(payload,"pie")
     state.weatherData.canlenderData = Data(payload,"canlender")
-    state.weatherData.pointData = Data(payload,"point")
+    state.weatherData.pointData = Data(payload,"scatter")
     state.weatherData.lineData = Data(payload,"line")
 
     // console.log(state.weatherData.lineData)
@@ -94,7 +94,7 @@ const mutation = {
 
   },
   commitInteracScatterData(state,payload){
-    state.interacScatterData =interationData(state.weatherData.baseData,"point" ,payload)
+    state.interacScatterData =interationData(state.weatherData.baseData,"scatter" ,payload)
   },
 
   commitInteracWeatherData(state,payload){
@@ -104,6 +104,8 @@ const mutation = {
           if (interact_chart_data.indexOf('chart')>-1){
             interact_chart_data=interact_chart_data.replace('chart','')
           }
+
+          console.log(interact_chart_data)
           console.log(state["interac"+interact_chart_data+"Data"] =interationData(state.weatherData.baseData,
             interact_chart_data.toLowerCase() ,payload))
         }
@@ -117,8 +119,6 @@ const mutation = {
     state.interacCanlendarData =  state.weatherData.canlenderData
     state.interacScatterData = state.weatherData.pointData
     state.interacLineData = state.weatherData.lineData
-
-    console.log('ddd')
   },
 
   commitDataMapper(state,payload){
@@ -209,7 +209,7 @@ let arr_point = []
     case 'bar':return arr_bar;
     case 'pie':return arr_pie;
     case 'canlender':return arr_canlender;
-    case 'point':return arr_point;
+    case 'scatter':return arr_point;
     case 'line':return arr_line
   }
 }
@@ -221,9 +221,7 @@ function interationData(payload,type,factor) {
   let arr_point = []
   let arr_line = []
   for (let i=0;i<payload.length;i++){
-    //
-    // console.log(payload[i][factor.fieldname])
-    // console.log(factor.select_data)
+
     if ((payload[i].date.indexOf("2012")>-1)&&
       (payload[i][factor.fieldname]==factor.select_data)) {    //控制字段名和选择的值
       arr_bar.push(   //柱状图
@@ -264,15 +262,11 @@ function interationData(payload,type,factor) {
     })
   }
 
-
-  console.log(arr_canlender)
-
-  console.log(arr_line)
   switch (type){
     case 'bar':return arr_bar;
     case 'pie':return arr_pie;
     case 'canlendar':return arr_canlender;
-    case 'point':return arr_point;
+    case 'scatter':return arr_point;
     case 'line':return arr_line
   }
 }

@@ -27,10 +27,9 @@ var datamapper = [
 
 var select_config = {
   "controller":'Barchart',
-  "controllee":["Canlendar","Linechart"],
+  "controllee":["Canlendar","Linechart","Scatter"],
   'action':'filter',
-  'data':'weather',
-  'fieldname':'date'
+  'data':'weather'
 }
 export default {
   name: "Barchart",
@@ -208,6 +207,8 @@ export default {
     },
     dataMap: {
       handler(newVal) {
+
+        console.log(newVal)
         if (newVal.id == this.id) {
           if (newVal.datamappers === undefined) {
             this.baseData.datamappers = datamapper;
