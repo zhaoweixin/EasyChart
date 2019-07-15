@@ -45,7 +45,7 @@
     }
   },
   {
-    "controller": "Scatter_vega",
+    "controller": "Scatter",
     "controllee": {
       "Piechart": {
         "action": [
@@ -65,6 +65,17 @@
       "Barchart": {
         "action": [
           "filter","connect"
+        ]
+      }
+    }
+  },
+  {
+    "controller": "Linechart",
+    "controllee": {
+      "Scatter": {
+        "action": [
+          "filter",
+          "connect"
         ]
       }
     }

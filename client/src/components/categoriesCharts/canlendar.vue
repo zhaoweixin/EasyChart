@@ -94,6 +94,7 @@
         // },
       },
       mounted(){
+        this.baseData.id=this.id
         this.myChart=echarts.init(document.getElementById(this.id));
         this.option = {
           title:{
@@ -163,22 +164,23 @@
     watch:{
       storeBaseData:{
         handler(newVal){
-          console.log(newVal)
+          if (this.id==newVal.id) {
             this.myChart.setOption({
-              visualMap:{
-                inRange:{
-                  color:newVal.style.color,
+              visualMap: {
+                inRange: {
+                  color: newVal.style.color,
                 }
               },
 
-              title:{
+              title: {
                 text: newVal.metaConfig.title
               },
-              series:{
-                data:this.changeArray(newVal.data)
+              series: {
+                data: this.changeArray(newVal.data)
               }
             })
-          // console.log(newVal)
+            // console.log(newVal)
+          }
         },
         deep:true
       },

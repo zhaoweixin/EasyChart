@@ -8,50 +8,70 @@
                 </el-page-header>
                 <el-container>
                     <el-aside style="text-align: center;  height: 950px; width:200px">
-                        <el-divider content-position="center" style="font-size:16px; color:#333; font-weight:700">Tool Boxs</el-divider>
-                        <div>
-                            <el-collapse v-model="activeNames">
-                                <el-collapse-item title="categories1" name="1">
-                                    <el-row>
-                                        <vs-button type="line" style="width:150px">Primary</vs-button>
-                                    </el-row>
-                                    <el-row>
-                                        <vs-button type="line" style="width:150px">Primary</vs-button>
-                                    </el-row>
-                                    <el-row>
-                                        <vs-button type="line" style="width:150px">Primary</vs-button>
-                                    </el-row>
-                                    <el-row>
-                                        <vs-button type="line" style="width:150px">Primary</vs-button>
-                                    </el-row>
-                                </el-collapse-item>
-                                <el-collapse-item title="categories2" name="2">
-                                    <el-row>
-                                        <vs-button type="line" style="width:150px">Primary</vs-button>
-                                    </el-row>
-                                    <el-row>
-                                        <vs-button type="line" style="width:150px">Primary</vs-button>
-                                    </el-row>
-                                </el-collapse-item>
-                                <el-collapse-item title="categories3" name="3">
-                                    <el-row>
-                                        <vs-button type="line" style="width:150px">Primary</vs-button>
-                                    </el-row>
-                                    <el-row>
-                                        <vs-button type="line" style="width:150px">Primary</vs-button>
-                                    </el-row>
-                                </el-collapse-item>
-                                <el-collapse-item title="categories4" name="4">
-                                    <el-row>
-                                        <vs-button type="line" style="width:150px">Primary</vs-button>
-                                    </el-row>
-                                    <el-row>
-                                        <vs-button type="line" style="width:150px">Primary</vs-button>
-                                    </el-row>
-                                </el-collapse-item>
-                            </el-collapse>
+                        <el-divider content-position="center" style="font-size:16px; color:#333; font-weight:700">Function Panel</el-divider>
+                        <div style="padding-top:5%">
+                            <vs-row vs-justify="center">
+                                <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="12">
+                                    <vs-card>
+                                    <div slot="header">
+                                        <h5 v-bind:style="h5Style">
+                                        State Boxs
+                                        </h5>
+                                    </div>
+                                    <div slot="media">
+                                        <img :src="mouseActionType.pic" style="width:50px; margin-left:37%">
+                                    </div>
+                                    <div>
+                                        <span>{{mouseActionType.text}}</span>
+                                    </div>
+                                    </vs-card>
+                                </vs-col>
+                            </vs-row>
                         </div>
-                    </el-aside>
+
+                        <div style="padding-top:5%">
+                            <vs-row vs-justify="center">
+                                <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="12">
+                                    <vs-card>
+                                    <div slot="header">
+                                        <h5>
+                                        Tool Boxs
+                                        </h5>
+                                    </div>
+
+                                    <div>
+                                        <el-collapse v-model="activeNames">
+                                            <el-collapse-item title="Mouse Action" name="1">
+                                                <el-row>
+                                                    <vs-button type="line" style="width:150px" color="#838DFF" @click="changeMouseActionType('Connection')">Connection</vs-button>
+                                                </el-row>
+                                                <el-row>
+                                                    <vs-button type="line" style="width:150px" color="#70B34D" @click="changeMouseActionType('Filter')">Filter</vs-button>
+                                                </el-row>
+                                            </el-collapse-item>
+                                            <el-collapse-item title="Focus" name="2">
+                                                <el-row>
+                                                    <vs-button type="line" style="width:150px" color="grey" @click="highlightHandler">Highlight</vs-button>
+                                                </el-row>
+                                                <el-row>
+                                                    <vs-button type="line" style="width:150px" color="grey" @click="updateSubChart">UpdateSubChart</vs-button>
+                                                </el-row>
+                                                <el-row>
+                                                    <vs-button type="line" style="width:150px" color="grey" @click="restart">Restart</vs-button>
+                                                </el-row>
+                                            </el-collapse-item>
+                                        </el-collapse>
+                                    </div>
+                                    </vs-card>
+                                </vs-col>
+                            </vs-row>
+                        </div>
+
+                        <div>
+                            
+                        </div>
+                        
+                        </el-aside>
                     <el-container style="padding-left:2%">
                         <el-header style="height:50px">
                             <el-row >
@@ -122,7 +142,17 @@ export default {
             },
             dataMapper:{},
             lastBlueLines:[],
-            blueLinesName:[], // store the links between components
+            blueLinesName:[], // store the links between components,
+            mouseActionType:{
+                "pic":'../../../static/Image/Connections.png',
+                "text":'Attribute Mapping',
+                "color": "#838DFF"
+            },
+            h5Style:{
+                'background':"#838DFF",
+                'border-radius': '7px'
+            }
+            
 
         }
     },
@@ -405,7 +435,9 @@ export default {
             cc.on('click', function(d){
             })
             cc.on('dblclick', function(d){
+                
                 if(that.mouseAction == "drawing_line"){
+                    console.log("dblclick")
                     deleteSingleLine()
                 }
             })
@@ -448,7 +480,9 @@ export default {
                         params = com.getParmas(),
                         x = d.parentX + d.x,
                         y = d.parentY + d.y,
-                        sourceid = params.id;
+                        sourceid = params.id,
+                        nowColor = that.mouseActionType.color;
+                coverColor = nowColor
 
                 let line = (that.drawingLine = new BlueprintLine(
                     that.container,
@@ -777,6 +811,27 @@ export default {
             })
             return list
         },
+        changeMouseActionType(type){
+            let content = {
+                "Connection": {
+                    "pic": "../../../static/Image/Connections.png",
+                    "text": 'Attribute Mapping',
+                    "color": "#838DFF"
+                },
+                "Filter": {
+                    "pic": "../../../static/Image/filter.png",
+                    "text": "Filter Condition",
+                    "color": "#70B34D"
+                }
+            }
+            this.mouseActionType.pic = content[type].pic;
+            this.mouseActionType.text = content[type].text;
+            this.mouseActionType.color = content[type].color;
+            this.h5Style.background = content[type].color;
+        },
+        highlightHandler(){},
+        UpdateSubChart(){},
+        restart(){}
     },
     mounted() {
 

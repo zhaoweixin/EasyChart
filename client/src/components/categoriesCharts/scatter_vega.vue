@@ -98,20 +98,18 @@ export default {
     },
     },
     watch:{
-        // storeBaseData: {
-        //     handler(newVal){
-        //         if (newVal.id==this.id){
-        //             this.baseData.style.color = newVal.style.color,
-        //             this.baseData.metaConfig.title = newVal.metaConfig.title
-        //             this.baseData.data = newVal.data
-        //             this.draw()
-        //         }
-        //     },
-        //   deep:true
-        // },
+        storeBaseData: {
+            handler(newVal){
+                if (newVal.id==this.id){
+                    this.baseData.style.color = newVal.style.color,
+                    this.baseData.metaConfig.title = newVal.metaConfig.title
+                    this.baseData.data = newVal.data
+                    this.draw()
+                }
+            },
+          deep:true
+        },
       WeatherScatterData:{
-
-          // console.log()
         handler(newVal){
           this.baseData.data = newVal;
           this.$store.commit("commitPropsData", this.baseData);
