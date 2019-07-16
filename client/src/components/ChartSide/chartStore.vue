@@ -235,10 +235,15 @@ function add(data, name) {
         var height = $("body .ui-draggable-dragging").height();
         var maxleft = left + width;
         var maxtop = top + height;
-
-        console.log(oper);
-        console.log(store.state);
-
+        if (oper != "null" && gro == "null") {
+          alert("please select group");
+          return;
+        } else {
+          if (gro != "null" && oper == "null") {
+            alert("please select oper");
+            return;
+          }
+        }
         store.state.propsData =
           store.state.chartArray[store.state.selectChartId].baseData;
         if (
@@ -287,7 +292,7 @@ function add(data, name) {
                 twoinputs.val(Mapperdata.fieldname);
               }
               if (twoinputf.val().length > 0) {
-                console.log("拖拽完成:");
+                // console.log("拖拽完成:");
                 mapperdataM.setdatamap(datamap);
                 mapperdataM.setmapperdata(MapperDatas);
                 //  mapperdataM.startanalyzedata();
@@ -377,7 +382,7 @@ function add(data, name) {
             }
 
             if (twoinputf.val().length > 0 && oneinputf.val().length > 0) {
-              console.log("拖拽完成:");
+              // console.log("拖拽完成:");
               mapperdataM.setdatamap(datamap);
               mapperdataM.setmapperdata(MapperDatas);
               MapperDatas = Tool.CreatNewMapperDatas();

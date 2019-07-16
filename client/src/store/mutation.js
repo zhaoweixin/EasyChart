@@ -19,7 +19,9 @@ const mutation = {
     state.chartIdArray.push(id);
   },
   pushDataToArray(state, payload) {
+    console.log(payload);
     state.chartArray[payload.i] = payload;
+    console.log(state.chartArray);
   },
   changeSelectId(state, payload) {
     state.selectChartId = payload;
