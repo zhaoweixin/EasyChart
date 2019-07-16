@@ -94,6 +94,8 @@ export default {
                     this.baseData.style.color = newVal.style.color,
                     this.baseData.metaConfig.title = newVal.metaConfig.title
                     this.baseData.data = newVal.data
+
+          console.log(this.baseData)
                     this.draw()
     },
     },
@@ -111,8 +113,15 @@ export default {
         },
       WeatherScatterData:{
         handler(newVal){
+
+          console.log(newVal)
           this.baseData.data = newVal;
           this.$store.commit("commitPropsData", this.baseData);
+
+
+          console.log("ddd")
+          console.log(this.baseData)
+          this.draw()
         },
         deep:true
       }
