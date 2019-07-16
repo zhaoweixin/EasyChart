@@ -52,13 +52,13 @@ export default {
       chart:{},
       g2id: this.id + "_g2",
       baseData:defaultData.linechart.baseData,
-      select_config:{
-      "controller":'Linechart',
-        "controllee":["Scatter"],
-        'action':'filter',
-        'data':'weather',
-        'fieldname':'date'
-    }
+    //   select_config:{
+    //   "controller":'Linechart',
+    //     "controllee":["Scatter"],
+    //     'action':'filter',
+    //     'data':'weather',
+    //     'fieldname':'date'
+    // }
     };
   },
   computed: {
@@ -74,7 +74,6 @@ export default {
   watch:{
     storeBaseData: {
       handler(newVal) {
-        console.log(newVal);
         if (newVal.id == this.id) {
           this.chart.repaint();
           this.chart.changeData(newVal.data)
@@ -84,10 +83,7 @@ export default {
     },
     getWeatInterlineData:{
       handler(newVal) {
-        console.log(newVal);
           this.baseData.data = newVal;
-          console.log('time'+this.baseData.data[0].time)
-          console.log('time'+this.baseData.data[this.baseData.data.length-1].time)
           this.$store.commit("commitPropsData", this.baseData);
       },
       deep: true
@@ -99,6 +95,7 @@ export default {
     let that = this;
     this.initChart();
 
+    this.baseData.id=this.id    //重新赋值id
     var erd = elementResizeDetectorMaker()
     erd.listenTo(document.getElementById(this.id),  (element)=> {
           var width = element.offsetWidth
@@ -183,6 +180,7 @@ export default {
         if (this.select_config.controller==this.name) {
           if (typeof ev.data != "undefined" ? true : false) {
             let data1 = ev.data[0]._origin;
+            console.log(ev)
 
             console.log(data1.time)
             for (let i = 0; i < this.select_config.controllee.length; i++) {
@@ -195,7 +193,6 @@ export default {
               }
               this.select_config.select_data =data1.time
               this.select_config.index = i
-
               console.log(this.select_config)
               this.$store.commit("commitInteracWeatherData", this.select_config)
             }

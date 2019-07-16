@@ -57,7 +57,7 @@ const mutation = {
     state.weatherData.barData = Data(payload, "bar");
     state.weatherData.pieData = Data(payload, "pie");
     state.weatherData.canlenderData = Data(payload, "canlender");
-    state.weatherData.pointData = Data(payload, "point");
+    state.weatherData.pointData = Data(payload, "scatter");
     state.weatherData.lineData = Data(payload, "line");
 
     // console.log(state.weatherData.lineData)
@@ -101,25 +101,26 @@ const mutation = {
   commitInteracScatterData(state, payload) {
     state.interacScatterData = interationData(
       state.weatherData.baseData,
-      "point",
+      "scatter",
       payload
     );
   },
 
   commitInteracWeatherData(state, payload) {
+
+    console.log(payload)
     for (let i = 0; i < interactive_config.length; i++) {
       if (payload.controller == interactive_config[i].controller) {
         let interact_chart_data = payload.controllee[payload.index];
         if (interact_chart_data.indexOf("chart") > -1) {
           interact_chart_data = interact_chart_data.replace("chart", "");
         }
-        console.log(
-          (state["interac" + interact_chart_data + "Data"] = interationData(
+
+        console.log(state["interac" + interact_chart_data + "Data"] = interationData(
             state.weatherData.baseData,
             interact_chart_data.toLowerCase(),
             payload
           ))
-        );
       }
     }
   },
@@ -135,8 +136,6 @@ const mutation = {
     state.interacCanlendarData = state.weatherData.canlenderData;
     state.interacScatterData = state.weatherData.pointData;
     state.interacLineData = state.weatherData.lineData;
-
-    console.log("ddd");
   },
 
   commitDataMapper(state, payload) {
@@ -234,7 +233,7 @@ function Data(payload, type) {
       return arr_pie;
     case "canlender":
       return arr_canlender;
-    case "point":
+    case "scatter":
       return arr_point;
     case "line":
       return arr_line;
@@ -255,8 +254,7 @@ function interationData(payload, type, factor) {
     if (
       payload[i].date.indexOf("2012") > -1 &&
       payload[i][factor.fieldname] == factor.select_data
-    ) {
-      //控制字段名和选择的值
+    ) {//控制字段名和选择的值
       arr_bar.push(
         //柱状图
         {
@@ -297,10 +295,6 @@ function interationData(payload, type, factor) {
       percent: a[i][1] / payload.length
     });
   }
-
-  console.log(arr_canlender);
-
-  console.log(arr_line);
   switch (type) {
     case "bar":
       return arr_bar;
@@ -308,7 +302,7 @@ function interationData(payload, type, factor) {
       return arr_pie;
     case "canlendar":
       return arr_canlender;
-    case "point":
+    case "scatter":
       return arr_point;
     case "line":
       return arr_line;

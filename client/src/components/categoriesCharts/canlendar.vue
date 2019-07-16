@@ -8,13 +8,23 @@
   import { mapGetters} from 'vuex'
   import echarts from 'echarts'
   import defaultData from "../../assets/baseData"
+
+
+  // var select_config = {
+  //   "controller":'Canlendar',
+  //   "controllee":["Barchart","Scatter"],
+  //   'action':'filter',
+  //   'data':'weather',
+  //   'fieldname':'date'
+  // }
   export default {
-      name: "canlendar",
+      name: "Canlendar",
       props:{
           id:String
       },
       data(){
         return {
+          name:"Canlendar",
           myChart:"",
           option:"",
           // baseData:{
@@ -147,6 +157,28 @@
         };
 
         this.myChart.setOption(this.option,true)
+
+
+        this.myChart.on('click', (d)=>{
+
+          let select_config = this.$store.state.select_config
+          if (select_config.controller==this.name) {
+            for (let i=0;i<select_config.controllee.length;i++){
+              let inter_chart = select_config.controllee[i]
+              if (inter_chart.indexOf('chart')>-1){
+                inter_chart=inter_chart.replace('chart','')
+              }
+              if (this.baseData.datamappers[1].Alias != null) {
+                select_config.fieldname = this.baseData.datamappers[1].Alias    //字段名
+              } //字段名
+              select_config.select_data =d.data[0]
+              select_config.index = i
+              this.$store.commit("commitInteracWeatherData", select_config)
+            }
+          }
+        })
+
+
         var erd = elementResizeDetectorMaker()
         erd.listenTo(document.getElementById(this.id),  (element)=> {
           var width = element.offsetWidth
@@ -186,11 +218,7 @@
       },
       weatherCanlIntData:{
         handler(newVal){
-
-          console.log(this.baseData.data)
           this.baseData.data = this.changeObject(newVal)
-
-          console.log(this.baseData.data)
           this.$store.commit("commitPropsData",this.baseData)
         },
         deep:true
