@@ -57,7 +57,7 @@
                                                     <vs-button type="line" style="width:150px" color="grey" @click="updateSubChart">UpdateSubChart</vs-button>
                                                 </el-row>
                                                 <el-row>
-                                                    <vs-button type="line" style="width:150px" color="grey" @click="restart">Restart</vs-button>
+                                                    <vs-button type="line" style="width:150px" color="#FFB99C" @click="refresh">Refresh</vs-button>
                                                 </el-row>
                                             </el-collapse-item>
                                         </el-collapse>
@@ -117,7 +117,7 @@ export default {
             loadedDatasets:{}, //accroding datacomponent to loaded datasets
             width: null,
             height: null,
-            drawingLine: "", //The line which is being darwing by user,
+            drawingLine: null, //The line which is being darwing by user,
             blueLines: [], //Store the connections between component which connected by curve
             mouseAction: "", //mouse action label which used to change the mouse action state
             exstingPorts:[], //all of the component port in blueprint
@@ -130,6 +130,7 @@ export default {
             blueLinesDelSignal:false, //true has been delete
             chartLayout:{}, //layout is the preset typesetting
             chartLayoutObj:{}, //更新chartLayoutObj 用于存储layout-port-config
+            
             blueComponentNameList:[], //the index made of componentid
             componentGraph:[],
             vegaObjectObj:{}, //vegaobject is used to generate graph throgh
@@ -150,7 +151,8 @@ export default {
             },
             h5Style:{
                 'background':"#838DFF",
-                'border-radius': '7px'
+                'border-radius': '7px',
+                "transition": "all .5s ease"
             }
             
 
@@ -278,7 +280,7 @@ export default {
             for(let i=0; i<controlledCom.length; i++){
                 let controlledIndex = this.blueComponentNameList.indexOf(controlledCom[i])
                 for(let j=0; j<this.blueComponentNameList.length; j++){
-                    if(this.componentGraph[j][controlledIndex] == 1){
+                    if(this.componentGraph[j] != undefined && this.componentGraph[j][controlledIndex] == 1){
                         //link
                         let source = this.blueComponentNameList[j],
                             target = this.blueComponentNameList[controlledIndex],
@@ -822,6 +824,11 @@ export default {
                     "pic": "../../../static/Image/filter.png",
                     "text": "Filter Condition",
                     "color": "#70B34D"
+                },
+                "Refresh": {
+                    "pic": "../../../static/Image/refresh.png",
+                    "text": "Refresh editor",
+                    "color": "#FFB99C"
                 }
             }
             this.mouseActionType.pic = content[type].pic;
@@ -830,8 +837,47 @@ export default {
             this.h5Style.background = content[type].color;
         },
         highlightHandler(){},
-        UpdateSubChart(){},
-        restart(){}
+        updateSubChart(){},
+        refresh(){
+            let that = this
+            let cleanAttribution = function(){
+                for(let key in that.controlComponentCount){
+                    that.controlComponentCount[key] = 0
+                }
+                for(let key in that.comChartCount){
+                    that.comChartCount[key] = 0
+                }
+                for(let key in that.blueComponentsTypeCount){
+                    that.blueComponentsTypeCount[key] = 0
+                }
+                that.dataComponent = {}
+                that.blueComponents = []
+                that.selectedData = {}
+                that.loadedDatasets = {}
+                that.blueLines = []
+                that.exstingPorts = []
+                that.blueLinesDelSignal = false
+                that.chartLayout = {}
+                that.chartLayoutObj = {}
+                that.blueComponentNameList = []
+                that.componentGraph = []
+                that.chartData = {}
+                that.dataMapper = {}
+                that.lastBlueLines = []
+                that.blueLinesName = []
+            }
+            cleanAttribution()
+            //add components
+            d3.selectAll('.blueComponent').remove()
+            d3.selectAll('.blueLine').remove()
+            this._components.forEach(d => {
+                that.addComponent(d)
+            })
+            that.changeMouseActionType("Refresh")
+            window.setTimeout(function(){
+                that.changeMouseActionType('Connection')
+            },500);
+        }
     },
     mounted() {
 

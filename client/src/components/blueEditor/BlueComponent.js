@@ -53,10 +53,10 @@ export default class BlueComponent {
             .attr('transform', function(d){
                 return 'translate(' + d.x + ',' + d.y + ')'
             })
+            .attr("class", "blueComponent")
             .on('dblclick', function(d){
                 that.setDelete()
             })
-
         ////////////////////////////////
         ///Add drag event to component
         ///////////////////////////////
@@ -463,9 +463,6 @@ export default class BlueComponent {
 
     }
     draw(type){
-
-
-      console.log(this.inPorts)
 
         if(type === 'Layout'){
             this.width *= 1.5
