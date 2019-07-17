@@ -135,7 +135,24 @@ export default {
         interaction: "controler"
       });
       this.myChart.on('click', (d)=>{
-        let select_config = this.$store.state.select_config
+
+
+        console.log(d)
+        let Transport_data = {}
+
+        if (d.name.indexOf('\r')>-1){
+          Transport_data.select_data = d.name.replace("\r", '');
+        } else {
+          Transport_data.select_data = d.name;
+        }
+        Transport_data.chartId = this.id
+        Transport_data.fieldname = 'weather'
+        if (this.baseData.datamappers[1].Alias != null) {
+          Transport_data.fieldname = this.baseData.datamappers[1].Alias    //字段名
+        }
+        this.$store.commit("commitInteracWeatherData", Transport_data)
+
+        /*let select_config = this.$store.state.select_config
         if (select_config.controller==this.name) {
           for (let i=0;i<select_config.controllee.length;i++){
             let inter_chart = select_config.controllee[i]
@@ -150,7 +167,7 @@ export default {
             this.$store.commit("commitInteracWeatherData", select_config)
 
           }
-        }
+        }*/
       })
     },
     reDraw(newVal) {
@@ -222,6 +239,7 @@ export default {
     },
     getInterData: {
       handler(newVal) {
+        console.log("dd")
         // this.baseData.data = newVal;
         // this.$store.commit("commitPropsData", this.baseData);
         this.reDraw(newVal)

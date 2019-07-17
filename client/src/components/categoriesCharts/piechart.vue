@@ -224,10 +224,22 @@ export default {
 
       //点击交互
       this.chart.on("click", ev => {
-        let select_config = this.$store.state.select_config
-        if (select_config.controller==this.name){
+        console.log(ev)
+        if (typeof ev.data != "undefined" ? true : false) {
+
+          const data = ev.data._origin;
+          let Transport_data = {}
+          Transport_data.select_data = data.item.replace("\r", '');
+          Transport_data.chartId = this.id
+          Transport_data.fieldname = 'weather'
+          if (this.baseData.datamappers[0].Alias != null) {
+            Transport_data.fieldname = this.baseData.datamappers[0].Alias    //字段名
+          }
+          this.$store.commit("commitInteracWeatherData", Transport_data)
+        }
+    /*    let select_config = this.$store.state.select_config
           if (typeof ev.data != "undefined" ? true : false) {
-            const data = ev.data._origin;
+
             for (let i = 0; i < select_config.controllee.length; i++) {
               let inter_chart = select_config.controllee[i]
               if (inter_chart.indexOf('chart')>-1){
@@ -240,11 +252,11 @@ export default {
               select_config.index = i
               this.$store.commit("commitInteracWeatherData",select_config)
             }
-          }
+          }*/
           // else {
           //   this.$store.commit("commitZongWeatherData", 1);
           // }
-        }
+
         // if (typeof ev.data != "undefined" ? true : false) {
         //   const data = ev.data._origin;
         //   this.$store.commit("commitInteracBarData", data.item);

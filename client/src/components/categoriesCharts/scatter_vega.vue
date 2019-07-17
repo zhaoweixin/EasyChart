@@ -69,6 +69,8 @@ export default {
     mounted(){
         let that = this
         this.draw()
+
+      this.baseData.id=this.id    //重新赋值id
         var erd = elementResizeDetectorMaker()
         erd.listenTo(document.getElementById(that.id), (element)=>{
             this.baseData.width = element.offsetWidth

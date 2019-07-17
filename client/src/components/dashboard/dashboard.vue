@@ -148,12 +148,12 @@ export default {
       if (id > 0) {
         console.log(that.$refs[id][0])
         console.log(that.$refs[id][0].reDraw)
-        that.$refs[id][0].reDraw(newVal); 
+        that.$refs[id][0].reDraw(newVal);
         console.log("修改子图")
       } else {
         console.log("修改dashboard");
         document.getElementById("box").style.backgroundColor = newVal.style.backgroundColor;
-        
+
       }
     },
     applyColor() {

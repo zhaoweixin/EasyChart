@@ -29,7 +29,7 @@ const state = {
   weatherData:{},
   select_config:{
     "controller":'Barchart',
-    "controllee":["Linechart","Scatter","Canlendar"],
+    "controllee":["Linechart","Scatter"],
     'action':'filter',
     'data':'weather'
   }

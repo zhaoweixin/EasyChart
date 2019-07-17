@@ -41,7 +41,6 @@ export default {
         //       data:this.$store.state.weatherData.lineData
         //     }
         //       return a;
-
         //   }
         // }
       },
@@ -177,13 +176,21 @@ export default {
 
       this.chart.on('click',ev=>{
 
-        if (this.select_config.controller==this.name) {
           if (typeof ev.data != "undefined" ? true : false) {
             let data1 = ev.data[0]._origin;
-            console.log(ev)
-
-            console.log(data1.time)
-            for (let i = 0; i < this.select_config.controllee.length; i++) {
+            let Transport_data = {}
+            if (data1.item.indexOf("\r")>-1) {
+              Transport_data.select_data = data1.item.replace("\r", '');
+            }else {
+              Transport_data.select_data=data1.item
+            }
+            Transport_data.chartId = this.id
+            Transport_data.fieldname = 'weather'
+            if (this.baseData.datamappers[0].Alias != null) {
+              Transport_data.fieldname = this.baseData.datamappers[0].Alias    //字段名
+            }
+            this.$store.commit("commitInteracWeatherData", Transport_data)
+            /*for (let i = 0; i < this.select_config.controllee.length; i++) {
               let inter_chart = this.select_config.controllee[i]
               if (inter_chart.indexOf('chart')>-1){
                 inter_chart=inter_chart.replace('chart','')
@@ -195,8 +202,8 @@ export default {
               this.select_config.index = i
               console.log(this.select_config)
               this.$store.commit("commitInteracWeatherData", this.select_config)
-            }
-          }
+            }*/
+
         }
 
       })

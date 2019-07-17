@@ -1,6 +1,5 @@
 var interactive_config = require("../assets/interactive.json");
 
-console.log(interactive_config);
 
 const mutation = {
   increment(state, payload) {
@@ -67,9 +66,9 @@ const mutation = {
     for (let i = 0; i < interactive_config.length; i++) {
       if (payload.controller == interactive_config[i].controller) {
         for (let j = 0; j < payload.controllee.length; j++) {
-          let interact_chart_data = payload.controllee[j].replace("chart", "");
+          let interact_type_chart = payload.controllee[j].replace("chart", "");
 
-          state["interac" + interact_chart_data + "Data"] = interationData(
+          state["interac" + interact_type_chart+ "Data"] = interationData(
             state.weatherData.baseData,
             interact_chart_data.toLowerCase(),
             payload.select_data
@@ -105,20 +104,20 @@ const mutation = {
   },
 
   commitInteracWeatherData(state, payload) {
-
-    console.log(payload)
+    let select_config = state.select_config
     for (let i = 0; i < interactive_config.length; i++) {
-      if (payload.controller == interactive_config[i].controller) {
-        let interact_chart_data = payload.controllee[payload.index];
-        if (interact_chart_data.indexOf("chart") > -1) {
-          interact_chart_data = interact_chart_data.replace("chart", "");
-        }
-
-        console.log(state["interac" + interact_chart_data + "Data"] = interationData(
+      if (select_config.controller == interactive_config[i].controller) {
+        for (let j=0;j<select_config.controllee.length;j++) {
+          let interact_type_chart= select_config.controllee[j];
+          if (interact_type_chart.indexOf("chart") > -1) {
+            interact_type_chart= interact_type_chart.replace("chart", "");
+          }
+          state["interac" + interact_type_chart+ "Data"] = interationData(
             state.weatherData.baseData,
-            interact_chart_data.toLowerCase(),
+            interact_type_chart.toLowerCase(),
             payload
-          ))
+          )
+        }
       }
     }
   },
