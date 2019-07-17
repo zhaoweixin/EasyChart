@@ -74,7 +74,7 @@ function count(data, countfield, group) {
   }
 
   store.state.chartArray[store.state.selectChartId].baseData.data = result;
-  console.log(result);
+  // console.log(result);
 }
 function sum(data, sumfield, group) {
   var map = publicopre(data, group);
@@ -93,7 +93,7 @@ function sum(data, sumfield, group) {
     gettype(result[i], keys[i], group);
   }
   store.state.chartArray[store.state.selectChartId].baseData.data = result;
-  console.log(result);
+  // console.log(result);
 }
 function avg(data, avgfield, group) {
   var map = publicopre(data, group);
@@ -113,11 +113,11 @@ function avg(data, avgfield, group) {
   }
 
   store.state.chartArray[store.state.selectChartId].baseData.data = result;
-  console.log(result);
+  // console.log(result);
 }
 function all(data, fieldnames) {
-  console.log("所有字段:");
-  console.log(fieldnames.length);
+  // console.log("所有字段:");
+  // console.log(fieldnames.length);
   var result = [];
   for (var i = 0; i < data.length; i++) {
     for (var j = 0; j < fieldnames.length; j++) {
@@ -128,14 +128,11 @@ function all(data, fieldnames) {
   }
 
   store.state.chartArray[store.state.selectChartId].baseData.data = result;
-  console.log(result);
+  // console.log(result);
 }
 function piedata(data, fieldname) {
-  console.log(data);
-  // var result = [];
-  // for (var i = 0; i < data.length; i++) {
-  //   result[i][fieldname] = data[i][fieldname];
-  // }
+  // console.log(data);
+
   var result = [];
   var map = publicopre(data, fieldname);
   var keys = map.keys();
@@ -145,7 +142,7 @@ function piedata(data, fieldname) {
     gettype(result[i], keys[i], fieldname);
     gettype(result[i], map.get(keys[i]).length, fieldname);
   }
-  console.log(result);
+  // console.log(result);
   store.state.chartArray[store.state.selectChartId].baseData.data = result;
 }
 function publicopre(data, group) {
@@ -158,7 +155,7 @@ function publicopre(data, group) {
       .map(data, d3.map)
   );
 
-  console.log(map);
+  // console.log(map);
   return map;
 }
 function gettype(result, value, filed) {
