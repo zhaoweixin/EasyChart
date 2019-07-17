@@ -25,12 +25,13 @@ var datamapper = [
   }
 ];
 
-var select_config = {
-  "controller":'Barchart',
-  "controllee":["Canlendar","Linechart","Scatter"],
-  'action':'filter',
-  'data':'weather'
-}
+// var select_config = {
+//   "controller":'Barchart',
+//   "controllee":["Canlendar","Scatter"],
+//   'action':'filter',
+//   'data':'weather',
+//   'fieldname':'date'
+// }
 export default {
   name: "Barchart",
   props: {
@@ -134,13 +135,16 @@ export default {
         interaction: "controler"
       });
       this.myChart.on('click', (d)=>{
+        let select_config = this.$store.state.select_config
         if (select_config.controller==this.name) {
           for (let i=0;i<select_config.controllee.length;i++){
             let inter_chart = select_config.controllee[i]
             if (inter_chart.indexOf('chart')>-1){
               inter_chart=inter_chart.replace('chart','')
             }
-            select_config.fieldname = this.baseData.datamappers[1].Alias    //字段名
+            if (this.baseData.datamappers[1].Alias != null) {
+              select_config.fieldname = this.baseData.datamappers[1].Alias    //字段名
+            }
             select_config.select_data =d.name.replace("\r",'')
             select_config.index = i
             this.$store.commit("commitInteracWeatherData", select_config)
@@ -191,24 +195,53 @@ export default {
     });
   },
   watch: {
+    //野
+    storeBaseData: {
+      handler(newVal) {
+
+        console.log(newVal)
+        if (newVal.id == this.id) {
+          this.myChart.setOption({
+            title: {
+              text: newVal.metaConfig.title
+            },
+            color: newVal.style.color,
+            xAxis: [
+              {
+                data: this.comArray(newVal.data, Dataconfig.barxname)
+              }
+            ],
+            series: {
+              name: Dataconfig.dataname,
+              data: this.comArray(newVal.data, Dataconfig.baryname)
+            }
+          });
+        }
+      },
+      deep: true
+    },
     getInterData: {
       handler(newVal) {
         // this.baseData.data = newVal;
         // this.$store.commit("commitPropsData", this.baseData);
+        this.reDraw(newVal)
       },
       deep: true
     },
     getWeatInterData: {
       handler(newVal) {
+
+        console.log(newVal)
         this.baseData.data = newVal;
+
+        console.log(this.baseData)
         this.$store.commit("commitPropsData", this.baseData);
+        this.reDraw(this.baseData)
       },
       deep: true
     },
     dataMap: {
       handler(newVal) {
-
-        console.log(newVal)
         if (newVal.id == this.id) {
           if (newVal.datamappers === undefined) {
             this.baseData.datamappers = datamapper;

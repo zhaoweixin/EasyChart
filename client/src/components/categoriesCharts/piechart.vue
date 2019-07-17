@@ -21,12 +21,12 @@ var datamapper = [
     Alias: null
   }
 ];
-var select_config = {
-  "controller":'Piechart',
-  "controllee":["Barchart"],
-  'action':'filter',
-  'data':'weather'
-}
+// var select_config = {
+//   "controller":'Piechart',
+//   "controllee":["Barchart","Linechart","Scatter","Canlendar"],
+//   'action':'filter',
+//   'data':'weather'
+// }
 export default {
   name: "Piechart",
   props: {
@@ -224,22 +224,26 @@ export default {
 
       //点击交互
       this.chart.on("click", ev => {
+        let select_config = this.$store.state.select_config
         if (select_config.controller==this.name){
           if (typeof ev.data != "undefined" ? true : false) {
             const data = ev.data._origin;
-            for (let i=0;i<select_config.controllee.length;i++) {
-              let inter_chart = select_config.controllee[i].replace("chart",'')
-              select_config.select_data =data.item
-              this.$store.commit("commitInterac"+inter_chart+"Data", select_config)
-
-              // this.$store.commit("commitInteracBarData", data.item);
-              // this.$store.commit("commitInteracCanlendarData", data.item);
-              // this.$store.commit("commitInteracScatterData", data.item);
-              // this.$store.commit("commitInteracLineData", data.item);
+            for (let i = 0; i < select_config.controllee.length; i++) {
+              let inter_chart = select_config.controllee[i]
+              if (inter_chart.indexOf('chart')>-1){
+                inter_chart=inter_chart.replace('chart','')
+              }
+              if (this.baseData.datamappers[0].Alias != null) {
+                select_config.fieldname = this.baseData.datamappers[0].Alias    //字段名
+              }
+              select_config.select_data =data.item.replace("\r",'')
+              select_config.index = i
+              this.$store.commit("commitInteracWeatherData",select_config)
             }
-          } else {
-            this.$store.commit("commitZongWeatherData", 1);
           }
+          // else {
+          //   this.$store.commit("commitZongWeatherData", 1);
+          // }
         }
         // if (typeof ev.data != "undefined" ? true : false) {
         //   const data = ev.data._origin;

@@ -26,7 +26,13 @@ const state = {
   interacPieData:[],   //交互pie
   interacLineData:[],   //交互先
   dataMapper:[],
-  weatherData:{}
+  weatherData:{},
+  select_config:{
+    "controller":'Barchart',
+    "controllee":["Linechart","Scatter","Canlendar"],
+    'action':'filter',
+    'data':'weather'
+  }
 };
 
 export default new Vuex.Store({

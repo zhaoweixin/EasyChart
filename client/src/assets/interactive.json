@@ -70,12 +70,26 @@
     }
   },
   {
-    "controller": "Linechart",
+    "controller": "Canlendar",
     "controllee": {
+      "Piechart": {
+        "action": [
+          "filter","connect"
+        ]
+      },
+      "Linechart": {
+        "action": [
+          "filter","connect"
+        ]
+      },
       "Scatter": {
         "action": [
-          "filter",
-          "connect"
+          "filter","connect"
+        ]
+      },
+      "Barchart": {
+        "action": [
+          "filter","connect"
         ]
       }
     }
