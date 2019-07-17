@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 
-let TextBlueLine = function(container, parent, point, source, sourceid, coverColor){
+let TextBlueLine = function(container, parent, point, source, sourceid, coverColor, actionTypeIndex){
     //私有属性
     var attribu = {
         sourcePoint : '',
@@ -25,7 +25,8 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
         sourceId : '',
         isDeleted : false,
         coverColor : "#808080",
-        randomCoverId: ''
+        randomCoverId: '',
+        actionTypeIndex: -1
     }
     //私有方法
 
@@ -268,6 +269,7 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
         attribu.sourceParent = parent
         attribu.sourceId = sourceid
         attribu.coverColor = coverColor
+        attribu.actionTypeIndex = actionTypeIndex
         attribu.randomCoverId = "linearColor" + String(new Date()-0)
     }
     this.parentPosUpdated = function(dx, dy, inPorts, outPorts, curEleid) {

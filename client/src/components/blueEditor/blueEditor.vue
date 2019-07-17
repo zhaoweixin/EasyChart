@@ -130,7 +130,6 @@ export default {
             blueLinesDelSignal:false, //true has been delete
             chartLayout:{}, //layout is the preset typesetting
             chartLayoutObj:{}, //更新chartLayoutObj 用于存储layout-port-config
-            
             blueComponentNameList:[], //the index made of componentid
             componentGraph:[],
             vegaObjectObj:{}, //vegaobject is used to generate graph throgh
@@ -147,7 +146,8 @@ export default {
             mouseActionType:{
                 "pic":'../../../static/Image/Connections.png',
                 "text":'Attribute Mapping',
-                "color": "#838DFF"
+                "color": "#838DFF",
+                "index": 1
             },
             h5Style:{
                 'background':"#838DFF",
@@ -298,7 +298,6 @@ export default {
                 }
             }
             this.$store.commit("updateDataMapper", that.dataMapper)
-            //console.log(controlledCom, this.blueComponentNameList, that.componentGraph)
             this.$store.commit("editInteraction")
         },
         calculator(option){
@@ -492,7 +491,8 @@ export default {
                     [x, y],
                     d,
                     sourceid,
-                    coverColor
+                    coverColor,
+                    that.mouseActionType.index
                 ));
                 that.blueLines.push(line);
                 that.mouseAction = "drawing_line";
@@ -620,7 +620,6 @@ export default {
             constructproperty(that, that.modelConfig[_name], _name)
         },
         buildBlueGraph(con){
-            //console.log(that.blueLines)
             let that = this
             let connect = con.getConnectInfo()
             let _source = connect.source
@@ -682,7 +681,9 @@ export default {
             for(let i=0; i<this.blueLinesName.length; i++){
                 let indexsource = this.blueComponentNameList.indexOf(String(this.blueLinesName[i]).split('_')[0])
                 let indextarget = this.blueComponentNameList.indexOf(String(this.blueLinesName[i]).split('_')[1])
-                that.componentGraph[indexsource][indextarget] = 1
+                //1 connection
+                //2 filter
+                that.componentGraph[indexsource][indextarget] = that.mouseActionType.index
             }
         },
         catchConnect(option){
@@ -818,22 +819,23 @@ export default {
                 "Connection": {
                     "pic": "../../../static/Image/Connections.png",
                     "text": 'Attribute Mapping',
-                    "color": "#838DFF"
+                    "color": "#838DFF",
+                    "index": 1
                 },
                 "Filter": {
                     "pic": "../../../static/Image/filter.png",
                     "text": "Filter Condition",
-                    "color": "#70B34D"
+                    "color": "#70B34D",
+                    "index": 2
                 },
                 "Refresh": {
                     "pic": "../../../static/Image/refresh.png",
                     "text": "Refresh editor",
-                    "color": "#FFB99C"
+                    "color": "#FFB99C",
+                    "index": -1
                 }
             }
-            this.mouseActionType.pic = content[type].pic;
-            this.mouseActionType.text = content[type].text;
-            this.mouseActionType.color = content[type].color;
+            this.mouseActionType = JSON.parse(JSON.stringify(content[type]))
             this.h5Style.background = content[type].color;
         },
         highlightHandler(){},
