@@ -173,6 +173,7 @@ export default {
     reDraw(newVal) {
       // console.log("进入到子组件来了")
       // console.log(newVal)
+      if (newVal.id == this.id){
       this.myChart.setOption({
         title: {
           text: newVal.metaConfig.title
@@ -188,6 +189,7 @@ export default {
           data: this.comArray(newVal.data, Dataconfig.baryname)
         }
       });
+      }
       // echarts.init(document.getElementById(this.id)).resize();
     },
     comArray(data, name) {
@@ -200,6 +202,7 @@ export default {
     }
   },
   mounted() {
+    this.baseData.id = this.id;
     this.draw();
     var erd = elementResizeDetectorMaker();
     erd.listenTo(document.getElementById(this.id), element => {

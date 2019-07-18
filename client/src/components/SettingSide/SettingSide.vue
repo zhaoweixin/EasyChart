@@ -258,15 +258,11 @@ export default {
     // },
     selectChartId: {
       handler(newVal){
-        var chartsList = this.$store.state.chartArray;
-        // console.log(newVal)
-        if(newVal === "dashboard"){
-          this.baseData = chartsList[0].baseData
+         if(newVal === "dashboard"){
+          this.baseData = this.$store.state.dashboardData.baseData
         } else {
-          this.baseData = chartsList[newVal].baseData
+          this.baseData = this.$store.state.chartArray[newVal].baseData
         }
-          // console.log(this.baseData);
-        
       }
     }
   },

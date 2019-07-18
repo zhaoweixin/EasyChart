@@ -81,28 +81,16 @@ export default {
     };
   },
   mounted() {
-    // console.log(this.baseData)
-    this.$store.commit("pushDataToArray", { baseData: this.baseData, i: 0 });
+    this.$store.commit("pushToDashboardData", {baseData: this.baseData, i: "dashboard" });
     this.$store.commit("changeSelectId", "dashboard");
     this.chartInit("#preview");
   },
   computed: {
     ...mapGetters(["getIsActive", "chartArray"]),
-    ...mapGetters({ storeBaseData: "getPropsData" }),
-    ...mapGetters({ charts: "getChartDataArray" })
+    // ...mapGetters({ storeBaseData: "getPropsData" }),
+    // ...mapGetters({ charts: "getChartDataArray" })
   },
   watch: {
-    // storeBaseData: {
-    //   //将改变的颜色赋值给背景色
-
-    //   handler(newVal) {
-    //     console.log(newVal)
-    //     document.getElementById("box").style.backgroundColor =
-    //       newVal.style.backgroundColor;
-    //   },
-    //   deep: true
-    // },
-    //背景颜色修改
     selectChart: {
       handler(newVal) {
         console.log(newVal)
@@ -119,41 +107,29 @@ export default {
   },
   methods: {
     changeStatic(id) {
-      //  console.log("得到ID了"+ item);
       let that = this;
-      let i = id;
       that.j = that.j + 1;
       let count = that.j;
-      console.log(count);
-      this.$store.commit("changeStatic", { index: i, value: count });
-      console.log(i);
+      this.$store.commit("changeStatic", { index: id, value: count });
     },
     getData(id) {
       //获取baseData里的内容，并传进state里
-      // this.$store.commit("commitPropsData", this.baseData);
       var re = /^[0-9]+.?[0-9]*/; //判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
       if (!re.test(id)) {
-        // console.log("dash")
         this.$store.commit("changeSelectId", "dashboard");
-        this.selectChart = this.$store.state.chartArray[0];
+        this.selectChart = this.$store.state.dashboardData;
       } else {
-        // console.log(id)
         this.$store.commit("changeSelectId", id);
         this.selectChart = this.$store.state.chartArray[id];
       }
-      console.log(this.charts);
+
     },
     callReDraw(id,newVal) {
       let that = this;
-      if (id > 0) {
-        console.log(that.$refs[id][0])
-        console.log(that.$refs[id][0].reDraw)
-        that.$refs[id][0].reDraw(newVal);
-        console.log("修改子图")
+      if (id<2000) {
+        that.$refs[id][0].reDraw(newVal); 
       } else {
-        console.log("修改dashboard");
         document.getElementById("box").style.backgroundColor = newVal.style.backgroundColor;
-
       }
     },
     applyColor() {

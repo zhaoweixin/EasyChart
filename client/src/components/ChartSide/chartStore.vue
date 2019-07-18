@@ -506,8 +506,7 @@ export default {
             j: "item" + stores.state.chartArray.length,
             color: "#f7f7f7"
           };
-          mutations.addIdToArray(stores.state, item);
-          mutations.pushDataToArray(store.state, item);
+          mutations.addToArray(stores.state, item);
         }
       });
     },
@@ -529,9 +528,9 @@ export default {
               name: "image" + random + ".png",
               data: buf
             },
-            chartIdArray: {
-              name: "chartIdArray" + random + ".json",
-              data: that.$store.state.chartIdArray
+             chartArray: {
+              name: "chartArray" + random + ".json",
+              data: that.$store.state.chartArray
             }
           };
 

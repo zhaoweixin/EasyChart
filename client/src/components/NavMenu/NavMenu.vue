@@ -79,9 +79,9 @@ export default {
               name: "image" + random + ".png",
               data: buf
             },
-            chartIdArray: {
-              name: "chartIdArray" + random + ".json",
-              data: that.$store.state.chartIdArray
+            chartArray: {
+              name: "chartArray" + random + ".json",
+              data: that.$store.state.chartArray
             }
           };
 
@@ -129,9 +129,9 @@ export default {
               name: "image" + random + ".png",
               data: buf
             },
-            chartIdArray: {
-              name: "chartIdArray" + random + ".json",
-              data: that.$store.state.chartIdArray
+            chartArray: {
+              name: "chartArray" + random + ".json",
+              data: that.$store.state.chartArray
             }
           };
 

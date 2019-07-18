@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     ...mapState({
-      chartArray: state => state.chartIdArray,
+      chartArray: state => state.chartArray,
       refreshData: state => state.chartSizeChange
     }),
     ...mapGetters({
