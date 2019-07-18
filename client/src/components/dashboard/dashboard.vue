@@ -93,7 +93,6 @@ export default {
   watch: {
     selectChart: {
       handler(newVal) {
-        console.log(newVal)
         this.callReDraw(newVal.i,newVal.baseData);
       },
       deep: true
@@ -125,6 +124,7 @@ export default {
 
     },
     callReDraw(id,newVal) {
+      
       let that = this;
       if (id<2000) {
         that.$refs[id][0].reDraw(newVal); 

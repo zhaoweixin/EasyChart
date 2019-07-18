@@ -9,7 +9,6 @@ var elementResizeDetectorMaker = require("element-resize-detector");
 import { mapState, mapGetters } from "vuex";
 import echarts from "echarts";
 import defaultData from "../../assets/baseData";
-// console.log(defaultData.barChart.baseData)
 var datamapper = [
   {
     Fieldname: "value",
@@ -172,8 +171,11 @@ export default {
     },
     reDraw(newVal) {
       // console.log("进入到子组件来了")
-      // console.log(newVal)
-      if (newVal.id == this.id){
+      console.log(newVal)
+      console.log(newVal.id)
+     console.log(this.id)
+      // if (newVal.id == this.id){
+        console.log("hskjahgjdakjga")
       this.myChart.setOption({
         title: {
           text: newVal.metaConfig.title
@@ -189,7 +191,7 @@ export default {
           data: this.comArray(newVal.data, Dataconfig.baryname)
         }
       });
-      }
+      // }
       // echarts.init(document.getElementById(this.id)).resize();
     },
     comArray(data, name) {

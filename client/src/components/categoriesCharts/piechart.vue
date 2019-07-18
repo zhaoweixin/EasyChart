@@ -96,16 +96,15 @@ export default {
         console.log("更改了wh");
       }
     },
-    storeBaseData: {
-      handler(newVal) {
-        console.log(newVal);
-        if (newVal.id == this.id) {
-          // this.chart.repaint();
-          this.chart.changeData(newVal.data);
-        }
-      },
-      deep: true
-    },
+    // storeBaseData: {
+    //   handler(newVal) {
+    //     console.log(newVal);
+    //       // this.chart.repaint();
+    //       this.chart.changeData(newVal.data);
+        
+    //   },
+    //   deep: true
+    // },
     getWeatPieData: {
       handler(newVal) {
         this.baseData.data = newVal;
@@ -152,6 +151,8 @@ export default {
       this.$store.commit("commitPropsData", this.baseData);
     },
     reDraw(newVal) {
+      console.log("jhshkjfsadhkjdh")
+      console.log(newVal)
       let reData = newVal.data;
       for (let i = 0; i < reData.length; i++) {
         reData[i].count = parseInt(reData[i].count);
