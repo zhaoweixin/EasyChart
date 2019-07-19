@@ -327,7 +327,7 @@ function sharing_data(state,payload) {
 
       for (let j=0;j<select_config.controllee.length;j++) {
         let interact_type_chart= select_config.controllee[j].type;
-        if (interact_type_chart.indexOf("chart") > -1) {
+        if (interact_type_chart.indexOf("chart") > -1) { //去掉chart
           interact_type_chart= interact_type_chart.replace("chart", "");
         }
         let Transport_Data = {
@@ -335,6 +335,8 @@ function sharing_data(state,payload) {
             interact_type_chart.toLowerCase(), payload),
           chartId:select_config.controllee[j].chartId
         }
+
+        console.log(interact_type_chart)
         state["interac" + interact_type_chart+ "Data"] = Transport_Data
       }
     }
@@ -346,14 +348,37 @@ function sameFiledName(state,payload) {
   payload.fieldname==select_config.FiledName
 
   let chartArray = state.chartArray
-  // console.log(state.interacBarData)
   if (select_config.controller.chartId ==payload.chartId){
     for( let i=0;i<select_config.controllee.length;i++){
-      let interact_type_chart= select_config.controllee[i].type.toLowerCase();
-      for (let j=0;j<chartArray.length;j++){
+      let chart_id= select_config.controllee[i].chartId
+      let index  = chart_id.charAt(chart_id.length-1)
 
+      let Transport_Data = {
+        data:find_data(chartArray[index].baseData.data,payload.select_data),
+        chartId:select_config.controllee[i].chartId
       }
+      //确定图的类型
+      let interact_type_chart= select_config.controllee[i].type;
+      if (interact_type_chart.indexOf("chart") > -1) { //去掉chart
+        interact_type_chart= interact_type_chart.replace("chart", "");
+      }
+
+      state["interac" + interact_type_chart+ "Data"] = Transport_Data
+
     }
   }
+}
+function find_data(data,filterdata) {
+  let arr=[]
 
+ for (let i=0;i<data.length;i++){
+   let data_name = data[i].name
+   if (data_name.indexOf("\r")>-1){
+     data_name=data_name.replace("\r", '')
+   }
+   if (data_name == filterdata){
+     arr.push(data[i])
+   }
+ }
+ return arr
 }
