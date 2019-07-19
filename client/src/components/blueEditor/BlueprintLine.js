@@ -222,6 +222,14 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
         }
     }
     function baseLine_handleMouseOver(d, i){
+        
+    }
+
+    function baseLine_handleMouseOut(d, i){
+        
+    }
+
+    function highLight_handle(d, i){
         d3.select(this)
             .transition()
             .duration(200)
@@ -234,7 +242,7 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
         }
     }
 
-    function baseLine_handleMouseOut(d, i){
+    function dishighLight_handle(d, i){
         d3.select(this)
             .transition()
             .duration(500)
@@ -257,6 +265,15 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
     function forceRemove(){
         attribu.container.remove()
         attribu.isDeleted = true
+    }
+    function getEndPoints_handle(){
+        let temp = {
+            "sourceX":attribu.storePoints[0][0],
+            "sourceY":attribu.storePoints[0][1],
+            "targetX":attribu.storePoints[1][0],
+            "targetY":attribu.storePoints[1][1]
+        }
+        return temp
     }
 
     //特权方法
@@ -370,6 +387,21 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
             "isDeleted": attribu.isDeleted
         }
         return re
+    }
+    this.highLight = function(){
+        highLight_handle()
+    }
+    this.dishighLight = function(){
+        dishighLight_handle()
+    }
+    this.getEndPoints = function(){
+        return getEndPoints_handle()
+    }
+    this.toDelete = function(){
+        this.isDeleted = !this.isDeleted
+    }
+    this.getdeleteStatu = function(){
+        return this.isDeleted
     }
     //对象共有属性
     //构造器
