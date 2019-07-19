@@ -56,12 +56,10 @@ import store from "../../store/store.js";
 import axios from "axios";
 import mapperdataM from "../../store/MapperDataManage.js";
 import modeConfig from "../../assets/modelConfig2.json";
-import baseData from "../../assets/baseData";
+import defaultData from "../../assets/baseData";
 import Tool from "../../store/DataMapperTools.js";
 require("webpack-jquery-ui");
 require("webpack-jquery-ui/css");
-
-console.log(modeConfig);
 var htmlToImage = require("html-to-image");
 
 const MaxLength = 2;
@@ -492,11 +490,12 @@ export default {
             $("#app .el-aside").width();
 
           console.log(chartType);
-          // console.log(baseData[chartType].baseData)
+           var testarry=$.extend(true,[],defaultData);
           var item = {
             // chartname:chartType,
+           
             chartname: chartType,
-            baseData: baseData[chartType].baseData,
+            baseData: testarry[chartType].baseData,
             x: 0,
             y: 0,
             w: 4,
@@ -506,8 +505,11 @@ export default {
             j: "item" + stores.state.chartArray.length,
             color: "#f7f7f7"
           };
-          mutations.addIdToArray(stores.state, item);
-          mutations.pushDataToArray(store.state, item);
+          // console.log(defaultData);
+          // console.log(testarry);
+          // console.log(item)
+          mutations.addToArray(stores.state, item);
+          console.log(stores.state.chartArray)
         }
       });
     },
@@ -529,9 +531,9 @@ export default {
               name: "image" + random + ".png",
               data: buf
             },
-            chartIdArray: {
-              name: "chartIdArray" + random + ".json",
-              data: that.$store.state.chartIdArray
+             chartArray: {
+              name: "chartArray" + random + ".json",
+              data: that.$store.state.chartArray
             }
           };
 

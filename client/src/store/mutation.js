@@ -14,13 +14,11 @@ const mutation = {
   pushDataSetToState(state, dataset) {
     state.chartComponentArray.push(dataset);
   },
-  addIdToArray(state, id) {
-    state.chartIdArray.push(id);
+  addToArray(state,payload) {
+    state.chartArray.push(payload);
   },
-  pushDataToArray(state, payload) {
-    console.log(payload);
-    state.chartArray[payload.i] = payload;
-    console.log(state.chartArray);
+  pushToDashboardData(state, payload) {
+    state.dashboardData= payload;
   },
   changeSelectId(state, payload) {
     state.selectChartId = payload;
@@ -37,9 +35,6 @@ const mutation = {
   // commitChange(state, payload){
   //     state.chartSizeChange = payload;
   // },
-  commitDashboardId(state, payload) {
-    state.dashboardId = payload;
-  },
   commitIsActive(state, payload) {
     state.isActive = payload;
   },

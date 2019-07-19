@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     ...mapState({
-      chartArray: state => state.chartIdArray,
+      chartArray: state => state.chartArray,
       refreshData: state => state.chartSizeChange
     }),
     ...mapGetters({
@@ -86,14 +86,39 @@ export default {
     }),
     dataMap() {
       return this.storeBaseData;
+    },
+    // setData() {
+    //   return {
+    //   metaConfig: {
+    //     title: this.baseData.metaConfig.title
+    //   },
+    //   style: {
+    //     color: this.baseData.style.color
+    //   },
+    //   id: this.baseData.id,
+    //   data: this.baseData.data,
+
+    //   button: {
+    //     method: this.baseData.button.method,
+    //     title: this.baseData.button.title
+    //   },
+    //   mapperdatas: null,
+    //   width: this.baseData.width,
+    //   height: this.baseData.height
+    // }
+    //   }
+    baseDataChange() {
+      return this.baseData;
     }
   },
   watch: {
-    refreshData: {
+    baseDataChange: {
       deep: true,
       handler() {
         //this.chart.changeSize(this.$store.state.chartSizeChange.newWidth,this.$store.state.chartSizeChange.newHeight);
         console.log("更改了wh");
+        this.chart.destroy();
+        this.initChart();
       }
     },
     storeBaseData: {
@@ -154,6 +179,9 @@ export default {
       this.$store.commit("commitPropsData", this.baseData);
     },
     reDraw(newVal) {
+      console.log("jhshkjfsadhkjdh")
+      console.log(newVal)
+      this.baseData = newVal
       let reData = newVal.data;
       for (let i = 0; i < reData.length; i++) {
         reData[i].count = parseInt(reData[i].count);

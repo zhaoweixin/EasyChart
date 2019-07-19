@@ -62,13 +62,16 @@ export default {
   },
   computed: {
     ...mapState({
-      chartArray: state => state.chartIdArray,
+      chartArray: state => state.chartArray,
       refreshData: state => state.chartChange,
     }),
       ...mapGetters({
         storeBaseData: "getPropsData",
         getWeatInterlineData: "getWeatherLineData"
-      })
+      }),
+    baseDataChange(){
+      return this.baseData
+    }
   },
   watch:{
     storeBaseData: {
@@ -89,7 +92,14 @@ export default {
         }
       },
       deep: true
-    }
+    },
+    // baseDataChange:{
+    //   handler() {
+    //       this.chart.destroy()
+    //       //this.chart.initChart()
+    //   },
+    //   deep: true
+    // }
 
   },
 
@@ -276,6 +286,7 @@ export default {
      reDraw(newVal){
       // console.log("进入到子组件来了")
       // console.log(newVal)
+      this.baseData = newVal;
       this.chart.repaint();
           this.chart.changeData(newVal.data)
     },

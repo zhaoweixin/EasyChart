@@ -135,7 +135,9 @@ export default {
         interaction: "controler"
       });
       this.myChart.on('click', (d)=>{
-        console.log(this.id)
+
+
+        console.log(d)
         let Transport_data = {}
 
         if (d.name.indexOf('\r')>-1){
@@ -170,24 +172,27 @@ export default {
     },
     reDraw(newVal) {
       // console.log("进入到子组件来了")
-      // console.log(newVal)
-      if (newVal.id==this.id) {
-        this.myChart.setOption({
-          title: {
-            text: newVal.metaConfig.title
-          },
-          color: newVal.style.color,
-          xAxis: [
-            {
-              data: this.comArray(newVal.data, Dataconfig.barxname)
-            }
-          ],
-          series: {
-            name: Dataconfig.dataname,
-            data: this.comArray(newVal.data, Dataconfig.baryname)
+      console.log(newVal)
+      console.log(newVal.id)
+     console.log(this.id)
+      // if (newVal.id == this.id){
+        console.log("hskjahgjdakjga")
+      this.myChart.setOption({
+        title: {
+          text: newVal.metaConfig.title
+        },
+        color: newVal.style.color,
+        xAxis: [
+          {
+            data: this.comArray(newVal.data, Dataconfig.barxname)
           }
-        });
-      }
+        ],
+        series: {
+          name: Dataconfig.dataname,
+          data: this.comArray(newVal.data, Dataconfig.baryname)
+        }
+      });
+      // }
       // echarts.init(document.getElementById(this.id)).resize();
     },
     comArray(data, name) {
@@ -200,9 +205,8 @@ export default {
     }
   },
   mounted() {
+    this.baseData.id = this.id;
     this.draw();
-
-    this.baseData.id = this.id
     var erd = elementResizeDetectorMaker();
     erd.listenTo(document.getElementById(this.id), element => {
       var width = element.offsetWidth;
@@ -215,8 +219,10 @@ export default {
   },
   watch: {
     //野
-   /* storeBaseData: {
+    storeBaseData: {
       handler(newVal) {
+
+        console.log(newVal)
         if (newVal.id == this.id) {
           this.myChart.setOption({
             title: {
@@ -233,7 +239,6 @@ export default {
               data: this.comArray(newVal.data, Dataconfig.baryname)
             }
           });
-          this.reDraw(this.baseData)
         }
       },
       deep: true
@@ -246,7 +251,7 @@ export default {
         this.reDraw(newVal)
       },
       deep: true
-    },*/
+    },
     getWeatInterData: {
       handler(newVal) {
         if (newVal.chartId == this.id){
@@ -258,7 +263,7 @@ export default {
       },
       deep: true
     },
-   /* dataMap: {
+    dataMap: {
       handler(newVal) {
         if (newVal.id == this.id) {
           if (newVal.datamappers === undefined) {
@@ -277,7 +282,7 @@ export default {
         }
       },
       deep: true
-    }*/
+    }
   }
 };
 </script>

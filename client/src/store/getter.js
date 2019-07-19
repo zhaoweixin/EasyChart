@@ -3,13 +3,10 @@ const getter = {
         return state.someLists.filter(() => param.done)
     },
     chartArray:state => {
-        return state.chartIdArray
+        return state.chartArray
     },
     layout:state =>{
         return state.rects
-    },
-    dashboardId: state=>{
-        return state.dashboardId
     },
     getIsActive: state=>{
         return state.isActive
