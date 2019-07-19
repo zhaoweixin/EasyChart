@@ -14,26 +14,6 @@
                                 <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="12">
                                     <vs-card>
                                     <div slot="header">
-                                        <h5 v-bind:style="h5Style">
-                                        State Boxs
-                                        </h5>
-                                    </div>
-                                    <div slot="media">
-                                        <img :src="mouseActionType.pic" style="width:50px; margin-left:37%">
-                                    </div>
-                                    <div>
-                                        <span>{{mouseActionType.text}}</span>
-                                    </div>
-                                    </vs-card>
-                                </vs-col>
-                            </vs-row>
-                        </div>
-
-                        <div style="padding-top:5%">
-                            <vs-row vs-justify="center">
-                                <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="12">
-                                    <vs-card>
-                                    <div slot="header">
                                         <h5>
                                         Tool Boxs
                                         </h5>
@@ -42,22 +22,19 @@
                                     <div>
                                         <el-collapse v-model="activeNames">
                                             <el-collapse-item title="Mouse Action" name="1">
-                                                <el-row>
-                                                    <vs-button type="line" style="width:150px" color="#838DFF" @click="changeMouseActionType('Connection')">Connection</vs-button>
+                                                <el-row style="padding-top:10px">
+                                                    <vs-radio v-model="radios" vs-value="Connection" @click="changeMouseActionType('Connection')">Connection</vs-radio>
                                                 </el-row>
-                                                <el-row>
-                                                    <vs-button type="line" style="width:150px" color="#70B34D" @click="changeMouseActionType('Filter')">Filter</vs-button>
+                                                <el-row style="padding-top:10px">
+                                                    <vs-radio color="success" v-model="radios" vs-value="Filter" @click="changeMouseActionType('Filter')">Filter</vs-radio>
+                                                </el-row>
+                                                <el-row style="padding-top:10px">
+                                                    <vs-radio color="warning" v-model="radios" vs-value="Highlight" @click="changeMouseActionType('Highlight')">Highlight</vs-radio>
                                                 </el-row>
                                             </el-collapse-item>
                                             <el-collapse-item title="Focus" name="2">
                                                 <el-row>
-                                                    <vs-button type="line" style="width:150px" color="grey" @click="highlightHandler">Highlight</vs-button>
-                                                </el-row>
-                                                <el-row>
-                                                    <vs-button type="line" style="width:150px" color="grey" @click="updateSubChart">UpdateSubChart</vs-button>
-                                                </el-row>
-                                                <el-row>
-                                                    <vs-button type="line" style="width:150px" color="#FFB99C" @click="refresh">Refresh</vs-button>
+                                                    <vs-button type="flat" style="width:150px" color="#B81D17" @click="refresh">Refresh</vs-button>
                                                 </el-row>
                                             </el-collapse-item>
                                         </el-collapse>
@@ -79,7 +56,13 @@
                             </el-row>
                         </el-header>
                         <el-main>
-                            <div id='preview' style="background:rgba(0,0,0,0.05); box-shadow:0 2px 12px 0 rgba(0,0,0, 0.1)"><svg id ='editorborad'></svg></div>
+                            <div id='preview' style="background:rgba(0,0,0,0.05); box-shadow:0 2px 12px 0 rgba(0,0,0, 0.1)">
+                                <div class="panelButtons" style="position:absolute; padding:1%">
+                                        <vs-button radius color="primary" type="filled" icon="delete" @click="deleteLine()"></vs-button>
+                                        <vs-button radius color="primary" type="filled" icon="undo" style="transform:translate(15px)" ></vs-button>
+                                </div>
+                                <svg id ='editorborad'></svg>
+                            </div>
                         </el-main>
                     </el-container>
                 </el-container>
@@ -144,7 +127,6 @@ export default {
             lastBlueLines:[],
             blueLinesName:[], // store the links between components,
             mouseActionType:{
-                "pic":'../../../static/Image/Connections.png',
                 "text":'Attribute Mapping',
                 "color": "#838DFF",
                 "index": 1
@@ -153,6 +135,14 @@ export default {
                 'background':"#838DFF",
                 'border-radius': '7px',
                 "transition": "all .5s ease"
+            },
+            radios:'Connection',
+            dragble:{
+                "flag": false,
+                "startLoc": [],
+                "endLoc": [],
+                "clickTime": [],
+
             }
             
 
@@ -188,8 +178,8 @@ export default {
                 if(curVal.length == oldVal.length){
                 for (let i = 0; i < this.blueComponents.length; i++){
                     if(this.blueComponents[i].isDelete){
-                    that.remove(this.blueComponents[i])
-                    break;
+                        that.remove(this.blueComponents[i])
+                        break;
                     }
                     
                     let curEle = curVal[i];
@@ -199,21 +189,21 @@ export default {
                     let prePos = preEle.getPos();
 
                     if(this.blueLines.length > 0){
-                    this.blueLines.forEach(function(line, i){
-                        //寻找与组件相关的blueLines
-                        let connectInfo = line.getConnectInfo()
-                        if(connectInfo.sourceId == curEle.getId() || connectInfo.targetId == curEle.getId()){
-                        line.parentPosUpdated(
-                            curPos.dx, //delta of horizon postion
-                            curPos.dy, //delta of vertical position
-                            curEle.inPorts,
-                            curEle.outPorts,
-                            curEle.id
-                        )
-                        }
-                        curEle.resetDeltaPos();
-                        preEle.resetDeltaPos();
-                    })
+                        this.blueLines.forEach(function(line, i){
+                            //寻找与组件相关的blueLines
+                            let connectInfo = line.getConnectInfo()
+                            if(connectInfo.sourceId == curEle.getId() || connectInfo.targetId == curEle.getId()){
+                                line.parentPosUpdated(
+                                    curPos.dx, //delta of horizon postion
+                                    curPos.dy, //delta of vertical position
+                                    curEle.inPorts,
+                                    curEle.outPorts,
+                                    curEle.id
+                                )
+                            }
+                            curEle.resetDeltaPos();
+                            preEle.resetDeltaPos();
+                        })
                     }
                 }
                 }
@@ -261,6 +251,12 @@ export default {
         _components : {
             handler(val, oldVal){
                 this.addComponent(val[val.length-1])
+            },
+            deep:true
+        },
+        radios: {
+            handler(val, oldVal){
+                this.changeMouseActionType(val)
             },
             deep:true
         }
@@ -375,73 +371,83 @@ export default {
         containerListener(){
             //distinguish click and dblclick
             let that = this
-            function clickcancel() {
-                var event = d3.dispatch('click', 'dblclick')
-                function cc(selection){
-                var down,
-                    tolerance = 5,
-                    last,
-                    wait = null;
-                    // euclidean distance
-                function dist(a, b){
-                    return Math.sqrt(Math.pow(a[0] - b[0], 2), Math.pow(a[1] - b[1], 2));
-                }
-                selection.on('mousedown', function(){
-                    down = d3.mouse(document.body);
-                    last = +new Date();
-                });
-                selection.on('mouseup', function(){
-                    if (dist(down, d3.mouse(document.body)) > tolerance){
-                    return;
-                    } else {
-                    if (wait) {
-                        window.clearTimeout(wait);
-                        wait = null;
-                        event.call("dblclick", this, d3.event)
-                        //event.dblclick(d3.event);
-                    } else {
-                        wait = window.setTimeout((function(e){
-                        return function(){
-                            event.call("click", this, e)
-                            //event.click(e);
-                            wait = null;
-                        };
-                        })(d3.event), 300);
-                    }
-                    }
-                });
-                };
-                let rebind = function(target, source) {
-                    var i = 1, n = arguments.length, method;
-                    while (++i < n) target[method = arguments[i]] = d3_rebind(target, source, source[method]);
-                    return target;
-                };
-                function d3_rebind(target, source, method) {
-                    return function() {
-                        var value = method.apply(source, arguments);
-                        return value === source ? target : value;
-                    };
-                }
-                return rebind(cc, event, 'on');
-            }
             function deleteSingleLine() {
                 that.drawingLine.remove()
                 that.blueLines.pop()
                 that.mouseAction == ""
                 that.container.on("mousemove", null)
             }
-            let cc = clickcancel()
-            d3.select('#editorborad').call(cc);
-            
-            cc.on('click', function(d){
+
+            let svg = d3.select("#editorborad")
+            let rect = svg.append("rect")
+                .attr("width", 0)
+                .attr("height", 0)
+                .attr("fill", "rgba(33,20,50,0.3)")
+                .attr("stroke", "#ccc")
+                .attr("stroke-width", "2px")
+                .attr("transform", "translate(0,0)")
+                .attr("id", "squareSelect");
+
+
+            svg.on("mousedown.drag", function(d){
+                that.dragble.flag = true
+                rect.attr("transform", "translate(" + d3.event.layerX + "," + d3.event.layerY + ")");
+                that.dragble.startLoc = [d3.event.layerX, d3.event.layerY];
+                that.blueLines.forEach((d,i) => {
+                    d.dishighLight()
+                    d.toDelete()
+                })
             })
-            cc.on('dblclick', function(d){
-                
-                if(that.mouseAction == "drawing_line"){
-                    console.log("dblclick")
-                    deleteSingleLine()
+            svg.on("mousemove.drag", function(d){
+                if (d3.event.target.localName == "svg" && that.dragble.flag == true || d3.event.target.localName == "rect" && that.dragble.flag == true) {
+                    var width = d3.event.layerX - that.dragble.startLoc[0];
+                    var height = d3.event.layerY - that.dragble.startLoc[1];
+                    if (width < 0) {
+                        rect.attr("transform", "translate(" + d3.event.layerX + "," + that.dragble.startLoc[1] + ")");
+                    }
+                    if (height < 0) {
+                        rect.attr("transform", "translate(" + that.dragble.startLoc[0] + "," + d3.event.layerY + ")");
+                    }
+                    if (height < 0 && width < 0) {
+                        rect.attr("transform", "translate(" + d3.event.layerX + "," + d3.event.layerY + ")");
+                    }
+                    rect.attr("width", Math.abs(width)).attr("height", Math.abs(height))
                 }
+                
             })
+
+            svg.on("mouseup.drag", function(d){
+                if(that.dragble.flag = true){
+                    that.dragble.flag = false
+                    that.dragble.endLoc = [d3.event.layerX, d3.event.layerY]
+                    rect.attr("width", 0).attr("height", 0)
+
+                    that.blueLines.forEach((d,i) => {
+                        let ep = d.getEndPoints(),
+                            widthRange = [that.dragble.startLoc[0], that.dragble.endLoc[0]].sort(),
+                            heightRange = [that.dragble.startLoc[1], that.dragble.endLoc[1]].sort()
+                        if(( widthRange[0] < ep.sourceX && ep.sourceX < widthRange[1] && heightRange[0] < ep.sourceY && ep.sourceY < heightRange[1]) || 
+                            (widthRange[0] < ep.targetX && ep.targetX < widthRange[1] && heightRange[0] < ep.targetY && ep.targetY < heightRange[1])){
+                                console.log("in")
+                                d.highLight()
+                                d.toDelete()
+                            }
+                    })
+                }
+                
+            })
+        },
+        deleteLine(){
+            let that = this,
+                lineLines = this.blueLines.length
+            for(let i=0; i<lineLines; i++){
+                console.log(this.blueLines[i].getdeleteStatu())
+                if(this.blueLines[i].getdeleteStatu() == true){
+                    that.blueLines[i].remove()
+                    this.bluelines.split(i, 1)
+                    lineLines = lineLines - 1
+                }
+            }
         },
         addComponent(com){
             let that = this;
@@ -459,6 +465,7 @@ export default {
             //func
             const addLineEvent = function(that, com){
                 //darwing the connection line accroding to the mouse real-time position
+                console.log(that.container)
                 that.container.on("mousemove", function(d) {
                     
                     if (
@@ -817,21 +824,23 @@ export default {
         changeMouseActionType(type){
             let content = {
                 "Connection": {
-                    "pic": "../../../static/Image/Connections.png",
                     "text": 'Attribute Mapping',
                     "color": "#838DFF",
                     "index": 1
                 },
                 "Filter": {
-                    "pic": "../../../static/Image/filter.png",
                     "text": "Filter Condition",
                     "color": "#70B34D",
                     "index": 2
                 },
+                "Highlight": {
+                    "text": "Highlight Condition",
+                    "color": "#FFB429",
+                    "index": 3
+                },
                 "Refresh": {
-                    "pic": "../../../static/Image/refresh.png",
                     "text": "Refresh editor",
-                    "color": "#FFB99C",
+                    "color": "#B81D17",
                     "index": -1
                 }
             }
@@ -839,7 +848,6 @@ export default {
             this.h5Style.background = content[type].color;
         },
         highlightHandler(){},
-        updateSubChart(){},
         refresh(){
             let that = this
             let cleanAttribution = function(){

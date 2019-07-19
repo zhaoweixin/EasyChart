@@ -19,7 +19,6 @@
           <el-aside width="200px" style="border-left: 2px solid #eee9e9">
             <SettingSide></SettingSide>
           </el-aside>
-
       </el-container>
     </el-container>
   </div>

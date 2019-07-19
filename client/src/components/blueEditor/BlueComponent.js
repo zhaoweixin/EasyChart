@@ -703,4 +703,18 @@ export default class BlueComponent {
     getType(){
         return this.type
     }
+    getCirclePosition(){
+        let ports = []
+        this.inPorts.forEach( (d,i) => {
+            let x = d.x + d.parentX,
+                y = d.y + d.parentY
+            ports.push([x,y])
+        })
+        this.outPorts.forEach( (d,i) => {
+            let x = d.x + d.parentX,
+                y = d.y + d.parentY
+            ports.push([x,y])
+        })
+        return ports
+    }
 }
