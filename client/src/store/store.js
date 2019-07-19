@@ -27,11 +27,44 @@ const state = {
   interacLineData:[],   //交互先
   dataMapper:[],
   weatherData:{},
+
+  //相同数据字段配置
+  sameFiledName:{
+    "controller":{
+      chartId:'',
+      type:'Piechart'
+    },
+    "controllee":{
+      chartId:'',
+      type:'Barchart'
+    },
+    "FileName":'weather'
+  },
+  //共用数据的配置
   select_config:{
-    "controller":'Barchart',
-    "controllee":["Linechart","Scatter"],
+    "controller":
+      {
+      chartId:'item1',
+      type:'Piechart'
+      },
+    "controllee":[
+      // {
+      //   chartId:'item3',
+      // type:'Barchart'
+      // },{
+      //   chartId:'item4',
+      //   type:'Linechart'
+      // },{
+      //   chartId:'item5',
+      //   type:'Canlendar'
+      // },
+      {
+        chartId:'item2',
+        type:'Barchart'
+      }],
     'action':'filter',
-    'data':'weather'
+    // 'data':'weather'
+    "FiledName":'weather'
   }
 };
 

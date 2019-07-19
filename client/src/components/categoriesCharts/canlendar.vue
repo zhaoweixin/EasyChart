@@ -218,8 +218,12 @@
       },
       weatherCanlIntData:{
         handler(newVal){
-          this.baseData.data = this.changeObject(newVal)
-          this.$store.commit("commitPropsData",this.baseData)
+          if (newVal.chartId == this.id) {
+            this.baseData.id = newVal.chartId
+            this.baseData.data = this.changeObject(newVal.data)
+            this.$store.commit("commitPropsData", this.baseData)
+            this.reDraw(this.baseData)
+          }
         },
         deep:true
       }

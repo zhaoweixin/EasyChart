@@ -9,6 +9,7 @@ var elementResizeDetectorMaker = require("element-resize-detector");
 import { mapState, mapGetters } from "vuex";
 import echarts from "echarts";
 import defaultData from "../../assets/baseData";
+// console.log(defaultData.barChart.baseData)
 var datamapper = [
   {
     Fieldname: "value",
@@ -253,13 +254,12 @@ export default {
     },
     getWeatInterData: {
       handler(newVal) {
-
-        console.log(newVal)
-        this.baseData.data = newVal;
-
-        console.log(this.baseData)
-        this.$store.commit("commitPropsData", this.baseData);
-        this.reDraw(this.baseData)
+        if (newVal.chartId == this.id){
+          this.baseData.data = newVal.data;
+          this.baseData.id = newVal.chartId
+          this.$store.commit("commitPropsData", this.baseData);
+          // this.reDraw(this.baseData)
+        }
       },
       deep: true
     },

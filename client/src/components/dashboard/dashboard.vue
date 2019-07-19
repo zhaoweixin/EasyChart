@@ -124,10 +124,10 @@ export default {
 
     },
     callReDraw(id,newVal) {
-      
+
       let that = this;
       if (id<2000) {
-        that.$refs[id][0].reDraw(newVal); 
+        that.$refs[id][0].reDraw(newVal);
       } else {
         document.getElementById("box").style.backgroundColor = newVal.style.backgroundColor;
       }

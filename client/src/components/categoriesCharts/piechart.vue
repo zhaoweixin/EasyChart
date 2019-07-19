@@ -30,7 +30,7 @@ var datamapper = [
 export default {
   name: "Piechart",
   props: {
-    id: String,
+    id: String
     // baseData: {
     //   type:Object,
     //   default: function() {
@@ -110,7 +110,6 @@ export default {
     baseDataChange() {
       return this.baseData;
     }
-
   },
   watch: {
     baseDataChange: {
@@ -122,19 +121,22 @@ export default {
         this.initChart();
       }
     },
-    // storeBaseData: {
-    //   handler(newVal) {
-    //     console.log(newVal);
-    //       // this.chart.repaint();
-    //       this.chart.changeData(newVal.data);
-        
-    //   },
-    //   deep: true
-    // },
+    storeBaseData: {
+      handler(newVal) {
+        if (newVal.id == this.id) {
+          // this.chart.repaint();
+          this.chart.changeData(newVal.data);
+        }
+      },
+      deep: true
+    },
     getWeatPieData: {
       handler(newVal) {
-        this.baseData.data = newVal;
-        this.$store.commit("commitPropsData", this.baseData);
+        if (newVal.chartId == this.id) {
+          this.baseData.data = newVal.data;
+          this.baseData.id = newVal.chartId
+          this.$store.commit("commitPropsData", this.baseData);
+        }
       },
       deep: true
     },
@@ -197,7 +199,6 @@ export default {
       this.chart.changeData(dv);
     },
     initChart() {
-      console.log(this.baseData.metaConfig.title)
       this.chart = new G2.Chart({
         container: this.g2id,
         width: this.baseData.width,
