@@ -145,9 +145,11 @@ export default {
     },
     callReDraw(id,newVal) {
       let that = this;
+      console.log(id)
+      console.log(newVal)
       if (id > 0) {
-        console.log(that.$refs[id][0])
-        console.log(that.$refs[id][0].reDraw)
+        // console.log(that.$refs[id][0])
+        // console.log(that.$refs[id][0].reDraw)
         that.$refs[id][0].reDraw(newVal);
         console.log("修改子图")
       } else {

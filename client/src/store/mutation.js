@@ -106,22 +106,17 @@ const mutation = {
   },
 
   commitInteracWeatherData(state, payload) {
-    let select_config = state.select_config
-    for (let i = 0; i < interactive_config.length; i++) {
-      if (select_config.controller == interactive_config[i].controller) {
-        for (let j=0;j<select_config.controllee.length;j++) {
-          let interact_type_chart= select_config.controllee[j];
-          if (interact_type_chart.indexOf("chart") > -1) {
-            interact_type_chart= interact_type_chart.replace("chart", "");
-          }
-          state["interac" + interact_type_chart+ "Data"] = interationData(
-            state.weatherData.baseData,
-            interact_type_chart.toLowerCase(),
-            payload
-          )
-        }
-      }
+    if (state.select_config.hasOwnProperty("FiledName")) {
+      sameFiledName(state,payload)
+    }else {
+      sharing_data(state,payload)
     }
+
+  },
+
+  commitsameFiledNameDate(state,controller_chart_data){
+    console.log(state)
+
   },
   commitInteracLineData(state, payload) {
     state.interacLineData = interationData(
@@ -324,4 +319,46 @@ function can_data(_arr) {
   }
   //_res 二维数维中保存了 值和值的重复数
   return _res;
+}
+
+
+//共用同种数据的数据处理方法
+function sharing_data(state,payload) {
+  let select_config = state.select_config
+  console.log(payload)
+  for (let i = 0; i < interactive_config.length; i++) {
+    if (select_config.controller.type == interactive_config[i].controller&&
+      (select_config.controller.chartId == payload.chartId)) {
+
+      for (let j=0;j<select_config.controllee.length;j++) {
+        let interact_type_chart= select_config.controllee[j].type;
+        if (interact_type_chart.indexOf("chart") > -1) {
+          interact_type_chart= interact_type_chart.replace("chart", "");
+        }
+        let Transport_Data = {
+          data:interationData(state.weatherData.baseData,
+            interact_type_chart.toLowerCase(), payload),
+          chartId:select_config.controllee[j].chartId
+        }
+        state["interac" + interact_type_chart+ "Data"] = Transport_Data
+      }
+    }
+  }
+}
+//相同字段的方法
+function sameFiledName(state,payload) {
+  let select_config = state.select_config
+  payload.fieldname==select_config.FiledName
+
+  let chartArray = state.chartArray
+  // console.log(state.interacBarData)
+  if (select_config.controller.chartId ==payload.chartId){
+    for( let i=0;i<select_config.controllee.length;i++){
+      let interact_type_chart= select_config.controllee[i].type.toLowerCase();
+      for (let j=0;j<chartArray.length;j++){
+
+      }
+    }
+  }
+
 }

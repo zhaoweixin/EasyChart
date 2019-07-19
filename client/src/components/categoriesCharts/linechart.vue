@@ -82,8 +82,11 @@ export default {
     },
     getWeatInterlineData:{
       handler(newVal) {
-          this.baseData.data = newVal;
+        if (newVal.chartId == this.id) {
+          this.baseData.data = newVal.data;
+          this.baseData.id = newVal.chartId
           this.$store.commit("commitPropsData", this.baseData);
+        }
       },
       deep: true
     }

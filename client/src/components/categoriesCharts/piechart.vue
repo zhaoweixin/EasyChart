@@ -98,7 +98,6 @@ export default {
     },
     storeBaseData: {
       handler(newVal) {
-        console.log(newVal);
         if (newVal.id == this.id) {
           // this.chart.repaint();
           this.chart.changeData(newVal.data);
@@ -108,8 +107,11 @@ export default {
     },
     getWeatPieData: {
       handler(newVal) {
-        this.baseData.data = newVal;
-        this.$store.commit("commitPropsData", this.baseData);
+        if (newVal.chartId == this.id) {
+          this.baseData.data = newVal.data;
+          this.baseData.id = newVal.chartId
+          this.$store.commit("commitPropsData", this.baseData);
+        }
       },
       deep: true
     },

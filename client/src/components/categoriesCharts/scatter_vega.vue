@@ -93,12 +93,12 @@ export default {
             this.$store.commit("commitPropsData",this.baseData)
         },
         reDraw(newVal){
-                    this.baseData.style.color = newVal.style.color,
-                    this.baseData.metaConfig.title = newVal.metaConfig.title
-                    this.baseData.data = newVal.data
-
-          console.log(this.baseData)
-                    this.draw()
+          if (newVal.id == this.id) {
+            this.baseData.style.color = newVal.style.color
+            this.baseData.metaConfig.title = newVal.metaConfig.title
+            this.baseData.data = newVal.data
+            this.draw()
+          }
     },
     },
     watch:{
@@ -117,13 +117,12 @@ export default {
         handler(newVal){
 
           console.log(newVal)
-          this.baseData.data = newVal;
-          this.$store.commit("commitPropsData", this.baseData);
-
-
-          console.log("ddd")
-          console.log(this.baseData)
-          this.draw()
+          console.log(this.id)
+          if (newVal.chartId == this.id) {
+            this.baseData.data = newVal.data;
+             this.baseData.id = newVal.chartId
+            this.$store.commit("commitPropsData", this.baseData);
+          }
         },
         deep:true
       }
