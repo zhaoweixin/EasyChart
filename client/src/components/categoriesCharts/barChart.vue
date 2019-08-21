@@ -221,8 +221,6 @@ export default {
     //野
     storeBaseData: {
       handler(newVal) {
-
-        console.log(newVal)
         if (newVal.id == this.id) {
           this.myChart.setOption({
             title: {
@@ -258,7 +256,7 @@ export default {
           this.baseData.data = newVal.data;
           this.baseData.id = newVal.chartId
           this.$store.commit("commitPropsData", this.baseData);
-          // this.reDraw(this.baseData)
+          this.reDraw(this.baseData)
         }
       },
       deep: true

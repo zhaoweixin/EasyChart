@@ -44,7 +44,7 @@ const state = {
   select_config:{
     "controller":
       {
-      chartId:'item1',
+      chartId:'item0',
       type:'Piechart'
       },
     "controllee":[
@@ -59,7 +59,7 @@ const state = {
       //   type:'Canlendar'
       // },
       {
-        chartId:'item2',
+        chartId:'item1',
         type:'Barchart'
       }],
     'action':'filter',
