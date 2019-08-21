@@ -27,6 +27,8 @@ export default class BlueComponent {
         this.isLoading = true
         this.id = ''
         this.control = null
+        this.backrect = null
+        this.isSelected = false
 
         for(let key in options){
             //deep copy
@@ -55,7 +57,7 @@ export default class BlueComponent {
             })
             .attr("class", "blueComponent")
             .on('dblclick', function(d){
-                that.setDelete()
+                that.toDelete()
             })
         ////////////////////////////////
         ///Add drag event to component
@@ -165,7 +167,9 @@ export default class BlueComponent {
     //Draw the back retangle
 
     drawBack(height){
-        this.container
+
+        let that = this
+        this.backrect = this.container
             .append('rect')
             .attr('class','back')
             .attr("rx", 6)
@@ -175,6 +179,12 @@ export default class BlueComponent {
             .attr('fill', this.fill)
             .attr('stroke', this.stroke)
             .attr('stroke-width', 2)
+            .on("mouseover", function(d){
+                d3.select(this).transition().duration(150).attr('fill', "#FFCC33")
+            })
+            .on("mouseout", function(d){
+                d3.select(this).transition().duration(150).attr('fill', that.fill)
+            })
 
         //Container for the gradients
         var defs = this.container.append("defs");
@@ -478,23 +488,30 @@ export default class BlueComponent {
         this.drawOutPorts()
         }
     }
+    // 
+    highlight(){
+        let that = this
+        this.backrect.transition().duration(150).attr('fill', "#FFCC33")
+    }
+    disHightlight(){
+        let that = this
+        this.backrect.transition().duration(150).attr('fill', that.fill)
+    }
     dragstarted(node, d) {
        // d3.select(node).raise().classed("active", true);
     }
     dragged(node, d){
-        let that = this
+        var that = this
+        this.container.attr("transform", function(q){
 
-        d3.select(node).attr("transform", function(q){
-
-            that.dx = d3.event.x - that.x
-            that.dy = d3.event.y - that.y
-            that.x  = d3.event.x
-            that.y  = d3.event.y
-            d.x = d3.event.x
-            d.y = d3.event.y
+            that.dx = Math.round(d3.event.x) - that.x
+            that.dy = Math.round(d3.event.y) - that.y
+            that.x  = Math.round(d3.event.x)
+            that.y  = Math.round(d3.event.y)
+            d.x = that.x
+            d.y = that.y
             return 'translate(' + d.x + ',' + d.y + ')'
         });
-
 
         this.container.selectAll('.port')
             .attr('none', function(d){
@@ -594,10 +611,8 @@ export default class BlueComponent {
             that.container.selectAll('.binRect').attr('fill', function(d){
 
                 if(d.key <= that.filterRange[1] && d.key >= that.filterRange[0]){
-
                     return 'steelblue'
                 }
-
                 return '#ccc'
             })
         }
@@ -633,6 +648,7 @@ export default class BlueComponent {
         })
         .attr('fill','#ccc')
         .attr('stroke','none')
+        
 
         binsChart.transition()
         .duration(500)
@@ -690,11 +706,17 @@ export default class BlueComponent {
             d.name = d.parent + '&' + d.name;
         })
     }
-    setDelete(){
+    toDelete(){
         this.isDelete = !this.isDelete
     }
+    toSelected(){
+        this.isSelected = !this.isSelected
+    }
+    getSelectedStatu = function(){
+        return this.isSelected
+    }
     removeGraph(){
-        this.container.selectAll('*').remove()
+        //this.container.selectAll('*').remove()
         this.container.remove()
     }
     getId(){
@@ -716,5 +738,14 @@ export default class BlueComponent {
             ports.push([x,y])
         })
         return ports
+    }
+    getComPosition(){
+        let temp = {
+            "left": +this.x,
+            "right": +this.x + +this.width,
+            "top": +this.y,
+            "down": +this.y + +this.height
+        }
+        return temp
     }
 }

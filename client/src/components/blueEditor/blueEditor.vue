@@ -53,7 +53,7 @@
                         <el-header style="height:50px">
                             <el-row >
                                 <el-divider content-position="center" style="font-size:16px; color:#333; font-weight:700">Editor Panel</el-divider>
-                            </el-row>
+                            </el-row> 
                         </el-header>
                         <el-main>
                             <div id='preview' style="background:rgba(0,0,0,0.05); box-shadow:0 2px 12px 0 rgba(0,0,0, 0.1)">
@@ -378,6 +378,9 @@ export default {
                 that.container.on("mousemove", null)
             }
 
+            function highlightCom(range){
+                
+            }
             let svg = d3.select("#editorborad")
             let rect = svg.append("rect")
                 .attr("width", 0)
@@ -393,10 +396,12 @@ export default {
                 that.dragble.flag = true
                 rect.attr("transform", "translate(" + d3.event.layerX + "," + d3.event.layerY + ")");
                 that.dragble.startLoc = [d3.event.layerX, d3.event.layerY];
+                /*
                 that.blueLines.forEach((d,i) => {
                     d.dishighLight()
                     d.toDelete()
                 })
+                */
             })
             svg.on("mousemove.drag", function(d){
                 if (d3.event.target.localName == "svg" && that.dragble.flag == true || d3.event.target.localName == "rect" && that.dragble.flag == true) {
@@ -420,18 +425,44 @@ export default {
                 if(that.dragble.flag = true){
                     that.dragble.flag = false
                     that.dragble.endLoc = [d3.event.layerX, d3.event.layerY]
+                    let transX = rect.attr("transform").split("translate(")[1].split(',')[0]
+                    let transY = rect.attr("transform").split(",")[1].split(")")[0]
+                    let range = {
+                        "left": +transX,
+                        "right": +transX + +rect.attr("width"),
+                        "top": +transY,
+                        "down": +transY + +rect.attr("height")
+                    }
+
                     rect.attr("width", 0).attr("height", 0)
 
                     that.blueLines.forEach((d,i) => {
                         let ep = d.getEndPoints(),
                             widthRange = [that.dragble.startLoc[0], that.dragble.endLoc[0]].sort(),
                             heightRange = [that.dragble.startLoc[1], that.dragble.endLoc[1]].sort()
-                        if(( widthRange[0] < ep.sourceX && ep.sourceX < widthRange[1] && heightRange[0] < ep.sourceY && ep.sourceY < heightRange[1]) || 
-                            (widthRange[0] < ep.targetX && ep.targetX < widthRange[1] && heightRange[0] < ep.targetY && ep.targetY < heightRange[1])){
-                                console.log("in")
+
+                        if((range.left < ep.sourceX && ep.sourceX < range.right && range.top < ep.sourceY && ep.sourceY < range.down) || 
+                            (range.left < ep.targetX && ep.targetX < range.right && range.top < ep.targetY && ep.targetY < range.down)){
                                 d.highLight()
-                                d.toDelete()
+                                d.toSelected()
+                        }else{
+                            if(d.getSelectedStatu() == true){
+                                d.dishighLight()
+                                d.toSelected()
                             }
+                        }
+                    })
+                    that.blueComponents.forEach((d,i) => {
+                        let com = d.getComPosition()
+                        if(range.left < com.left && com.left < range.right && range.top < com.top && com.down < range.down){
+                            d.highlight()
+                            d.toSelected()
+                        } else {
+                            if(d.getSelectedStatu() == true){
+                                d.disHightlight()
+                                d.toSelected()
+                            }
+                        }
                     })
                 }
                 
@@ -439,15 +470,30 @@ export default {
         },
         deleteLine(){
             let that = this,
-                lineLines = this.blueLines.length
-            for(let i=0; i<lineLines; i++){
-                console.log(this.blueLines[i].getdeleteStatu())
-                if(this.blueLines[i].getdeleteStatu() == true){
-                    that.blueLines[i].remove()
-                    this.bluelines.split(i, 1)
-                    lineLines = lineLines - 1
+                lineLines = this.blueLines.length,
+                com = this.blueComponents.length
+
+            this.blueLines = this.blueLines.filter((item) => {
+                if(item.getSelectedStatu() == true){
+                    item.remove()
+                    return false
+                } else {
+                    return true
                 }
-            }
+            })
+            
+            this.blueComponents = this.blueComponents.filter((item) => {
+                console.log("components", item.getSelectedStatu())
+                if(item.getSelectedStatu() == true){
+                    item.removeGraph()
+                    //that.remove(item)
+                    return false
+                    //delete com
+                } else {
+                    return true
+                }
+            })
+
         },
         addComponent(com){
             let that = this;
@@ -465,9 +511,7 @@ export default {
             //func
             const addLineEvent = function(that, com){
                 //darwing the connection line accroding to the mouse real-time position
-                console.log(that.container)
                 that.container.on("mousemove", function(d) {
-                    
                     if (
                         that.mouseAction == "drawing_line" &&
                         that.drawingLine.getConnectInfo()["target"] == ""
@@ -748,7 +792,7 @@ export default {
             let that = this,
                 comid = com.getId(),
                 comtype = com.getType()
-
+            
             //first removeGraph bluecomponent
             com.removeGraph()
             //second find connected blueline/ removed graph/ delete in array
@@ -759,7 +803,7 @@ export default {
                     linkname = _source + "_" + _target
 
                 if(comid == _source || comid == _target){
-                that.blueLines[i].forceRemove();
+                that.blueLines[i].remove();
                 that.blueLines[i] = null;
                 that.blueLines.splice(i, 1);
                 i--;
@@ -790,10 +834,12 @@ export default {
                 delete that.selectedData[comid]
                 delete that.dataComponent[comid]
             }else if(comtype == "Viewer" || comtype == "Chart"){
+                /*
                 let index = comid.split("-")[1]
                 that.viewerbuttonbox[index]["content"] = "button" + index
                 that.viewerbuttonbox[index]["style"] = "none"
                 that.viewerbuttonbox[index]["id"] = ""
+                */
                 that.blueComponentsTypeCount[comtype] = that.blueComponentsTypeCount[comtype] + 1
             }
             that.blueComponentsTypeCount[comtype] = that.blueComponentsTypeCount[comtype] - 1

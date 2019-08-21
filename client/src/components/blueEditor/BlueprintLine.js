@@ -24,6 +24,7 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
         targetId : '',
         sourceId : '',
         isDeleted : false,
+        isSelected : false,
         coverColor : "#808080",
         randomCoverId: '',
         actionTypeIndex: -1
@@ -400,8 +401,14 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
     this.toDelete = function(){
         this.isDeleted = !this.isDeleted
     }
+    this.toSelected = function(){
+        this.isSelected = !this.isSelected
+    }
     this.getdeleteStatu = function(){
         return this.isDeleted
+    }
+    this.getSelectedStatu = function(){
+        return this.isSelected
     }
     //对象共有属性
     //构造器
