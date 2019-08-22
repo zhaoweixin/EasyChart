@@ -143,9 +143,9 @@ export default {
                 "endLoc": [],
                 "clickTime": [],
 
-            }
+            },
+            oprationStack:[]
             
-
         }
     },
     computed:{
@@ -394,6 +394,7 @@ export default {
 
             svg.on("mousedown.drag", function(d){
                 that.dragble.flag = true
+                
                 rect.attr("transform", "translate(" + d3.event.layerX + "," + d3.event.layerY + ")");
                 that.dragble.startLoc = [d3.event.layerX, d3.event.layerY];
                 /*
@@ -592,13 +593,13 @@ export default {
                 if(interactionType == "controlled"){
                     let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
                     obj['x'] = 1300;
-                    obj['y'] = 200 + gap * that.controlComponentCount["curled"];
+                    obj['y'] = 200 + Math.round(gap * that.controlComponentCount["curled"]);
                     that.controlComponentCount["curled"] ++;
                     obj['control'] = "controlled"
                 }else if(interactionType == "controler"){
                     let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
                     obj['x'] = 300;
-                    obj['y'] = 200 + gap * that.controlComponentCount["curler"];
+                    obj['y'] = 200 + Math.round(gap * that.controlComponentCount["curler"]);
                     that.controlComponentCount["curler"] ++;
                     obj['control'] = "controler"
                 }
@@ -641,6 +642,7 @@ export default {
                 }
                 that.blueComponentsTypeCount[obj.type] = that.blueComponentsTypeCount[obj.type] + 1
                 _com = new BlueComponent(that.container, obj);
+                
 
                 if(obj.inPorts.length != 0){
                     let dic = {
@@ -663,6 +665,11 @@ export default {
                     })
                     that.dataMapper[obj.id] = dic
                 }
+                //add stack
+                that.operateStack("00", {
+                    "id": obj.id,
+                    "transXY": [obj['x'], obj['y']]
+                })
                 that.blueComponents.push(_com);
                 addClickEvent2Circle(that, _com);
             }
@@ -670,6 +677,58 @@ export default {
            let _name = arguments[0]
             constructproperty(that, that.modelConfig[_name], _name)
         },
+        operateStack(status, operation, option){
+            //status : go/back
+            /*
+            [{
+                "operation": '00',
+                //00 add component 01 delete component 02 modificate component
+                //10 add line 11 delete line 12 modifi line
+                "option":{
+                    "id": '',
+                    "transXY":[]
+                }
+            },{}]
+            */
+           let that = this
+           if(status == "go"){
+               if (operation == "00"){
+                this.oprationStack.push({
+                    "operation": "00",
+                    "option": {
+                        "id": option['id']
+                    }
+                })
+                
+                } else if (operation == "01"){
+
+                } else if (operation == "02"){
+
+                } else if (operation == "10"){
+
+                } else if (operation == "11"){
+
+                } else if (operation == "12"){
+
+                }
+           }else if(status == "back"){
+               if (operation == "00"){
+                   //opt = this.operateStack.pop()
+                   //opt.option.id
+               } else if (operation == "01"){
+
+               } else if (operation == "02"){
+
+               } else if (operation == "10"){
+
+               } else if (operation == "11"){
+
+               } else if (operation == "12"){
+
+               }
+           }
+        },
+        
         buildBlueGraph(con){
             let that = this
             let connect = con.getConnectInfo()
