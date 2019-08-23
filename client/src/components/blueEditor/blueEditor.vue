@@ -58,7 +58,7 @@
                         <el-main>
                             <div id='preview' style="background:rgba(0,0,0,0.05); box-shadow:0 2px 12px 0 rgba(0,0,0, 0.1)">
                                 <div class="panelButtons" style="position:absolute; padding:1%">
-                                        <vs-button radius color="primary" type="filled" icon="delete" @click="deleteLine()"></vs-button>
+                                        <vs-button radius color="primary" type="filled" icon="delete" @click="deleteSelectedItems()"></vs-button>
                                         <vs-button radius color="primary" type="filled" icon="undo" style="transform:translate(15px)" ></vs-button>
                                 </div>
                                 <svg id ='editorborad'></svg>
@@ -394,15 +394,9 @@ export default {
 
             svg.on("mousedown.drag", function(d){
                 that.dragble.flag = true
-                
                 rect.attr("transform", "translate(" + d3.event.layerX + "," + d3.event.layerY + ")");
                 that.dragble.startLoc = [d3.event.layerX, d3.event.layerY];
-                /*
-                that.blueLines.forEach((d,i) => {
-                    d.dishighLight()
-                    d.toDelete()
-                })
-                */
+
             })
             svg.on("mousemove.drag", function(d){
                 if (d3.event.target.localName == "svg" && that.dragble.flag == true || d3.event.target.localName == "rect" && that.dragble.flag == true) {
@@ -469,9 +463,9 @@ export default {
                 
             })
         },
-        deleteLine(){
+        deleteSelectedItems(){
             let that = this,
-                lineLines = this.blueLines.length,
+                lineLines = this.blueLines.length,s
                 com = this.blueComponents.length
 
             this.blueLines = this.blueLines.filter((item) => {
@@ -484,12 +478,9 @@ export default {
             })
             
             this.blueComponents = this.blueComponents.filter((item) => {
-                console.log("components", item.getSelectedStatu())
                 if(item.getSelectedStatu() == true){
                     item.removeGraph()
-                    //that.remove(item)
                     return false
-                    //delete com
                 } else {
                     return true
                 }
@@ -505,6 +496,104 @@ export default {
             }
             that.createNewComponent(com.name)
         },
+        deleteComponent(comid){
+            // in com id
+            let that = this
+            this.blueComponents = this.blueComponents.filter((item) => {
+                if(item.getId() == comid){
+                    item.removeGraph()
+                    return false
+                } else {
+                    return true
+                }
+            })
+        },
+        addLine(){},
+        deleteLine(opt){
+            // {"status": 0/1 , options: {"comid": "comid", "linkname": "linkname"}}
+            // 0 delete line connected with components
+            // 1 delete assigned line
+            let that = this
+            if(opt["status"] == 0){
+
+                this.blueLines = this.blueLines.filter((item) => {
+                    let lineinfo = item.getConnectInfo(),
+                        _source = lineinfo.sourceId,
+                        _target = lineinfo.targetId,
+                        linkname = _source + '_' + _target
+
+                    if(opt["options"]["comid"] == _source || opt["options"]["comid"] == _target){
+                        item.remove()
+                        that.blueLinesName.filter((item2) => {
+                            if(item2 == linkname){
+                                return false
+                            } else {
+                                return true
+                            }
+                        })
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+
+            } else if(opt["status"] == 1){
+                
+            }
+        },
+        updateExstingPorts(opt){
+            // 0 updateExstingPorts, 
+            // 1 delete assign ports of components
+            // {"status": 0/1, "options":{"portsType": inPorts, "comid": comid}}
+            let that = this
+            
+            let func0 = function(opt, that){
+                let allPorts = [],
+                    portsType = opt["options"]["portsType"]
+
+                that.blueComponents.forEach(function(component,i) {
+                    //let ports = component.getAllPorts();
+                    let parmas = component.getParmas()
+                    let _inPorts = parmas["inPorts"]
+                    let _outPorts = parmas["outPorts"]
+                    let _id = parmas["id"]
+                    if (portsType == "in") {
+                        _outPorts.forEach(function(k) {
+                            //k.parent = component.id
+                            k.id = _id
+                            allPorts.push(k);
+                        });
+                        } else {
+                        _inPorts.forEach(function(k) {
+                            //k.parent = component.id
+                            k.id = _id
+                            allPorts.push(k);
+                        });
+                        }
+                });
+                that.exstingPorts = []
+                that.exstingPorts = allPorts
+            }
+            let func1 = function(opt, that){
+                let comid = opt["options"]["comid"]
+                that.exstingPorts = that.exstingPorts.filter((item) => {
+                    if(item.parentid == comid){
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+            }
+
+            if(opt["status"] == 0){
+                func0(opt, that)
+            } else if(opt["status"] == 1){
+                func1(opt, that)
+            } else {
+                console.log("error status in updateExstingPorts")
+            }
+            
+        },
         createNewComponent(){
             let that = this,
                 property = null,
@@ -518,7 +607,6 @@ export default {
                         that.drawingLine.getConnectInfo()["target"] == ""
                     ) {
                         let coordinates = d3.mouse(this);
-
                         that.drawingLine.dynamicGenerateCurveLine(coordinates);
                         that.drawingLine.findNearestPoint(coordinates, that.exstingPorts);
                     }
@@ -548,33 +636,7 @@ export default {
                 ));
                 that.blueLines.push(line);
                 that.mouseAction = "drawing_line";
-                
-                let allPorts = [];
-
-                that.blueComponents.forEach(function(component,i) {
-                    //let ports = component.getAllPorts();
-                    let parmas = component.getParmas()
-                    let _inPorts = parmas["inPorts"]
-                    let _outPorts = parmas["outPorts"]
-                    let _id = parmas["id"]
-                    if (d.type == "in") {
-                    _outPorts.forEach(function(k) {
-                        //k.parent = component.id
-                        k.id = _id
-                        allPorts.push(k);
-                    });
-                    } else {
-                    _inPorts.forEach(function(k) {
-                        //k.parent = component.id
-                        k.id = _id
-                        allPorts.push(k);
-                    });
-                    }
-                });
-
-                that.exstingPorts = []
-                that.exstingPorts = allPorts
-                //line.setExstingPorts(allPorts);
+                that.updateExstingPorts({"status": 0, "options": {"portsType": d.type}})
                 addLineEvent(that, com)
                 });
             }
@@ -585,25 +647,22 @@ export default {
                 //make sure that the viewer name equal to button content
                 obj["fill"] = that.componentTypes[obj.type].color;
                 obj["name"] = name;
-                obj['control'] = null;
+                obj['control'] = obj['interaction'];
                 obj['id'] = obj.type + '-' + that.blueComponentsTypeCount[obj.type];
-                let interactionType = obj['interaction'],
-                    chartType = obj['type']
+                let chartType = obj['type']
 
-                if(interactionType == "controlled"){
+                if(obj['interaction'] == "controlled"){
                     let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
                     obj['x'] = 1300;
                     obj['y'] = 200 + Math.round(gap * that.controlComponentCount["curled"]);
                     that.controlComponentCount["curled"] ++;
-                    obj['control'] = "controlled"
-                }else if(interactionType == "controler"){
+                }else if(obj['interaction'] == "controler"){
                     let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
                     obj['x'] = 300;
                     obj['y'] = 200 + Math.round(gap * that.controlComponentCount["curler"]);
                     that.controlComponentCount["curler"] ++;
-                    obj['control'] = "controler"
                 }
-
+                /*
                 if(chartType == 'Caculator'){
                     obj['x'] = 800;
                     obj['y'] = 500;
@@ -611,6 +670,7 @@ export default {
                     obj['x'] = 800;
                     obj['y'] = 100;
                 }
+                */
 
                 if(obj.inPorts != undefined){
                     for(let i=0; i<obj.inPorts.length; i++){
@@ -675,7 +735,7 @@ export default {
             }
 
            let _name = arguments[0]
-            constructproperty(that, that.modelConfig[_name], _name)
+           constructproperty(that, that.modelConfig[_name], _name)
         },
         operateStack(status, operation, option){
             //status : go/back
@@ -853,41 +913,15 @@ export default {
                 comtype = com.getType()
             
             //first removeGraph bluecomponent
-            com.removeGraph()
+            //com.removeGraph()
             //second find connected blueline/ removed graph/ delete in array
-            for(let i=0; i<that.blueLines.length; i++){
-                let lineinfo = that.blueLines[i].getConnectInfo()
-                let _source = lineinfo.sourceId,
-                    _target = lineinfo.targetId,
-                    linkname = _source + "_" + _target
-
-                if(comid == _source || comid == _target){
-                that.blueLines[i].remove();
-                that.blueLines[i] = null;
-                that.blueLines.splice(i, 1);
-                i--;
-
-                let index = that.blueLinesName.indexOf(linkname)
-                that.blueLinesName.splice(index, 1)
-                }
-            }
+            this.deleteLine({"status": 0, "options": {"comid": comid}})
 
             //third delete component in array
-            for(let i=0; i<this.blueComponents.length; i++){
-                if(comid == this.blueComponents[i].getId()){
-                this.blueComponents[i] = null;
-                this.blueComponents.splice(i, 1);
-
-                break;
-                }
-            }
+            that.deleteComponent(comid)
 
             //remove ports
-            for(let i=0; i<that.exstingPorts.length; i++){
-                if(comid == that.exstingPorts[i].parentid){
-                this.exstingPorts.splice(i, 1);
-                }
-            }
+            that.updateExstingPorts({"status": 1, "options": {"comid": comid}})
 
             if(comtype == "Data"){
                 delete that.selectedData[comid]
