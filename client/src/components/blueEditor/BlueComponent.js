@@ -26,9 +26,12 @@ export default class BlueComponent {
         this.time = 1
         this.isLoading = true
         this.id = ''
+
         this.control = null
         this.backrect = null
         this.isSelected = false
+        this.isDraged = false
+        this.obj = null
 
         for(let key in options){
             //deep copy
@@ -43,6 +46,7 @@ export default class BlueComponent {
             }
              //Set the initial parameter 设置初始参数
         }
+        this.obj = JSON.parse(JSON.stringify(options))
 
         this.width = this.name.length > 15 ? this.name.length * 10 : 180
         this.height = this.inPorts.length > this.outPorts.length ? 50 + this.inPorts.length * 30 : 50 + this.outPorts.length * 30
@@ -62,7 +66,7 @@ export default class BlueComponent {
         ////////////////////////////////
         ///Add drag event to component
         ///////////////////////////////
-
+        
         this.container.call(d3.drag()
             .on("start", function(d){
                 that.dragstarted(this, d)
@@ -221,7 +225,6 @@ export default class BlueComponent {
 
         this.drawInPorts()
         this.drawOutPorts()
-
     }
     drawInPorts(){
         let that = this
@@ -467,9 +470,7 @@ export default class BlueComponent {
             .text(function(d,i){
                 return d
             })
-
-
-    }
+        }
 
     }
     draw(type){
@@ -498,31 +499,34 @@ export default class BlueComponent {
         this.backrect.transition().duration(150).attr('fill', that.fill)
     }
     dragstarted(node, d) {
+        //this.isDraged = true
        // d3.select(node).raise().classed("active", true);
     }
     dragged(node, d){
         var that = this
-        this.container.attr("transform", function(q){
-
-            that.dx = Math.round(d3.event.x) - that.x
-            that.dy = Math.round(d3.event.y) - that.y
-            that.x  = Math.round(d3.event.x)
-            that.y  = Math.round(d3.event.y)
-            d.x = that.x
-            d.y = that.y
-            return 'translate(' + d.x + ',' + d.y + ')'
-        });
-
-        this.container.selectAll('.port')
-            .attr('none', function(d){
-            d.parentX = that.x
-            d.parentY = that.y
-        })
-
+            
+            d3.select(node).attr("transform", function(q){
+                that.dx = d3.event.x - that.x
+                that.dy = d3.event.y - that.y
+                that.x  = d3.event.x
+                that.y  = d3.event.y
+                d.x = that.x
+                d.y = that.y
+                return 'translate(' + d.x + ',' + d.y + ')'
+            });
+    
+            this.container.selectAll('.port')
+                .attr('none', function(d){
+                d.parentX = that.x
+                d.parentY = that.y
+            })
     }
     dragended(node,d) {
+        
         //d3.select(node).classed("active", false);
     }
+
+
     //Get all the ports' circles
     getAllCircles(){
 
@@ -721,6 +725,9 @@ export default class BlueComponent {
     }
     getId(){
         return this.id
+    }
+    getObj(){
+        return this.obj
     }
     getType(){
         return this.type

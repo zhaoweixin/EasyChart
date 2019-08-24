@@ -13,45 +13,41 @@
                             <vs-row vs-justify="center">
                                 <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="12">
                                     <vs-card>
-                                    <div slot="header">
-                                        <h5>
-                                        Tool Boxs
-                                        </h5>
-                                    </div>
+                                        <div slot="header">
+                                            <h5>
+                                            Tool Boxs
+                                            </h5>
+                                        </div>
 
-                                    <div>
-                                        <el-collapse v-model="activeNames">
-                                            <el-collapse-item title="Mouse Action" name="1">
-                                                <el-row style="padding-top:10px">
-                                                    <vs-radio v-model="radios" vs-value="Connection" @click="changeMouseActionType('Connection')">Connection</vs-radio>
-                                                </el-row>
-                                                <el-row style="padding-top:10px">
-                                                    <vs-radio color="success" v-model="radios" vs-value="Filter" @click="changeMouseActionType('Filter')">Filter</vs-radio>
-                                                </el-row>
-                                                <el-row style="padding-top:10px">
-                                                    <vs-radio color="warning" v-model="radios" vs-value="Highlight" @click="changeMouseActionType('Highlight')">Highlight</vs-radio>
-                                                </el-row>
-                                            </el-collapse-item>
-                                            <el-collapse-item title="Focus" name="2">
-                                                <el-row>
-                                                    <vs-button type="flat" style="width:150px" color="#B81D17" @click="refresh">Refresh</vs-button>
-                                                </el-row>
-                                            </el-collapse-item>
-                                        </el-collapse>
-                                    </div>
+                                        <div>
+                                            <el-collapse v-model="activeNames">
+                                                <el-collapse-item title="Mouse Action" name="1">
+                                                    <el-row style="padding-top:10px">
+                                                        <vs-radio v-model="radios" vs-value="Connection" @click="changeMouseActionType('Connection')">Connection</vs-radio>
+                                                    </el-row>
+                                                    <el-row style="padding-top:10px">
+                                                        <vs-radio color="success" v-model="radios" vs-value="Filter" @click="changeMouseActionType('Filter')">Filter</vs-radio>
+                                                    </el-row>
+                                                    <el-row style="padding-top:10px">
+                                                        <vs-radio color="warning" v-model="radios" vs-value="Highlight" @click="changeMouseActionType('Highlight')">Highlight</vs-radio>
+                                                    </el-row>
+                                                </el-collapse-item>
+                                                <el-collapse-item title="Focus" name="2">
+                                                    <el-row>
+                                                        <vs-button type="flat" style="width:150px" color="#B81D17" @click="refresh">Refresh</vs-button>
+                                                    </el-row>
+                                                </el-collapse-item>
+                                            </el-collapse>
+                                        </div>
                                     </vs-card>
                                 </vs-col>
                             </vs-row>
                         </div>
+                    </el-aside>
 
-                        <div>
-                            
-                        </div>
-                        
-                        </el-aside>
                     <el-container style="padding-left:2%">
                         <el-header style="height:50px">
-                            <el-row >
+                            <el-row>
                                 <el-divider content-position="center" style="font-size:16px; color:#333; font-weight:700">Editor Panel</el-divider>
                             </el-row> 
                         </el-header>
@@ -59,7 +55,7 @@
                             <div id='preview' style="background:rgba(0,0,0,0.05); box-shadow:0 2px 12px 0 rgba(0,0,0, 0.1)">
                                 <div class="panelButtons" style="position:absolute; padding:1%">
                                         <vs-button radius color="primary" type="filled" icon="delete" @click="deleteSelectedItems()"></vs-button>
-                                        <vs-button radius color="primary" type="filled" icon="undo" style="transform:translate(15px)" ></vs-button>
+                                        <vs-button radius color="primary" type="filled" icon="undo" @click="operateStack('back')" style="transform:translate(15px)" ></vs-button>
                                 </div>
                                 <svg id ='editorborad'></svg>
                             </div>
@@ -144,7 +140,8 @@ export default {
                 "clickTime": [],
 
             },
-            oprationStack:[]
+            operationStack:[],
+            backStatus: false
             
         }
     },
@@ -178,7 +175,14 @@ export default {
                 if(curVal.length == oldVal.length){
                 for (let i = 0; i < this.blueComponents.length; i++){
                     if(this.blueComponents[i].isDelete){
-                        that.remove(this.blueComponents[i])
+                        let comid = this.blueComponents[i].getId(),
+                            obj = this.blueComponents[i].getObj()
+                        that.deleteComponent({"status": 0, "options": {"comid": comid}})
+                        if(that.backStatus == false){
+                            that.operateStack("go", "01", {"id": comid, "comobj": obj})
+                        } else {
+                            that.operateStack = false
+                        }
                         break;
                     }
                     
@@ -464,58 +468,201 @@ export default {
             })
         },
         deleteSelectedItems(){
-            let that = this,
-                lineLines = this.blueLines.length,s
-                com = this.blueComponents.length
-
-            this.blueLines = this.blueLines.filter((item) => {
-                if(item.getSelectedStatu() == true){
-                    item.remove()
-                    return false
-                } else {
-                    return true
-                }
-            })
-            
-            this.blueComponents = this.blueComponents.filter((item) => {
-                if(item.getSelectedStatu() == true){
-                    item.removeGraph()
-                    return false
-                } else {
-                    return true
-                }
-            })
+            let that = this
+            this.deleteLine({"status": 2})
+            this.deleteComponent({"status": 1})
 
         },
         addComponent(com){
-            let that = this;
+            let that = this,
+                _com = null,
+                options = {"flag": false, "obj": null}
             if(com.interaction == "controler"){
                 that.controlComponentCount['controler'] ++
             }else if(com.interaction == "controlled"){
                 that.controlComponentCount['controlled'] ++
             }
-            that.createNewComponent(com.name)
+
+            const addClickEvent2Circle = function(that, com){
+                //boundind the click event to the circles which represent the ports in component
+                //after click the circle, there will new a line in canvas
+                com.getAllCircles().on("click", function(d) {
+                    let opt = {
+                    "com": d, //port
+                    "container": that.container,
+                    "coverColor": that.mouseActionType.color,
+                    "mouseActionType": that.mouseActionType,
+                    "id": "blueLines-" + that.blueLines.length
+                   }
+                that.addLine(opt)
+                });
+            }
+            const constructproperty = function(that, property, name, options){
+                let obj = null
+                let calculateObj = function(that, tobj, name){
+                    //according to this.blueComponentsTypeCount construct id and add 1
+                    //make inports outports full
+                    //make sure that the viewer name equal to button content
+                    let obj = JSON.parse(JSON.stringify(tobj))
+                    obj["fill"] = that.componentTypes[obj.type].color;
+                    obj["name"] = name;
+                    obj['control'] = obj['interaction'];
+                    obj['id'] = obj.type + '-' + that.blueComponentsTypeCount[obj.type];
+
+                    if(obj['interaction'] == "controlled"){
+                        let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
+                        obj['x'] = 1300;
+                        obj['y'] = 200 + Math.round(gap * that.controlComponentCount["curled"]);
+                        that.controlComponentCount["curled"] ++;
+                    }else if(obj['interaction'] == "controler"){
+                        let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
+                        obj['x'] = 300;
+                        obj['y'] = 200 + Math.round(gap * that.controlComponentCount["curler"]);
+                        that.controlComponentCount["curler"] ++;
+                    }
+
+                    if(obj.inPorts != undefined){
+                        for(let i=0; i<obj.inPorts.length; i++){
+                            obj.inPorts[i]["parentX"] = obj['x'];
+                            obj.inPorts[i]["parentY"] = obj['y'];
+                            obj.inPorts[i]["parent"] = obj['name'];
+                            obj.inPorts[i]["parentid"] = obj['id'];
+                        }
+                    }
+                    if(obj.type != "Layout"){
+                        //layout do not have layout
+                        if(obj.outPorts != undefined){
+                            for(let i=0; i<obj.outPorts.length; i++){
+                                obj.outPorts[i]["parentX"] = obj['x'];
+                                obj.outPorts[i]["parentY"] = obj['y'];
+                                obj.outPorts[i]["parent"] = obj['name'];
+                                obj.outPorts[i]["parentid"] = obj['id'];
+                            }
+                        }
+                    }else if(obj.type == "Layout"){
+                        that.layoutIdName[obj.id] = {}
+                        that.layoutIdName[obj.id]["name"] = obj.name
+                        that.layoutIdName[obj.id]["ref"] = "msg" + "-" + obj.name.split(" ")[1]
+                    }
+                    return obj
+                }
+                if(options.flag == false){
+                    obj = calculateObj(that, JSON.parse(JSON.stringify(property)), name)
+                } else {
+                    obj = JSON.parse(JSON.stringify(options.obj))
+                }
+                
+                
+                if(obj.type == "Chart"){
+                    let propertiesname = obj.name + "-" + that.comChartCount[obj.name];
+                    that.comChartCount[obj.name] = that.comChartCount[obj.name] + 1
+                }
+                that.blueComponentsTypeCount[obj.type] = that.blueComponentsTypeCount[obj.type] + 1
+                _com = new BlueComponent(that.container, obj);
+                that.blueComponents.push(_com);
+                that.updateDataMapper({
+                    "status": 0,
+                    "options":{
+                        "obj": obj
+                    }
+                })
+                //add stack
+                if(that.backStatus == false){
+                    that.operateStack("go", "00", {
+                        "id": obj.id,
+                        "comobj": obj
+                    })
+                }else{
+                    that.backStatus = false
+                }
+                
+                addClickEvent2Circle(that, _com);
+            }
+            
+            if(arguments[1] != undefined){
+                options.flag = true
+                options.obj = JSON.parse(JSON.stringify(arguments[1]))
+            }
+            constructproperty(that, that.modelConfig[com["name"]], com["name"], options)
+            //that.createNewComponent(com.name)
         },
-        deleteComponent(comid){
+        deleteComponent(opt){
+            // {"status": 0/1, "options": {"comid": comid}}
+            // 0 delete assigned component
+            // 1 delete selected components
             // in com id
             let that = this
-            this.blueComponents = this.blueComponents.filter((item) => {
-                if(item.getId() == comid){
+            if(opt["status"] == 0){
+                this.blueComponents = this.blueComponents.filter((item) => {
+                    if(item.getId() == opt["options"]["comid"]){
+                        let obj = item.getObj()
+                        that.comChartCount[obj.name] = that.comChartCount[obj.name] - 1
+                        that.blueComponentsTypeCount[obj.type] = that.blueComponentsTypeCount[obj.type] - 1
+                        item.removeGraph()
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+                delete this.dataMapper[opt["options"]["comid"]]
+            } else if(opt["status"] == 1){
+                this.blueComponents = this.blueComponents.filter((item) => {
+                if(item.getSelectedStatu() == true){
                     item.removeGraph()
-                    return false
-                } else {
-                    return true
-                }
-            })
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+            } else {
+                console.log("error status in deleteComponent")
+            }
         },
-        addLine(){},
+        addLine(opt){
+            /*
+            {   
+                "com": d,
+                "container": that.container,
+                "coverColor": coverColor,
+                "mouseActionType": that.mouseActionType
+            }
+            */
+            let that = this
+            const addLineEvent = function(that){
+                //darwing the connection line accroding to the mouse real-time position
+                that.container.on("mousemove", function(d) {
+                    if (
+                        that.mouseAction == "drawing_line" &&
+                        that.drawingLine.getConnectInfo()["target"] == ""
+                    ){
+                        let coordinates = d3.mouse(this);
+                        that.drawingLine.dynamicGenerateCurveLine(coordinates);
+                        that.drawingLine.findNearestPoint(coordinates, that.exstingPorts);
+                    }
+                });
+            }
+            opt.container = that.container
+
+            let line = (that.drawingLine = new BlueprintLine(opt))
+
+            if(that.backStatus == false){
+                that.operateStack("go", "10", {"comobj": opt })
+            } else {
+                that.backStatus = false
+            }
+
+            this.blueLines.push(line)
+            this.mouseAction = "drawing_line";
+            this.updateExstingPorts({"status": 0, "options": {"portsType": opt.com.type}})
+            addLineEvent(that)
+        },
         deleteLine(opt){
             // {"status": 0/1 , options: {"comid": "comid", "linkname": "linkname"}}
             // 0 delete line connected with components
             // 1 delete assigned line
+            // 2 delete selected line
             let that = this
             if(opt["status"] == 0){
-
                 this.blueLines = this.blueLines.filter((item) => {
                     let lineinfo = item.getConnectInfo(),
                         _source = lineinfo.sourceId,
@@ -538,7 +685,37 @@ export default {
                 })
 
             } else if(opt["status"] == 1){
+                this.blueLines = this.blueLines.filter((item) => {
+                    if(item.getId() == opt.id){
+                        item.remove()
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+                if(that.backStatus == false){
+                    that.operateStack("go", "11", {"comobj": opt})
+                } else {
+                    that.backStatus = false
+                }
                 
+            } else if(opt["status"] == 2){
+                let option = null
+                this.blueLines = this.blueLines.filter((item) => {
+                    if(item.getSelectedStatu() == true){
+
+                        option = item.getOpt()
+                        item.remove()
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+                if(that.backStatus == false){
+                    that.operateStack("go", "11", {"comobj": option})
+                } else {
+                    that.backStatus = false
+                }
             }
         },
         updateExstingPorts(opt){
@@ -594,116 +771,12 @@ export default {
             }
             
         },
-        createNewComponent(){
-            let that = this,
-                property = null,
-                _com = null;
-            //func
-            const addLineEvent = function(that, com){
-                //darwing the connection line accroding to the mouse real-time position
-                that.container.on("mousemove", function(d) {
-                    if (
-                        that.mouseAction == "drawing_line" &&
-                        that.drawingLine.getConnectInfo()["target"] == ""
-                    ) {
-                        let coordinates = d3.mouse(this);
-                        that.drawingLine.dynamicGenerateCurveLine(coordinates);
-                        that.drawingLine.findNearestPoint(coordinates, that.exstingPorts);
-                    }
-                });
-            }
-            const addClickEvent2Circle = function(that, com){
-                //boundind the click event to the circles which represent the ports in component
-                //after click the circle, there will new a line in canvas
-                com.getAllCircles().on("click", function(d) {
-                let coverType = com.getType(),
-                        coverColor = that.lineColor[coverType],
-                        params = com.getParmas(),
-                        x = d.parentX + d.x,
-                        y = d.parentY + d.y,
-                        sourceid = params.id,
-                        nowColor = that.mouseActionType.color;
-                coverColor = nowColor
-
-                let line = (that.drawingLine = new BlueprintLine(
-                    that.container,
-                    params.name,
-                    [x, y],
-                    d,
-                    sourceid,
-                    coverColor,
-                    that.mouseActionType.index
-                ));
-                that.blueLines.push(line);
-                that.mouseAction = "drawing_line";
-                that.updateExstingPorts({"status": 0, "options": {"portsType": d.type}})
-                addLineEvent(that, com)
-                });
-            }
-            const constructproperty = function(that, property, name){
-                let obj = JSON.parse(JSON.stringify(property))
-                //according to this.blueComponentsTypeCount construct id and add 1
-                //make inports outports full
-                //make sure that the viewer name equal to button content
-                obj["fill"] = that.componentTypes[obj.type].color;
-                obj["name"] = name;
-                obj['control'] = obj['interaction'];
-                obj['id'] = obj.type + '-' + that.blueComponentsTypeCount[obj.type];
-                let chartType = obj['type']
-
-                if(obj['interaction'] == "controlled"){
-                    let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
-                    obj['x'] = 1300;
-                    obj['y'] = 200 + Math.round(gap * that.controlComponentCount["curled"]);
-                    that.controlComponentCount["curled"] ++;
-                }else if(obj['interaction'] == "controler"){
-                    let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
-                    obj['x'] = 300;
-                    obj['y'] = 200 + Math.round(gap * that.controlComponentCount["curler"]);
-                    that.controlComponentCount["curler"] ++;
-                }
-                /*
-                if(chartType == 'Caculator'){
-                    obj['x'] = 800;
-                    obj['y'] = 500;
-                }else if(chartType == 'Processor'){
-                    obj['x'] = 800;
-                    obj['y'] = 100;
-                }
-                */
-
-                if(obj.inPorts != undefined){
-                    for(let i=0; i<obj.inPorts.length; i++){
-                        obj.inPorts[i]["parentX"] = obj['x'];
-                        obj.inPorts[i]["parentY"] = obj['y'];
-                        obj.inPorts[i]["parent"] = obj['name'];
-                        obj.inPorts[i]["parentid"] = obj['id'];
-                    }
-                }
-                if(obj.type != "Layout"){
-                    //layout do not have layout
-                    if(obj.outPorts != undefined){
-                        for(let i=0; i<obj.outPorts.length; i++){
-                            obj.outPorts[i]["parentX"] = obj['x'];
-                            obj.outPorts[i]["parentY"] = obj['y'];
-                            obj.outPorts[i]["parent"] = obj['name'];
-                            obj.outPorts[i]["parentid"] = obj['id'];
-                        }
-                    }
-                }else if(obj.type == "Layout"){
-                    that.layoutIdName[obj.id] = {}
-                    that.layoutIdName[obj.id]["name"] = obj.name
-                    that.layoutIdName[obj.id]["ref"] = "msg" + "-" + obj.name.split(" ")[1]
-                }
-
-                if(obj.type == "Chart"){
-                    let propertiesname = obj.name + "-" + that.comChartCount[obj.name];
-                    that.comChartCount[obj.name] = that.comChartCount[obj.name] + 1
-                }
-                that.blueComponentsTypeCount[obj.type] = that.blueComponentsTypeCount[obj.type] + 1
-                _com = new BlueComponent(that.container, obj);
-                
-
+        updateDataMapper(opt){
+            // {"status": 0/1, options: {"obj": obj}}
+            // 0 add component and update datamapper
+            let that = this
+            if(opt.status == 0){
+                let obj = opt.options.obj
                 if(obj.inPorts.length != 0){
                     let dic = {
                         "name": obj.name,
@@ -712,7 +785,7 @@ export default {
                         "control": obj.control,
                         "mapper":[]
                     }
-                    obj.inPorts.forEach( (d,i) => {
+                    obj.inPorts.forEach((d,i) => {
                         dic["mapper"].push({
                             "dataname": d.name,
                             "dataType": "string",
@@ -723,19 +796,10 @@ export default {
                             "alias": null
                         })
                     })
+
                     that.dataMapper[obj.id] = dic
                 }
-                //add stack
-                that.operateStack("00", {
-                    "id": obj.id,
-                    "transXY": [obj['x'], obj['y']]
-                })
-                that.blueComponents.push(_com);
-                addClickEvent2Circle(that, _com);
             }
-
-           let _name = arguments[0]
-           constructproperty(that, that.modelConfig[_name], _name)
         },
         operateStack(status, operation, option){
             //status : go/back
@@ -746,44 +810,80 @@ export default {
                 //10 add line 11 delete line 12 modifi line
                 "option":{
                     "id": '',
-                    "transXY":[]
+                    "comobj": obj
                 }
             },{}]
             */
            let that = this
            if(status == "go"){
                if (operation == "00"){
-                this.oprationStack.push({
+                   //add bluecomponent
+                this.operationStack.push({
                     "operation": "00",
-                    "option": {
-                        "id": option['id']
+                    "options": {
+                        "id": option['id'],
+                        "comobj": option["comobj"]
                     }
                 })
-                
                 } else if (operation == "01"){
-
+                    //delete bluecomponent
+                    this.operationStack.push({
+                        "operation": "01",
+                        "options": {
+                            "id": option["id"],
+                            "comobj": option["comobj"]
+                        }
+                    })
                 } else if (operation == "02"){
-
+                    //change bluecomponent
                 } else if (operation == "10"){
-
+                    //add blueline
+                    this.operationStack.push({
+                        "operation": "10",
+                        "options": {
+                            "comobj": option["comobj"]
+                        }
+                    })
                 } else if (operation == "11"){
-
+                    //delete blueline
+                    this.operationStack.push({
+                        "operation": "11",
+                        "options": {
+                            "comobj": option["comobj"]
+                        }
+                    })
                 } else if (operation == "12"){
-
+                    //change blueline
                 }
            }else if(status == "back"){
-               if (operation == "00"){
-                   //opt = this.operateStack.pop()
-                   //opt.option.id
-               } else if (operation == "01"){
+               let opt = this.operationStack.pop()
+               if (opt.operation == "00"){
+                   this.backStatus = true
+                   this.deleteComponent({
+                       "status": 0,
+                       "options": {
+                           "comid": opt.options.id
+                       }
+                   })
+               } else if (opt.operation == "01"){
+                   this.backStatus = true
+                   let interaction = opt["options"]["comobj"]["interaction"],
+                        name = opt["options"]["comobj"]["name"]
+                   this.addComponent(
+                       {"interaction": interaction, "name": name},
+                        opt.options.comobj)
+               } else if (opt.operation == "02"){
 
-               } else if (operation == "02"){
-
-               } else if (operation == "10"){
-
-               } else if (operation == "11"){
-
-               } else if (operation == "12"){
+               } else if (opt.operation == "10"){
+                   this.backStatus = true
+                   this.deleteLine({
+                       "status": 1,
+                       "options": opt.options.comobj
+                   })
+               } else if (opt.operation == "11"){
+                   this.backStatus = true
+                   this.addLine(opt.options.comobj)
+               } else if (opt.operation == "12"){
 
                }
            }
@@ -918,7 +1018,7 @@ export default {
             this.deleteLine({"status": 0, "options": {"comid": comid}})
 
             //third delete component in array
-            that.deleteComponent(comid)
+            that.deleteComponent({"status": 0, "options": {"comid": comid}})
 
             //remove ports
             that.updateExstingPorts({"status": 1, "options": {"comid": comid}})
@@ -927,12 +1027,6 @@ export default {
                 delete that.selectedData[comid]
                 delete that.dataComponent[comid]
             }else if(comtype == "Viewer" || comtype == "Chart"){
-                /*
-                let index = comid.split("-")[1]
-                that.viewerbuttonbox[index]["content"] = "button" + index
-                that.viewerbuttonbox[index]["style"] = "none"
-                that.viewerbuttonbox[index]["id"] = ""
-                */
                 that.blueComponentsTypeCount[comtype] = that.blueComponentsTypeCount[comtype] + 1
             }
             that.blueComponentsTypeCount[comtype] = that.blueComponentsTypeCount[comtype] - 1
@@ -1044,7 +1138,6 @@ export default {
                 if(that.blueLines[i].getConnectInfo().isDeleted == "true"){
                     that.blueLines.splice(i,1)
                     templength = templength - 1
-                    console.log(true)
                     }
                 }
             }
