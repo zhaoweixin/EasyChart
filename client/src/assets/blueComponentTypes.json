@@ -3,7 +3,7 @@
     "Chart": {
         "name": "Chart", 
         "childrens": ["Barchart", "Linechart", "Scatterplot", "Boxplot", "Stripplot", "Areaplot", "Circle", "ErrorBar", "ErrorBand", "Reacplot"],
-        "color": "#967ADC"
+        "color": "rgb(145, 145, 145)"
     }, 
     "Caculator": { 
         "name": "Caculator", 

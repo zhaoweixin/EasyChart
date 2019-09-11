@@ -295,7 +295,7 @@ let TextBlueLine = function(option){
         attribu.sourceParent = option.com.parent 
         attribu.sourceId = option.com.parentid
         attribu.coverColor = option.coverColor
-        attribu.actionTypeIndex = option.actionTypeIndex
+        attribu.actionTypeIndex = option.mouseActionType
         attribu.id = option.id
         attribu.randomCoverId = "linearColor" + String(new Date()-0)
         attribu.opt = JSON.parse(JSON.stringify(option))
@@ -369,6 +369,8 @@ let TextBlueLine = function(option){
             
                 attribu.isWaitPath == false
                 attribu.targetId = nearPoints[0].ID
+                
+                console.log("nearPoints", nearPoints)
 
             }
 
@@ -424,6 +426,16 @@ let TextBlueLine = function(option){
     }
     this.getId = function(){
         return attribu.id
+    }
+    this.getst = function(){
+        console.log("attribu", attribu.actionTypeIndex)
+        return {
+            "sourceId": attribu.sourceId,
+            "targetId": attribu.targetId,
+            "sourcePort": attribu.sourcePort,
+            "targetPort": attribu.targetPort,
+            "actionTypeIndex": attribu.actionTypeIndex
+        }
     }
     //对象共有属性
     //构造器

@@ -4,6 +4,7 @@ export default class BlueComponent {
 
     constructor(canvas, options) {
 
+
         let that = this
         this.frame = 2
         this.fill = '#F6BB42'
@@ -32,6 +33,7 @@ export default class BlueComponent {
         this.isSelected = false
         this.isDraged = false
         this.obj = null
+        that.ismousedown = false
 
         for(let key in options){
             //deep copy
@@ -66,7 +68,7 @@ export default class BlueComponent {
         ////////////////////////////////
         ///Add drag event to component
         ///////////////////////////////
-        
+
         this.container.call(d3.drag()
             .on("start", function(d){
                 that.dragstarted(this, d)
@@ -501,29 +503,31 @@ export default class BlueComponent {
     dragstarted(node, d) {
         //this.isDraged = true
        // d3.select(node).raise().classed("active", true);
+       return 1;
     }
     dragged(node, d){
         var that = this
-            
-            d3.select(node).attr("transform", function(q){
-                that.dx = d3.event.x - that.x
-                that.dy = d3.event.y - that.y
-                that.x  = d3.event.x
-                that.y  = d3.event.y
-                d.x = that.x
-                d.y = that.y
-                return 'translate(' + d.x + ',' + d.y + ')'
-            });
-    
-            this.container.selectAll('.port')
+
+        d3.select(node).attr("transform", function(q){
+            that.dx = d3.event.x - that.x
+            that.dy = d3.event.y - that.y
+            that.x  = d3.event.x
+            that.y  = d3.event.y
+
+            d.x = that.x
+            d.y = that.y
+            return 'translate(' + d3.event.x + ',' + d3.event.y + ')'
+        });
+
+        this.container.selectAll('.port')
                 .attr('none', function(d){
                 d.parentX = that.x
                 d.parentY = that.y
             })
+        return 1;
     }
     dragended(node,d) {
-        
-        //d3.select(node).classed("active", false);
+        return 1;
     }
 
 

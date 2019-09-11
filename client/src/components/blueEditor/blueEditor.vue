@@ -1,11 +1,8 @@
 <template>
     <div id="blueEditor">
         
-        <vs-popup title="Editor" fullscreen :active.sync="popupActivo4" icon-close="close" style="">
-            
+        <vs-popup title="Editor" :active.sync="popupActivo4" icon-close="close" style="">
             <div>
-                <el-page-header @back="close" content="详情页面">
-                </el-page-header>
                 <el-container>
                     <el-aside style="text-align: center;  height: 950px; width:200px">
                         <el-divider content-position="center" style="font-size:16px; color:#333; font-weight:700">Function Panel</el-divider>
@@ -14,30 +11,33 @@
                                 <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="12">
                                     <vs-card>
                                         <div slot="header">
-                                            <h5>
-                                            Tool Boxs
-                                            </h5>
-                                        </div>
-
-                                        <div>
-                                            <el-collapse v-model="activeNames">
-                                                <el-collapse-item title="Mouse Action" name="1">
-                                                    <el-row style="padding-top:10px">
-                                                        <vs-radio v-model="radios" vs-value="Connection" @click="changeMouseActionType('Connection')">Connection</vs-radio>
-                                                    </el-row>
-                                                    <el-row style="padding-top:10px">
-                                                        <vs-radio color="success" v-model="radios" vs-value="Filter" @click="changeMouseActionType('Filter')">Filter</vs-radio>
-                                                    </el-row>
-                                                    <el-row style="padding-top:10px">
-                                                        <vs-radio color="warning" v-model="radios" vs-value="Highlight" @click="changeMouseActionType('Highlight')">Highlight</vs-radio>
-                                                    </el-row>
-                                                </el-collapse-item>
-                                                <el-collapse-item title="Focus" name="2">
-                                                    <el-row>
-                                                        <vs-button type="flat" style="width:150px" color="#B81D17" @click="refresh">Refresh</vs-button>
-                                                    </el-row>
-                                                </el-collapse-item>
-                                            </el-collapse>
+                                            <h4>
+                                            Mouse Action
+                                            </h4>
+                                            <div class='con-radios'>
+                                                <el-row style="padding-top:10px; padding-left:30px">
+                                                <vs-radio v-model="radios" vs-value="Connection" @click="changeMouseActionType('Connection')">Connection</vs-radio>
+                                                </el-row>
+                                                <el-row style="padding-top:10px; padding-left:30px">
+                                                <vs-radio color="success" v-model="radios" vs-value="Filter" @click="changeMouseActionType('Filter')">Filter</vs-radio>
+                                                </el-row>
+                                                <el-row style="padding-top:10px; padding-left:30px">
+                                                <vs-radio color="warning" v-model="radios" vs-value="Highlight" @click="changeMouseActionType('Highlight')">Highlight</vs-radio>
+                                                </el-row>
+                                            </div>
+                                            <el-divider content-position="center" style="font-size:16px; color:#333; font-weight:700"></el-divider>
+                                            <h4>
+                                            function
+                                            </h4>
+                                            <el-row>
+                                                <vs-button type="flat" style="width:150px" color="grey" icon="refresh" @click="refresh">Restart</vs-button>
+                                            </el-row>
+                                            <el-row>
+                                                <vs-button type="flat" style="width:150px" color="grey" icon="delete" @click="deleteSelectedItems()">Delete</vs-button>
+                                            </el-row>
+                                            <el-row>
+                                                <vs-button type="flat" style="width:150px" color="grey" icon="undo" @click="operateStack('back')">Undo</vs-button>
+                                            </el-row>
                                         </div>
                                     </vs-card>
                                 </vs-col>
@@ -54,8 +54,10 @@
                         <el-main>
                             <div id='preview' style="background:rgba(0,0,0,0.05); box-shadow:0 2px 12px 0 rgba(0,0,0, 0.1)">
                                 <div class="panelButtons" style="position:absolute; padding:1%">
+                                    <!--
                                         <vs-button radius color="primary" type="filled" icon="delete" @click="deleteSelectedItems()"></vs-button>
                                         <vs-button radius color="primary" type="filled" icon="undo" @click="operateStack('back')" style="transform:translate(15px)" ></vs-button>
+                                    -->
                                 </div>
                                 <svg id ='editorborad'></svg>
                             </div>
@@ -64,11 +66,6 @@
                 </el-container>
             </div>
         </vs-popup>
-        <!--
-        <vs-popup title="Edit Interaction" fullscreen :active.sync="popupActivo4" :button-close-hidden="buttonclosehidden">
-
-        </vs-popup>
-        -->
     </div>
 </template>
 <script>
@@ -166,6 +163,9 @@ export default {
     watch:{
         popupActivo4: {
             handler(val, oldVal){
+                if(val == false){
+                    this.close()
+                }
             }
         },
         //Monitor the positon's change of component
@@ -266,39 +266,58 @@ export default {
         }
     },
     methods:{
+        test: function(){
+            console.log("test")
+        },
         close: function(){
             let that = this
-            let controlledCom = []
-            this.blueComponentNameList.forEach( (d,i) => {
-                let com = that.getComponentById(d)
-                if(com.control == "controlled"){
-                    controlledCom.push(d)
-                }
+            let controlerCom = [],
+                dMapper = [],
+                select_config = []
+
+            that.blueLines.forEach((d,i) => {
+                let source_id = d.getst().sourceId
+                controlerCom.push(source_id)
             })
-            //that.componentGraph
-            //this.blueComponentNameList
-            for(let i=0; i<controlledCom.length; i++){
-                let controlledIndex = this.blueComponentNameList.indexOf(controlledCom[i])
-                for(let j=0; j<this.blueComponentNameList.length; j++){
-                    if(this.componentGraph[j] != undefined && this.componentGraph[j][controlledIndex] == 1){
-                        //link
-                        let source = this.blueComponentNameList[j],
-                            target = this.blueComponentNameList[controlledIndex],
-                            linkList = this.getblueLinesByLinkName(source + "_" + target)
-                        for(let k=0; k<linkList.length; k++){
-                            let link = linkList[k],
-                                targetname = link["target"]["name"]
-                            for(let l=0;l<that.dataMapper[link.targetId]["mapper"].length; l++){
-                                if(that.dataMapper[link.targetId]["mapper"][l]["dataname"] == targetname){
-                                    that.dataMapper[link.targetId]["mapper"][l]["mapfrom"]["source"] = link["source"]
-                                }
-                            }
-                        }
+
+            controlerCom = Array.from(new Set(controlerCom)) //duplicate
+            controlerCom.forEach((d,i) => {
+                let com = that.getComponentById(d),
+                    obj = com.getObj()
+                    console.log(obj)
+                select_config.push({
+                        "chartId": d,
+                        "type": obj.name,
+                        "controllee":[]
+                    })
+            })
+
+            that.blueLines.forEach((d,i) => {
+                let _lineInfo = d.getst(),
+                    _source_Id = _lineInfo.sourceId,
+                    _target_Id = _lineInfo.targetId,
+                    _source_port = _lineInfo.sourcePort.text,
+                    _target_port = _lineInfo.targetPort.text,
+                    _type = _lineInfo.targetPort.parent,
+                    _action = _lineInfo.actionTypeIndex
+                
+                select_config.forEach((v,j) => {
+                    if(v.chartId == _source_Id){
+                        v.controllee.push({
+                            "chartId": _target_Id,
+                            "type": _type,
+                            "action": _action,
+                            "source": _source_port,
+                            "target": _target_port
+                        })
                     }
-                }
-            }
-            this.$store.commit("updateDataMapper", that.dataMapper)
-            this.$store.commit("editInteraction")
+                })
+                
+            })
+
+            this.$store.commit("updateDataMapper", select_config)
+            //this.$store.commit("editInteraction")
+            return 1;
         },
         calculator(option){
         },
@@ -322,17 +341,17 @@ export default {
             
             this.container = d3.select("#editorborad");
             this.container.append("g").attr("id", "grid_layer");
-            this.chartResize(window.innerWidth * 0.815, window.innerHeight * 0.8);
+            this.chartResize(window.innerWidth * 0.765, window.innerHeight * 0.843);
             bluecomponentscountInit(that)
             this.containerListener()
         },
         //Resize the canvas after window's size has been updated
         chartResize(innerWidth, innerHeight) {
             let that = this
-            let height = innerHeight > innerWidth * 2 ? innerWidth * 2 : innerHeight;
-            let width = innerWidth;
-            this.width = width;
-            this.height = height;
+            //let height = innerHeight > innerWidth * 2 ? innerWidth * 2 : innerHeight;
+            //let width = innerWidth;
+            this.width = innerWidth * 0.8;
+            this.height = innerHeight * 0.85;
 
             let drawGrids = function(that){
                 //Darwing the grids line in canvas which help user the recognize the canvas and components        
@@ -394,13 +413,11 @@ export default {
                 .attr("stroke-width", "2px")
                 .attr("transform", "translate(0,0)")
                 .attr("id", "squareSelect");
-
-
+                
             svg.on("mousedown.drag", function(d){
                 that.dragble.flag = true
                 rect.attr("transform", "translate(" + d3.event.layerX + "," + d3.event.layerY + ")");
                 that.dragble.startLoc = [d3.event.layerX, d3.event.layerY];
-
             })
             svg.on("mousemove.drag", function(d){
                 if (d3.event.target.localName == "svg" && that.dragble.flag == true || d3.event.target.localName == "rect" && that.dragble.flag == true) {
@@ -417,10 +434,10 @@ export default {
                     }
                     rect.attr("width", Math.abs(width)).attr("height", Math.abs(height))
                 }
-                
             })
 
             svg.on("mouseup.drag", function(d){
+
                 if(that.dragble.flag = true){
                     that.dragble.flag = false
                     that.dragble.endLoc = [d3.event.layerX, d3.event.layerY]
@@ -451,6 +468,7 @@ export default {
                             }
                         }
                     })
+                    /*
                     that.blueComponents.forEach((d,i) => {
                         let com = d.getComPosition()
                         if(range.left < com.left && com.left < range.right && range.top < com.top && com.down < range.down){
@@ -463,15 +481,16 @@ export default {
                             }
                         }
                     })
+                    */
                 }
                 
             })
+            
         },
         deleteSelectedItems(){
             let that = this
             this.deleteLine({"status": 2})
             this.deleteComponent({"status": 1})
-
         },
         addComponent(com){
             let that = this,
@@ -510,14 +529,14 @@ export default {
                     obj['id'] = obj.type + '-' + that.blueComponentsTypeCount[obj.type];
 
                     if(obj['interaction'] == "controlled"){
-                        let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
-                        obj['x'] = 1300;
-                        obj['y'] = 200 + Math.round(gap * that.controlComponentCount["curled"]);
+                        let gap = window.innerHeight * 0.765 / (that.controlComponentCount["controlled"] + 3)
+                        obj['x'] = 750;
+                        obj['y'] = 100 + Math.round(gap * that.controlComponentCount["curled"]);
                         that.controlComponentCount["curled"] ++;
                     }else if(obj['interaction'] == "controler"){
-                        let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
-                        obj['x'] = 300;
-                        obj['y'] = 200 + Math.round(gap * that.controlComponentCount["curler"]);
+                        let gap = window.innerHeight * 0.765 / (that.controlComponentCount["controler"] + 3)
+                        obj['x'] = 250;
+                        obj['y'] = 100 + Math.round(gap * that.controlComponentCount["curler"]);
                         that.controlComponentCount["curler"] ++;
                     }
 
@@ -643,7 +662,16 @@ export default {
             }
             opt.container = that.container
 
-            let line = (that.drawingLine = new BlueprintLine(opt))
+            let line = (that.drawingLine = new BlueprintLine(opt)),
+            lineInfo = line.getConnectInfo()
+            that.updateDataMapper({
+                "status": 1,
+                "options":{
+                    "lineInfo": lineInfo
+                }
+            })
+
+            //console.log(line.getConnectInfo())
 
             if(that.backStatus == false){
                 that.operateStack("go", "10", {"comobj": opt })
@@ -773,8 +801,10 @@ export default {
         },
         updateDataMapper(opt){
             // {"status": 0/1, options: {"obj": obj}}
-            // 0 add component and update datamapper
+            // 0 add component to datamapper
+            // 1 add line to datamapper
             let that = this
+            
             if(opt.status == 0){
                 let obj = opt.options.obj
                 if(obj.inPorts.length != 0){
@@ -799,7 +829,14 @@ export default {
 
                     that.dataMapper[obj.id] = dic
                 }
+            } else if(opt.status == 1){
+                if(that.dataMapper['line'] == null){
+                    that.dataMapper['line'] = []
+                } else {
+                    that.dataMapper['line'].push(opt.options.lineInfo)
+                }
             }
+
         },
         operateStack(status, operation, option){
             //status : go/back
@@ -887,74 +924,6 @@ export default {
 
                }
            }
-        },
-        
-        buildBlueGraph(con){
-            let that = this
-            let connect = con.getConnectInfo()
-            let _source = connect.source
-            let _target = connect.target
-            //two dimensional matrix of storage blueprint connection logic
-
-            //更新that.chartlayoutObj viewer- layout-0_chartA parentid + "_" + text
-            if(_target.attr == "Layout"){
-                //建立索引 用于更新layout-port
-                if(that.chartLayout[_source["parentid"]] == undefined){
-                that.chartLayout[_source["parentid"]] = []
-                let _name = _target.id + "_" + _target.text
-                that.chartLayout[_source["parentid"]].push(_name)
-                }else{
-                let _name = _target.id + "_" + _target.text
-                that.chartLayout[_source["parentid"]].push(_name)
-                }
-
-                //更新chartLayoutObj 用于存储layout-port-config
-                if(that.chartLayoutObj[_target["id"]] == undefined){
-                that.chartLayoutObj[_target["id"]] = {}
-
-                that.chartLayoutObj[_target["id"]][_target["text"]] = ""
-                that.chartLayoutObj[_target["id"]][_target["text"]] = JSON.parse(JSON.stringify(that.vegaObjectObj[_source["parentid"]]))
-
-                }else{
-                if(that.chartLayoutObj[_target["id"]][_target["text"]] == undefined){
-
-                    that.chartLayoutObj[_target["id"]][_target["text"]] = ""
-                    that.chartLayoutObj[_target["id"]][_target["text"]] = JSON.parse(JSON.stringify(that.vegaObjectObj[_source["parentid"]]))
-                }
-                }
-            }
-
-            //每增加一条边就更新
-            //首先处理componentIndex
-
-            let linkname = connect.sourceId + "_" + connect.targetId
-            let addId = [connect.sourceId, connect.targetId]
-            addId.forEach(function(d){
-                if(that.blueComponentNameList.indexOf(d) == -1){
-                that.blueComponentNameList.push(d)
-                }
-            })
-            //存入link
-            if(this.blueLinesName.indexOf(linkname) == -1){
-                this.blueLinesName.push(linkname)
-            }
-            //建立根据componentIndex覆盖更新二维数组
-            this.blueComponentNameList.forEach(function(d, i){
-                that.componentGraph[i] = new Array()
-            })
-            //graph init
-            for(let i=0; i<this.blueComponentNameList.length; i++){
-                for(let j=0; j<this.blueComponentNameList.length; j++){
-                that.componentGraph[i][j] = 0
-                }
-            }
-            for(let i=0; i<this.blueLinesName.length; i++){
-                let indexsource = this.blueComponentNameList.indexOf(String(this.blueLinesName[i]).split('_')[0])
-                let indextarget = this.blueComponentNameList.indexOf(String(this.blueLinesName[i]).split('_')[1])
-                //1 connection
-                //2 filter
-                that.componentGraph[indexsource][indextarget] = that.mouseActionType.index
-            }
         },
         catchConnect(option){
             // catch ConnectInfo
@@ -1153,7 +1122,7 @@ export default {
     display: inline-block;
 }
 .el-main{
-    padding: 5px !important
+    
 }
 
 .grid-content {
@@ -1170,5 +1139,15 @@ export default {
 .el-divider__text{
     font-weight: 700;
     font-size: 16px;
+}
+.vs-popup{
+    width: 1470px !important;
+    height: 910px !important; 
+}
+.con-radios{
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start;
+    padding: 5px;
 }
 </style>
