@@ -176,7 +176,6 @@ export default {
       console.log(newVal.id)
      console.log(this.id)
       // if (newVal.id == this.id){
-        console.log("hskjahgjdakjga")
       this.myChart.setOption({
         title: {
           text: newVal.metaConfig.title

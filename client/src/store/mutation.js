@@ -101,7 +101,7 @@ const mutation = {
   },
 
   commitInteracWeatherData(state, payload) {
-    if (state.select_config.hasOwnProperty("FiledName")) {
+    if (state.select_config[0].hasOwnProperty("FiledName")) {
       sameFiledName(state,payload)
     }else {
       sharing_data(state,payload)
@@ -322,18 +322,18 @@ function sharing_data(state,payload) {
   let select_config = state.select_config
   console.log(payload)
   for (let i = 0; i < interactive_config.length; i++) {
-    if (select_config.controller.type == interactive_config[i].controller&&
-      (select_config.controller.chartId == payload.chartId)) {
+    if (select_config[0].type == interactive_config[i].controller&&
+      (select_config[0].chartId == payload.chartId)) {
 
-      for (let j=0;j<select_config.controllee.length;j++) {
-        let interact_type_chart= select_config.controllee[j].type;
+      for (let j=0;j<select_config[0].controllee.length;j++) {
+        let interact_type_chart= select_config[0].controllee[j].type;
         if (interact_type_chart.indexOf("chart") > -1) { //去掉chart
           interact_type_chart= interact_type_chart.replace("chart", "");
         }
         let Transport_Data = {
           data:interationData(state.weatherData.baseData,
             interact_type_chart.toLowerCase(), payload),
-          chartId:select_config.controllee[j].chartId
+          chartId:select_config[0].controllee[j].chartId
         }
 
         console.log(interact_type_chart)
@@ -344,15 +344,18 @@ function sharing_data(state,payload) {
 }
 //相同字段的方法
 function sameFiledName(state,payload) {
-  let select_config = state.select_config
-  payload.fieldname==select_config.FiledName
-
+  let select_config = state.select_config[0]
+  // payload.fieldname==select_config.FiledName
+  console.log(payload)
   let chartArray = state.chartArray
-  if (select_config.controller.chartId ==payload.chartId){
+  if (select_config.chartId ==payload.chartId){
     for( let i=0;i<select_config.controllee.length;i++){
       let chart_id= select_config.controllee[i].chartId
       let index  = chart_id.charAt(chart_id.length-1)
 
+
+      console.log(chartArray[index].baseData.data)
+      console.log(payload.select_data)
       let Transport_Data = {
         data:find_data(chartArray[index].baseData.data,payload.select_data),
         chartId:select_config.controllee[i].chartId
@@ -363,6 +366,7 @@ function sameFiledName(state,payload) {
         interact_type_chart= interact_type_chart.replace("chart", "");
       }
 
+      console.log(Transport_Data)
       state["interac" + interact_type_chart+ "Data"] = Transport_Data
 
     }
