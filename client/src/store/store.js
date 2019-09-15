@@ -41,31 +41,8 @@ const state = {
     "FileName":'weather'
   },
   //共用数据的配置
-  select_config:{
-    "controller":
-      {
-      chartId:'item0',
-      type:'Piechart'
-      },
-    "controllee":[
-      // {
-      //   chartId:'item3',
-      // type:'Barchart'
-      // },{
-      //   chartId:'item4',
-      //   type:'Linechart'
-      // },{
-      //   chartId:'item5',
-      //   type:'Canlendar'
-      // },
-      {
-        chartId:'item1',
-        type:'Barchart'
-      }],
-    'action':'filter',
-    // 'data':'weather'
-    "FiledName":'weather'
-  }
+  select_config:[
+    ]
 };
 
 export default new Vuex.Store({
