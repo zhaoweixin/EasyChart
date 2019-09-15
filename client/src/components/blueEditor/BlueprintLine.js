@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 
-let TextBlueLine = function(container, parent, point, source, sourceid, coverColor, actionTypeIndex){
+let TextBlueLine = function(option){
     //私有属性
     var attribu = {
         sourcePoint : '',
@@ -24,9 +24,12 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
         targetId : '',
         sourceId : '',
         isDeleted : false,
+        isSelected : false,
         coverColor : "#808080",
         randomCoverId: '',
-        actionTypeIndex: -1
+        actionTypeIndex: -1,
+        opt: null,
+        id: null
     }
     //私有方法
 
@@ -278,16 +281,24 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
 
     //特权方法
     this.setAttributions = function(){
-        attribu.sourcePoint = point
-        attribu.sourcePort = source
-        attribu.points = [point, point]
-        attribu.storePoints = [point, point]
-        attribu.container = container.append('g').attr("class", "blueLine")
-        attribu.sourceParent = parent
-        attribu.sourceId = sourceid
-        attribu.coverColor = coverColor
-        attribu.actionTypeIndex = actionTypeIndex
+        //attribu.sourcePoint = point
+        let _x = +option.com.x + +option.com.parentX,
+            _y = +option.com.y + +option.com.parentY
+        //distinguish
+        attribu.sourcePoint = [_x, _y]
+        attribu.sourcePort = option.com
+
+        attribu.points = [[_x, _y], [_x, _y]]
+        attribu.storePoints = [[_x, _y], [_x, _y]]
+
+        attribu.container = option.container.append('g').attr("class", "blueLine")
+        attribu.sourceParent = option.com.parent 
+        attribu.sourceId = option.com.parentid
+        attribu.coverColor = option.coverColor
+        attribu.actionTypeIndex = option.mouseActionType
+        attribu.id = option.id
         attribu.randomCoverId = "linearColor" + String(new Date()-0)
+        attribu.opt = JSON.parse(JSON.stringify(option))
     }
     this.parentPosUpdated = function(dx, dy, inPorts, outPorts, curEleid) {
         
@@ -303,7 +314,6 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
             this.dynamicGenerateCurveLine()
             updateCoverLine()
         }
-
         
     }
     this.dynamicGenerateCurveLine = function(coordinates){
@@ -359,6 +369,8 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
             
                 attribu.isWaitPath == false
                 attribu.targetId = nearPoints[0].ID
+                
+                console.log("nearPoints", nearPoints)
 
             }
 
@@ -398,10 +410,32 @@ let TextBlueLine = function(container, parent, point, source, sourceid, coverCol
         return getEndPoints_handle()
     }
     this.toDelete = function(){
-        this.isDeleted = !this.isDeleted
+        attribu.isDeleted = !attribu.isDeleted
+    }
+    this.toSelected = function(){
+        attribu.isSelected = !attribu.isSelected
     }
     this.getdeleteStatu = function(){
-        return this.isDeleted
+        return attribu.isDeleted
+    }
+    this.getSelectedStatu = function(){
+        return attribu.isSelected
+    }
+    this.getOpt = function(){
+        return attribu.opt
+    }
+    this.getId = function(){
+        return attribu.id
+    }
+    this.getst = function(){
+        console.log("attribu", attribu.actionTypeIndex)
+        return {
+            "sourceId": attribu.sourceId,
+            "targetId": attribu.targetId,
+            "sourcePort": attribu.sourcePort,
+            "targetPort": attribu.targetPort,
+            "actionTypeIndex": attribu.actionTypeIndex
+        }
     }
     //对象共有属性
     //构造器

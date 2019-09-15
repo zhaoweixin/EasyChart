@@ -1,11 +1,8 @@
 <template>
     <div id="blueEditor">
         
-        <vs-popup title="Editor" fullscreen :active.sync="popupActivo4" icon-close="close" style="">
-            
+        <vs-popup title="Editor" :active.sync="popupActivo4" icon-close="close" style="">
             <div>
-                <el-page-header @back="close" content="详情页面">
-                </el-page-header>
                 <el-container>
                     <el-aside style="text-align: center;  height: 950px; width:200px">
                         <el-divider content-position="center" style="font-size:16px; color:#333; font-weight:700">Function Panel</el-divider>
@@ -13,53 +10,54 @@
                             <vs-row vs-justify="center">
                                 <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="12">
                                     <vs-card>
-                                    <div slot="header">
-                                        <h5>
-                                        Tool Boxs
-                                        </h5>
-                                    </div>
-
-                                    <div>
-                                        <el-collapse v-model="activeNames">
-                                            <el-collapse-item title="Mouse Action" name="1">
-                                                <el-row style="padding-top:10px">
-                                                    <vs-radio v-model="radios" vs-value="Connection" @click="changeMouseActionType('Connection')">Connection</vs-radio>
+                                        <div slot="header">
+                                            <h4>
+                                            Mouse Action
+                                            </h4>
+                                            <div class='con-radios'>
+                                                <el-row style="padding-top:10px; padding-left:30px">
+                                                <vs-radio v-model="radios" vs-value="Connection" @click="changeMouseActionType('Connection')">Connection</vs-radio>
                                                 </el-row>
-                                                <el-row style="padding-top:10px">
-                                                    <vs-radio color="success" v-model="radios" vs-value="Filter" @click="changeMouseActionType('Filter')">Filter</vs-radio>
+                                                <el-row style="padding-top:10px; padding-left:30px">
+                                                <vs-radio color="success" v-model="radios" vs-value="Filter" @click="changeMouseActionType('Filter')">Filter</vs-radio>
                                                 </el-row>
-                                                <el-row style="padding-top:10px">
-                                                    <vs-radio color="warning" v-model="radios" vs-value="Highlight" @click="changeMouseActionType('Highlight')">Highlight</vs-radio>
+                                                <el-row style="padding-top:10px; padding-left:30px">
+                                                <vs-radio color="warning" v-model="radios" vs-value="Highlight" @click="changeMouseActionType('Highlight')">Highlight</vs-radio>
                                                 </el-row>
-                                            </el-collapse-item>
-                                            <el-collapse-item title="Focus" name="2">
-                                                <el-row>
-                                                    <vs-button type="flat" style="width:150px" color="#B81D17" @click="refresh">Refresh</vs-button>
-                                                </el-row>
-                                            </el-collapse-item>
-                                        </el-collapse>
-                                    </div>
+                                            </div>
+                                            <el-divider content-position="center" style="font-size:16px; color:#333; font-weight:700"></el-divider>
+                                            <h4>
+                                            function
+                                            </h4>
+                                            <el-row>
+                                                <vs-button type="flat" style="width:150px" color="grey" icon="refresh" @click="refresh">Restart</vs-button>
+                                            </el-row>
+                                            <el-row>
+                                                <vs-button type="flat" style="width:150px" color="grey" icon="delete" @click="deleteSelectedItems()">Delete</vs-button>
+                                            </el-row>
+                                            <el-row>
+                                                <vs-button type="flat" style="width:150px" color="grey" icon="undo" @click="operateStack('back')">Undo</vs-button>
+                                            </el-row>
+                                        </div>
                                     </vs-card>
                                 </vs-col>
                             </vs-row>
                         </div>
+                    </el-aside>
 
-                        <div>
-                            
-                        </div>
-                        
-                        </el-aside>
                     <el-container style="padding-left:2%">
                         <el-header style="height:50px">
-                            <el-row >
+                            <el-row>
                                 <el-divider content-position="center" style="font-size:16px; color:#333; font-weight:700">Editor Panel</el-divider>
-                            </el-row>
+                            </el-row> 
                         </el-header>
                         <el-main>
                             <div id='preview' style="background:rgba(0,0,0,0.05); box-shadow:0 2px 12px 0 rgba(0,0,0, 0.1)">
                                 <div class="panelButtons" style="position:absolute; padding:1%">
-                                        <vs-button radius color="primary" type="filled" icon="delete" @click="deleteLine()"></vs-button>
-                                        <vs-button radius color="primary" type="filled" icon="undo" style="transform:translate(15px)" ></vs-button>
+                                    <!--
+                                        <vs-button radius color="primary" type="filled" icon="delete" @click="deleteSelectedItems()"></vs-button>
+                                        <vs-button radius color="primary" type="filled" icon="undo" @click="operateStack('back')" style="transform:translate(15px)" ></vs-button>
+                                    -->
                                 </div>
                                 <svg id ='editorborad'></svg>
                             </div>
@@ -68,11 +66,6 @@
                 </el-container>
             </div>
         </vs-popup>
-        <!--
-        <vs-popup title="Edit Interaction" fullscreen :active.sync="popupActivo4" :button-close-hidden="buttonclosehidden">
-
-        </vs-popup>
-        -->
     </div>
 </template>
 <script>
@@ -143,9 +136,10 @@ export default {
                 "endLoc": [],
                 "clickTime": [],
 
-            }
+            },
+            operationStack:[],
+            backStatus: false
             
-
         }
     },
     computed:{
@@ -169,6 +163,9 @@ export default {
     watch:{
         popupActivo4: {
             handler(val, oldVal){
+                if(val == false){
+                    this.close()
+                }
             }
         },
         //Monitor the positon's change of component
@@ -178,7 +175,14 @@ export default {
                 if(curVal.length == oldVal.length){
                 for (let i = 0; i < this.blueComponents.length; i++){
                     if(this.blueComponents[i].isDelete){
-                        that.remove(this.blueComponents[i])
+                        let comid = this.blueComponents[i].getId(),
+                            obj = this.blueComponents[i].getObj()
+                        that.deleteComponent({"status": 0, "options": {"comid": comid}})
+                        if(that.backStatus == false){
+                            that.operateStack("go", "01", {"id": comid, "comobj": obj})
+                        } else {
+                            that.operateStack = false
+                        }
                         break;
                     }
                     
@@ -262,39 +266,58 @@ export default {
         }
     },
     methods:{
+        test: function(){
+            console.log("test")
+        },
         close: function(){
             let that = this
-            let controlledCom = []
-            this.blueComponentNameList.forEach( (d,i) => {
-                let com = that.getComponentById(d)
-                if(com.control == "controlled"){
-                    controlledCom.push(d)
-                }
+            let controlerCom = [],
+                dMapper = [],
+                select_config = []
+
+            that.blueLines.forEach((d,i) => {
+                let source_id = d.getst().sourceId
+                controlerCom.push(source_id)
             })
-            //that.componentGraph
-            //this.blueComponentNameList
-            for(let i=0; i<controlledCom.length; i++){
-                let controlledIndex = this.blueComponentNameList.indexOf(controlledCom[i])
-                for(let j=0; j<this.blueComponentNameList.length; j++){
-                    if(this.componentGraph[j] != undefined && this.componentGraph[j][controlledIndex] == 1){
-                        //link
-                        let source = this.blueComponentNameList[j],
-                            target = this.blueComponentNameList[controlledIndex],
-                            linkList = this.getblueLinesByLinkName(source + "_" + target)
-                        for(let k=0; k<linkList.length; k++){
-                            let link = linkList[k],
-                                targetname = link["target"]["name"]
-                            for(let l=0;l<that.dataMapper[link.targetId]["mapper"].length; l++){
-                                if(that.dataMapper[link.targetId]["mapper"][l]["dataname"] == targetname){
-                                    that.dataMapper[link.targetId]["mapper"][l]["mapfrom"]["source"] = link["source"]
-                                }
-                            }
-                        }
+
+            controlerCom = Array.from(new Set(controlerCom)) //duplicate
+            controlerCom.forEach((d,i) => {
+                let com = that.getComponentById(d),
+                    obj = com.getObj()
+                    console.log(obj)
+                select_config.push({
+                        "chartId": d,
+                        "type": obj.name,
+                        "controllee":[]
+                    })
+            })
+
+            that.blueLines.forEach((d,i) => {
+                let _lineInfo = d.getst(),
+                    _source_Id = _lineInfo.sourceId,
+                    _target_Id = _lineInfo.targetId,
+                    _source_port = _lineInfo.sourcePort.text,
+                    _target_port = _lineInfo.targetPort.text,
+                    _type = _lineInfo.targetPort.parent,
+                    _action = _lineInfo.actionTypeIndex
+                
+                select_config.forEach((v,j) => {
+                    if(v.chartId == _source_Id){
+                        v.controllee.push({
+                            "chartId": _target_Id,
+                            "type": _type,
+                            "action": _action,
+                            "source": _source_port,
+                            "target": _target_port
+                        })
                     }
-                }
-            }
-            this.$store.commit("updateDataMapper", that.dataMapper)
-            this.$store.commit("editInteraction")
+                })
+                
+            })
+
+            this.$store.commit("updateDataMapper", select_config)
+            //this.$store.commit("editInteraction")
+            return 1;
         },
         calculator(option){
         },
@@ -318,17 +341,17 @@ export default {
             
             this.container = d3.select("#editorborad");
             this.container.append("g").attr("id", "grid_layer");
-            this.chartResize(window.innerWidth * 0.815, window.innerHeight * 0.8);
+            this.chartResize(window.innerWidth * 0.765, window.innerHeight * 0.843);
             bluecomponentscountInit(that)
             this.containerListener()
         },
         //Resize the canvas after window's size has been updated
         chartResize(innerWidth, innerHeight) {
             let that = this
-            let height = innerHeight > innerWidth * 2 ? innerWidth * 2 : innerHeight;
-            let width = innerWidth;
-            this.width = width;
-            this.height = height;
+            //let height = innerHeight > innerWidth * 2 ? innerWidth * 2 : innerHeight;
+            //let width = innerWidth;
+            this.width = innerWidth * 0.8;
+            this.height = innerHeight * 0.85;
 
             let drawGrids = function(that){
                 //Darwing the grids line in canvas which help user the recognize the canvas and components        
@@ -378,6 +401,9 @@ export default {
                 that.container.on("mousemove", null)
             }
 
+            function highlightCom(range){
+                
+            }
             let svg = d3.select("#editorborad")
             let rect = svg.append("rect")
                 .attr("width", 0)
@@ -387,16 +413,11 @@ export default {
                 .attr("stroke-width", "2px")
                 .attr("transform", "translate(0,0)")
                 .attr("id", "squareSelect");
-
-
+                
             svg.on("mousedown.drag", function(d){
                 that.dragble.flag = true
                 rect.attr("transform", "translate(" + d3.event.layerX + "," + d3.event.layerY + ")");
                 that.dragble.startLoc = [d3.event.layerX, d3.event.layerY];
-                that.blueLines.forEach((d,i) => {
-                    d.dishighLight()
-                    d.toDelete()
-                })
             })
             svg.on("mousemove.drag", function(d){
                 if (d3.event.target.localName == "svg" && that.dragble.flag == true || d3.event.target.localName == "rect" && that.dragble.flag == true) {
@@ -413,98 +434,327 @@ export default {
                     }
                     rect.attr("width", Math.abs(width)).attr("height", Math.abs(height))
                 }
-                
             })
 
             svg.on("mouseup.drag", function(d){
+
                 if(that.dragble.flag = true){
                     that.dragble.flag = false
                     that.dragble.endLoc = [d3.event.layerX, d3.event.layerY]
+                    let transX = rect.attr("transform").split("translate(")[1].split(',')[0]
+                    let transY = rect.attr("transform").split(",")[1].split(")")[0]
+                    let range = {
+                        "left": +transX,
+                        "right": +transX + +rect.attr("width"),
+                        "top": +transY,
+                        "down": +transY + +rect.attr("height")
+                    }
+
                     rect.attr("width", 0).attr("height", 0)
 
                     that.blueLines.forEach((d,i) => {
                         let ep = d.getEndPoints(),
                             widthRange = [that.dragble.startLoc[0], that.dragble.endLoc[0]].sort(),
                             heightRange = [that.dragble.startLoc[1], that.dragble.endLoc[1]].sort()
-                        if(( widthRange[0] < ep.sourceX && ep.sourceX < widthRange[1] && heightRange[0] < ep.sourceY && ep.sourceY < heightRange[1]) || 
-                            (widthRange[0] < ep.targetX && ep.targetX < widthRange[1] && heightRange[0] < ep.targetY && ep.targetY < heightRange[1])){
-                                console.log("in")
+
+                        if((range.left < ep.sourceX && ep.sourceX < range.right && range.top < ep.sourceY && ep.sourceY < range.down) || 
+                            (range.left < ep.targetX && ep.targetX < range.right && range.top < ep.targetY && ep.targetY < range.down)){
                                 d.highLight()
-                                d.toDelete()
+                                d.toSelected()
+                        }else{
+                            if(d.getSelectedStatu() == true){
+                                d.dishighLight()
+                                d.toSelected()
                             }
+                        }
                     })
+                    /*
+                    that.blueComponents.forEach((d,i) => {
+                        let com = d.getComPosition()
+                        if(range.left < com.left && com.left < range.right && range.top < com.top && com.down < range.down){
+                            d.highlight()
+                            d.toSelected()
+                        } else {
+                            if(d.getSelectedStatu() == true){
+                                d.disHightlight()
+                                d.toSelected()
+                            }
+                        }
+                    })
+                    */
                 }
                 
             })
+            
         },
-        deleteLine(){
-            let that = this,
-                lineLines = this.blueLines.length
-            for(let i=0; i<lineLines; i++){
-                console.log(this.blueLines[i].getdeleteStatu())
-                if(this.blueLines[i].getdeleteStatu() == true){
-                    that.blueLines[i].remove()
-                    this.bluelines.split(i, 1)
-                    lineLines = lineLines - 1
-                }
-            }
+        deleteSelectedItems(){
+            let that = this
+            this.deleteLine({"status": 2})
+            this.deleteComponent({"status": 1})
         },
         addComponent(com){
-            let that = this;
+            let that = this,
+                _com = null,
+                options = {"flag": false, "obj": null}
             if(com.interaction == "controler"){
                 that.controlComponentCount['controler'] ++
             }else if(com.interaction == "controlled"){
                 that.controlComponentCount['controlled'] ++
             }
-            that.createNewComponent(com.name)
+
+            const addClickEvent2Circle = function(that, com){
+                //boundind the click event to the circles which represent the ports in component
+                //after click the circle, there will new a line in canvas
+                com.getAllCircles().on("click", function(d) {
+                    let opt = {
+                    "com": d, //port
+                    "container": that.container,
+                    "coverColor": that.mouseActionType.color,
+                    "mouseActionType": that.mouseActionType,
+                    "id": "blueLines-" + that.blueLines.length
+                   }
+                that.addLine(opt)
+                });
+            }
+            const constructproperty = function(that, property, name, options){
+                let obj = null
+                let calculateObj = function(that, tobj, name){
+                    //according to this.blueComponentsTypeCount construct id and add 1
+                    //make inports outports full
+                    //make sure that the viewer name equal to button content
+                    let obj = JSON.parse(JSON.stringify(tobj))
+                    obj["fill"] = that.componentTypes[obj.type].color;
+                    obj["name"] = name;
+                    obj['control'] = obj['interaction'];
+                    obj['id'] = obj.type + '-' + that.blueComponentsTypeCount[obj.type];
+
+                    if(obj['interaction'] == "controlled"){
+                        let gap = window.innerHeight * 0.765 / (that.controlComponentCount["controlled"] + 3)
+                        obj['x'] = 750;
+                        obj['y'] = 100 + Math.round(gap * that.controlComponentCount["curled"]);
+                        that.controlComponentCount["curled"] ++;
+                    }else if(obj['interaction'] == "controler"){
+                        let gap = window.innerHeight * 0.765 / (that.controlComponentCount["controler"] + 3)
+                        obj['x'] = 250;
+                        obj['y'] = 100 + Math.round(gap * that.controlComponentCount["curler"]);
+                        that.controlComponentCount["curler"] ++;
+                    }
+
+                    if(obj.inPorts != undefined){
+                        for(let i=0; i<obj.inPorts.length; i++){
+                            obj.inPorts[i]["parentX"] = obj['x'];
+                            obj.inPorts[i]["parentY"] = obj['y'];
+                            obj.inPorts[i]["parent"] = obj['name'];
+                            obj.inPorts[i]["parentid"] = obj['id'];
+                        }
+                    }
+                    if(obj.type != "Layout"){
+                        //layout do not have layout
+                        if(obj.outPorts != undefined){
+                            for(let i=0; i<obj.outPorts.length; i++){
+                                obj.outPorts[i]["parentX"] = obj['x'];
+                                obj.outPorts[i]["parentY"] = obj['y'];
+                                obj.outPorts[i]["parent"] = obj['name'];
+                                obj.outPorts[i]["parentid"] = obj['id'];
+                            }
+                        }
+                    }else if(obj.type == "Layout"){
+                        that.layoutIdName[obj.id] = {}
+                        that.layoutIdName[obj.id]["name"] = obj.name
+                        that.layoutIdName[obj.id]["ref"] = "msg" + "-" + obj.name.split(" ")[1]
+                    }
+                    return obj
+                }
+                if(options.flag == false){
+                    obj = calculateObj(that, JSON.parse(JSON.stringify(property)), name)
+                } else {
+                    obj = JSON.parse(JSON.stringify(options.obj))
+                }
+                
+                
+                if(obj.type == "Chart"){
+                    let propertiesname = obj.name + "-" + that.comChartCount[obj.name];
+                    that.comChartCount[obj.name] = that.comChartCount[obj.name] + 1
+                }
+                that.blueComponentsTypeCount[obj.type] = that.blueComponentsTypeCount[obj.type] + 1
+                _com = new BlueComponent(that.container, obj);
+                that.blueComponents.push(_com);
+                that.updateDataMapper({
+                    "status": 0,
+                    "options":{
+                        "obj": obj
+                    }
+                })
+                //add stack
+                if(that.backStatus == false){
+                    that.operateStack("go", "00", {
+                        "id": obj.id,
+                        "comobj": obj
+                    })
+                }else{
+                    that.backStatus = false
+                }
+                
+                addClickEvent2Circle(that, _com);
+            }
+            
+            if(arguments[1] != undefined){
+                options.flag = true
+                options.obj = JSON.parse(JSON.stringify(arguments[1]))
+            }
+            constructproperty(that, that.modelConfig[com["name"]], com["name"], options)
+            //that.createNewComponent(com.name)
         },
-        createNewComponent(){
-            let that = this,
-                property = null,
-                _com = null;
-            //func
-            const addLineEvent = function(that, com){
+        deleteComponent(opt){
+            // {"status": 0/1, "options": {"comid": comid}}
+            // 0 delete assigned component
+            // 1 delete selected components
+            // in com id
+            let that = this
+            if(opt["status"] == 0){
+                this.blueComponents = this.blueComponents.filter((item) => {
+                    if(item.getId() == opt["options"]["comid"]){
+                        let obj = item.getObj()
+                        that.comChartCount[obj.name] = that.comChartCount[obj.name] - 1
+                        that.blueComponentsTypeCount[obj.type] = that.blueComponentsTypeCount[obj.type] - 1
+                        item.removeGraph()
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+                delete this.dataMapper[opt["options"]["comid"]]
+            } else if(opt["status"] == 1){
+                this.blueComponents = this.blueComponents.filter((item) => {
+                if(item.getSelectedStatu() == true){
+                    item.removeGraph()
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+            } else {
+                console.log("error status in deleteComponent")
+            }
+        },
+        addLine(opt){
+            /*
+            {   
+                "com": d,
+                "container": that.container,
+                "coverColor": coverColor,
+                "mouseActionType": that.mouseActionType
+            }
+            */
+            let that = this
+            const addLineEvent = function(that){
                 //darwing the connection line accroding to the mouse real-time position
-                console.log(that.container)
                 that.container.on("mousemove", function(d) {
-                    
                     if (
                         that.mouseAction == "drawing_line" &&
                         that.drawingLine.getConnectInfo()["target"] == ""
-                    ) {
+                    ){
                         let coordinates = d3.mouse(this);
-
                         that.drawingLine.dynamicGenerateCurveLine(coordinates);
                         that.drawingLine.findNearestPoint(coordinates, that.exstingPorts);
                     }
                 });
             }
-            const addClickEvent2Circle = function(that, com){
-                //boundind the click event to the circles which represent the ports in component
-                //after click the circle, there will new a line in canvas
-                com.getAllCircles().on("click", function(d) {
-                let coverType = com.getType(),
-                        coverColor = that.lineColor[coverType],
-                        params = com.getParmas(),
-                        x = d.parentX + d.x,
-                        y = d.parentY + d.y,
-                        sourceid = params.id,
-                        nowColor = that.mouseActionType.color;
-                coverColor = nowColor
+            opt.container = that.container
 
-                let line = (that.drawingLine = new BlueprintLine(
-                    that.container,
-                    params.name,
-                    [x, y],
-                    d,
-                    sourceid,
-                    coverColor,
-                    that.mouseActionType.index
-                ));
-                that.blueLines.push(line);
-                that.mouseAction = "drawing_line";
+            let line = (that.drawingLine = new BlueprintLine(opt)),
+            lineInfo = line.getConnectInfo()
+            that.updateDataMapper({
+                "status": 1,
+                "options":{
+                    "lineInfo": lineInfo
+                }
+            })
+
+            //console.log(line.getConnectInfo())
+
+            if(that.backStatus == false){
+                that.operateStack("go", "10", {"comobj": opt })
+            } else {
+                that.backStatus = false
+            }
+
+            this.blueLines.push(line)
+            this.mouseAction = "drawing_line";
+            this.updateExstingPorts({"status": 0, "options": {"portsType": opt.com.type}})
+            addLineEvent(that)
+        },
+        deleteLine(opt){
+            // {"status": 0/1 , options: {"comid": "comid", "linkname": "linkname"}}
+            // 0 delete line connected with components
+            // 1 delete assigned line
+            // 2 delete selected line
+            let that = this
+            if(opt["status"] == 0){
+                this.blueLines = this.blueLines.filter((item) => {
+                    let lineinfo = item.getConnectInfo(),
+                        _source = lineinfo.sourceId,
+                        _target = lineinfo.targetId,
+                        linkname = _source + '_' + _target
+
+                    if(opt["options"]["comid"] == _source || opt["options"]["comid"] == _target){
+                        item.remove()
+                        that.blueLinesName.filter((item2) => {
+                            if(item2 == linkname){
+                                return false
+                            } else {
+                                return true
+                            }
+                        })
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+
+            } else if(opt["status"] == 1){
+                this.blueLines = this.blueLines.filter((item) => {
+                    if(item.getId() == opt.id){
+                        item.remove()
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+                if(that.backStatus == false){
+                    that.operateStack("go", "11", {"comobj": opt})
+                } else {
+                    that.backStatus = false
+                }
                 
-                let allPorts = [];
+            } else if(opt["status"] == 2){
+                let option = null
+                this.blueLines = this.blueLines.filter((item) => {
+                    if(item.getSelectedStatu() == true){
+
+                        option = item.getOpt()
+                        item.remove()
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+                if(that.backStatus == false){
+                    that.operateStack("go", "11", {"comobj": option})
+                } else {
+                    that.backStatus = false
+                }
+            }
+        },
+        updateExstingPorts(opt){
+            // 0 updateExstingPorts, 
+            // 1 delete assign ports of components
+            // {"status": 0/1, "options":{"portsType": inPorts, "comid": comid}}
+            let that = this
+            
+            let func0 = function(opt, that){
+                let allPorts = [],
+                    portsType = opt["options"]["portsType"]
 
                 that.blueComponents.forEach(function(component,i) {
                     //let ports = component.getAllPorts();
@@ -512,92 +762,51 @@ export default {
                     let _inPorts = parmas["inPorts"]
                     let _outPorts = parmas["outPorts"]
                     let _id = parmas["id"]
-                    if (d.type == "in") {
-                    _outPorts.forEach(function(k) {
-                        //k.parent = component.id
-                        k.id = _id
-                        allPorts.push(k);
-                    });
-                    } else {
-                    _inPorts.forEach(function(k) {
-                        //k.parent = component.id
-                        k.id = _id
-                        allPorts.push(k);
-                    });
-                    }
+                    if (portsType == "in") {
+                        _outPorts.forEach(function(k) {
+                            //k.parent = component.id
+                            k.id = _id
+                            allPorts.push(k);
+                        });
+                        } else {
+                        _inPorts.forEach(function(k) {
+                            //k.parent = component.id
+                            k.id = _id
+                            allPorts.push(k);
+                        });
+                        }
                 });
-
                 that.exstingPorts = []
                 that.exstingPorts = allPorts
-                //line.setExstingPorts(allPorts);
-                addLineEvent(that, com)
-                });
             }
-            const constructproperty = function(that, property, name){
-                let obj = JSON.parse(JSON.stringify(property))
-                //according to this.blueComponentsTypeCount construct id and add 1
-                //make inports outports full
-                //make sure that the viewer name equal to button content
-                obj["fill"] = that.componentTypes[obj.type].color;
-                obj["name"] = name;
-                obj['control'] = null;
-                obj['id'] = obj.type + '-' + that.blueComponentsTypeCount[obj.type];
-                let interactionType = obj['interaction'],
-                    chartType = obj['type']
-
-                if(interactionType == "controlled"){
-                    let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
-                    obj['x'] = 1300;
-                    obj['y'] = 200 + gap * that.controlComponentCount["curled"];
-                    that.controlComponentCount["curled"] ++;
-                    obj['control'] = "controlled"
-                }else if(interactionType == "controler"){
-                    let gap = window.innerHeight * 0.81 / (that.controlComponentCount["controlled"] + 1)
-                    obj['x'] = 300;
-                    obj['y'] = 200 + gap * that.controlComponentCount["curler"];
-                    that.controlComponentCount["curler"] ++;
-                    obj['control'] = "controler"
-                }
-
-                if(chartType == 'Caculator'){
-                    obj['x'] = 800;
-                    obj['y'] = 500;
-                }else if(chartType == 'Processor'){
-                    obj['x'] = 800;
-                    obj['y'] = 100;
-                }
-
-                if(obj.inPorts != undefined){
-                    for(let i=0; i<obj.inPorts.length; i++){
-                        obj.inPorts[i]["parentX"] = obj['x'];
-                        obj.inPorts[i]["parentY"] = obj['y'];
-                        obj.inPorts[i]["parent"] = obj['name'];
-                        obj.inPorts[i]["parentid"] = obj['id'];
+            let func1 = function(opt, that){
+                let comid = opt["options"]["comid"]
+                that.exstingPorts = that.exstingPorts.filter((item) => {
+                    if(item.parentid == comid){
+                        return false
+                    } else {
+                        return true
                     }
-                }
-                if(obj.type != "Layout"){
-                    //layout do not have layout
-                    if(obj.outPorts != undefined){
-                        for(let i=0; i<obj.outPorts.length; i++){
-                            obj.outPorts[i]["parentX"] = obj['x'];
-                            obj.outPorts[i]["parentY"] = obj['y'];
-                            obj.outPorts[i]["parent"] = obj['name'];
-                            obj.outPorts[i]["parentid"] = obj['id'];
-                        }
-                    }
-                }else if(obj.type == "Layout"){
-                    that.layoutIdName[obj.id] = {}
-                    that.layoutIdName[obj.id]["name"] = obj.name
-                    that.layoutIdName[obj.id]["ref"] = "msg" + "-" + obj.name.split(" ")[1]
-                }
+                })
+            }
 
-                if(obj.type == "Chart"){
-                    let propertiesname = obj.name + "-" + that.comChartCount[obj.name];
-                    that.comChartCount[obj.name] = that.comChartCount[obj.name] + 1
-                }
-                that.blueComponentsTypeCount[obj.type] = that.blueComponentsTypeCount[obj.type] + 1
-                _com = new BlueComponent(that.container, obj);
-
+            if(opt["status"] == 0){
+                func0(opt, that)
+            } else if(opt["status"] == 1){
+                func1(opt, that)
+            } else {
+                console.log("error status in updateExstingPorts")
+            }
+            
+        },
+        updateDataMapper(opt){
+            // {"status": 0/1, options: {"obj": obj}}
+            // 0 add component to datamapper
+            // 1 add line to datamapper
+            let that = this
+            
+            if(opt.status == 0){
+                let obj = opt.options.obj
                 if(obj.inPorts.length != 0){
                     let dic = {
                         "name": obj.name,
@@ -606,7 +815,7 @@ export default {
                         "control": obj.control,
                         "mapper":[]
                     }
-                    obj.inPorts.forEach( (d,i) => {
+                    obj.inPorts.forEach((d,i) => {
                         dic["mapper"].push({
                             "dataname": d.name,
                             "dataType": "string",
@@ -617,81 +826,104 @@ export default {
                             "alias": null
                         })
                     })
+
                     that.dataMapper[obj.id] = dic
                 }
-                that.blueComponents.push(_com);
-                addClickEvent2Circle(that, _com);
+            } else if(opt.status == 1){
+                if(that.dataMapper['line'] == null){
+                    that.dataMapper['line'] = []
+                } else {
+                    that.dataMapper['line'].push(opt.options.lineInfo)
+                }
             }
 
-           let _name = arguments[0]
-            constructproperty(that, that.modelConfig[_name], _name)
         },
-        buildBlueGraph(con){
-            let that = this
-            let connect = con.getConnectInfo()
-            let _source = connect.source
-            let _target = connect.target
-            //two dimensional matrix of storage blueprint connection logic
-
-            //更新that.chartlayoutObj viewer- layout-0_chartA parentid + "_" + text
-            if(_target.attr == "Layout"){
-                //建立索引 用于更新layout-port
-                if(that.chartLayout[_source["parentid"]] == undefined){
-                that.chartLayout[_source["parentid"]] = []
-                let _name = _target.id + "_" + _target.text
-                that.chartLayout[_source["parentid"]].push(_name)
-                }else{
-                let _name = _target.id + "_" + _target.text
-                that.chartLayout[_source["parentid"]].push(_name)
+        operateStack(status, operation, option){
+            //status : go/back
+            /*
+            [{
+                "operation": '00',
+                //00 add component 01 delete component 02 modificate component
+                //10 add line 11 delete line 12 modifi line
+                "option":{
+                    "id": '',
+                    "comobj": obj
                 }
-
-                //更新chartLayoutObj 用于存储layout-port-config
-                if(that.chartLayoutObj[_target["id"]] == undefined){
-                that.chartLayoutObj[_target["id"]] = {}
-
-                that.chartLayoutObj[_target["id"]][_target["text"]] = ""
-                that.chartLayoutObj[_target["id"]][_target["text"]] = JSON.parse(JSON.stringify(that.vegaObjectObj[_source["parentid"]]))
-
-                }else{
-                if(that.chartLayoutObj[_target["id"]][_target["text"]] == undefined){
-
-                    that.chartLayoutObj[_target["id"]][_target["text"]] = ""
-                    that.chartLayoutObj[_target["id"]][_target["text"]] = JSON.parse(JSON.stringify(that.vegaObjectObj[_source["parentid"]]))
+            },{}]
+            */
+           let that = this
+           if(status == "go"){
+               if (operation == "00"){
+                   //add bluecomponent
+                this.operationStack.push({
+                    "operation": "00",
+                    "options": {
+                        "id": option['id'],
+                        "comobj": option["comobj"]
+                    }
+                })
+                } else if (operation == "01"){
+                    //delete bluecomponent
+                    this.operationStack.push({
+                        "operation": "01",
+                        "options": {
+                            "id": option["id"],
+                            "comobj": option["comobj"]
+                        }
+                    })
+                } else if (operation == "02"){
+                    //change bluecomponent
+                } else if (operation == "10"){
+                    //add blueline
+                    this.operationStack.push({
+                        "operation": "10",
+                        "options": {
+                            "comobj": option["comobj"]
+                        }
+                    })
+                } else if (operation == "11"){
+                    //delete blueline
+                    this.operationStack.push({
+                        "operation": "11",
+                        "options": {
+                            "comobj": option["comobj"]
+                        }
+                    })
+                } else if (operation == "12"){
+                    //change blueline
                 }
-                }
-            }
+           }else if(status == "back"){
+               let opt = this.operationStack.pop()
+               if (opt.operation == "00"){
+                   this.backStatus = true
+                   this.deleteComponent({
+                       "status": 0,
+                       "options": {
+                           "comid": opt.options.id
+                       }
+                   })
+               } else if (opt.operation == "01"){
+                   this.backStatus = true
+                   let interaction = opt["options"]["comobj"]["interaction"],
+                        name = opt["options"]["comobj"]["name"]
+                   this.addComponent(
+                       {"interaction": interaction, "name": name},
+                        opt.options.comobj)
+               } else if (opt.operation == "02"){
 
-            //每增加一条边就更新
-            //首先处理componentIndex
+               } else if (opt.operation == "10"){
+                   this.backStatus = true
+                   this.deleteLine({
+                       "status": 1,
+                       "options": opt.options.comobj
+                   })
+               } else if (opt.operation == "11"){
+                   this.backStatus = true
+                   this.addLine(opt.options.comobj)
+               } else if (opt.operation == "12"){
 
-            let linkname = connect.sourceId + "_" + connect.targetId
-            let addId = [connect.sourceId, connect.targetId]
-            addId.forEach(function(d){
-                if(that.blueComponentNameList.indexOf(d) == -1){
-                that.blueComponentNameList.push(d)
-                }
-            })
-            //存入link
-            if(this.blueLinesName.indexOf(linkname) == -1){
-                this.blueLinesName.push(linkname)
-            }
-            //建立根据componentIndex覆盖更新二维数组
-            this.blueComponentNameList.forEach(function(d, i){
-                that.componentGraph[i] = new Array()
-            })
-            //graph init
-            for(let i=0; i<this.blueComponentNameList.length; i++){
-                for(let j=0; j<this.blueComponentNameList.length; j++){
-                that.componentGraph[i][j] = 0
-                }
-            }
-            for(let i=0; i<this.blueLinesName.length; i++){
-                let indexsource = this.blueComponentNameList.indexOf(String(this.blueLinesName[i]).split('_')[0])
-                let indextarget = this.blueComponentNameList.indexOf(String(this.blueLinesName[i]).split('_')[1])
-                //1 connection
-                //2 filter
-                that.componentGraph[indexsource][indextarget] = that.mouseActionType.index
-            }
+               }
+           }
         },
         catchConnect(option){
             // catch ConnectInfo
@@ -748,52 +980,22 @@ export default {
             let that = this,
                 comid = com.getId(),
                 comtype = com.getType()
-
+            
             //first removeGraph bluecomponent
-            com.removeGraph()
+            //com.removeGraph()
             //second find connected blueline/ removed graph/ delete in array
-            for(let i=0; i<that.blueLines.length; i++){
-                let lineinfo = that.blueLines[i].getConnectInfo()
-                let _source = lineinfo.sourceId,
-                    _target = lineinfo.targetId,
-                    linkname = _source + "_" + _target
-
-                if(comid == _source || comid == _target){
-                that.blueLines[i].forceRemove();
-                that.blueLines[i] = null;
-                that.blueLines.splice(i, 1);
-                i--;
-
-                let index = that.blueLinesName.indexOf(linkname)
-                that.blueLinesName.splice(index, 1)
-                }
-            }
+            this.deleteLine({"status": 0, "options": {"comid": comid}})
 
             //third delete component in array
-            for(let i=0; i<this.blueComponents.length; i++){
-                if(comid == this.blueComponents[i].getId()){
-                this.blueComponents[i] = null;
-                this.blueComponents.splice(i, 1);
-
-                break;
-                }
-            }
+            that.deleteComponent({"status": 0, "options": {"comid": comid}})
 
             //remove ports
-            for(let i=0; i<that.exstingPorts.length; i++){
-                if(comid == that.exstingPorts[i].parentid){
-                this.exstingPorts.splice(i, 1);
-                }
-            }
+            that.updateExstingPorts({"status": 1, "options": {"comid": comid}})
 
             if(comtype == "Data"){
                 delete that.selectedData[comid]
                 delete that.dataComponent[comid]
             }else if(comtype == "Viewer" || comtype == "Chart"){
-                let index = comid.split("-")[1]
-                that.viewerbuttonbox[index]["content"] = "button" + index
-                that.viewerbuttonbox[index]["style"] = "none"
-                that.viewerbuttonbox[index]["id"] = ""
                 that.blueComponentsTypeCount[comtype] = that.blueComponentsTypeCount[comtype] + 1
             }
             that.blueComponentsTypeCount[comtype] = that.blueComponentsTypeCount[comtype] - 1
@@ -905,7 +1107,6 @@ export default {
                 if(that.blueLines[i].getConnectInfo().isDeleted == "true"){
                     that.blueLines.splice(i,1)
                     templength = templength - 1
-                    console.log(true)
                     }
                 }
             }
@@ -921,7 +1122,7 @@ export default {
     display: inline-block;
 }
 .el-main{
-    padding: 5px !important
+    
 }
 
 .grid-content {
@@ -938,5 +1139,15 @@ export default {
 .el-divider__text{
     font-weight: 700;
     font-size: 16px;
+}
+.vs-popup{
+    width: 1470px !important;
+    height: 910px !important; 
+}
+.con-radios{
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start;
+    padding: 5px;
 }
 </style>
