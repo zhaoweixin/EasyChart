@@ -42,6 +42,7 @@ const mutation = {
     state.propsData = payload;
   },
   updateDataMapper(state, payload) {
+    console.log(payload)
     state.dataMapper = JSON.parse(JSON.stringify(payload));
   },
 

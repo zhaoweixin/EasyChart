@@ -288,6 +288,8 @@ export default {
                 select_config.push({
                         "chartId": d,
                         "type": obj.name,
+                        "data": "weather",
+                        "FiledName": "weather",
                         "controllee":[]
                     })
             })
@@ -934,7 +936,7 @@ export default {
                 let conInfo = con.getConnectInfo()
                 if (conInfo.targetId != ""){
                     clearInterval(intr);
-                    that.buildBlueGraph(con)
+                    //that.buildBlueGraph(con)
                 }
                 }, 500)
             }
