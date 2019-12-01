@@ -59,7 +59,7 @@
                                         <vs-button radius color="primary" type="filled" icon="undo" @click="operateStack('back')" style="transform:translate(15px)" ></vs-button>
                                     -->
                                 </div>
-                                <svg id ='editorborad'></svg>
+                                <svg id ='blueditorboard'></svg>
                             </div>
                         </el-main>
                     </el-container>
@@ -341,7 +341,7 @@ export default {
                 }
             }
             
-            this.container = d3.select("#editorborad");
+            this.container = d3.select("#blueditorboard");
             this.container.append("g").attr("id", "grid_layer");
             this.chartResize(window.innerWidth * 0.765, window.innerHeight * 0.843);
             bluecomponentscountInit(that)
@@ -386,7 +386,7 @@ export default {
                     }
             }
 
-            d3.select("#editorborad")
+            d3.select("#blueditorboard")
                 .attr("width", this.width)
                 .attr("height", this.height);
 
@@ -406,7 +406,7 @@ export default {
             function highlightCom(range){
                 
             }
-            let svg = d3.select("#editorborad")
+            let svg = d3.select("#blueditorboard")
             let rect = svg.append("rect")
                 .attr("width", 0)
                 .attr("height", 0)

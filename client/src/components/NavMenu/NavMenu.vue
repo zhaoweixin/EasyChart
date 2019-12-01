@@ -26,7 +26,7 @@
     </div>
     <div  calss="right-button"  style="width:600px;position: absolute;top:14%;right:0%">
       <el-tooltip effect="dark" content="Click Save" placement="bottom">
-        <el-button type="info" @click="saveOption" size="small" icon="el-icon-edit"></el-button>
+        <el-button type="info"  @click="saveOption" size="small" icon="el-icon-edit"></el-button>
       </el-tooltip>
       <el-tooltip effect="dark" content="Edit Interaction" placement="bottom">
         <el-button type="info"  @click="popUp" size="small" icon="el-icon-pie-chart"></el-button>

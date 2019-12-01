@@ -3,8 +3,6 @@ import * as d3 from 'd3'
 export default class BlueComponent {
 
     constructor(canvas, options) {
-
-
         let that = this
         this.frame = 2
         this.fill = '#F6BB42'
@@ -27,7 +25,6 @@ export default class BlueComponent {
         this.time = 1
         this.isLoading = true
         this.id = ''
-
         this.control = null
         this.backrect = null
         this.isSelected = false
@@ -68,7 +65,7 @@ export default class BlueComponent {
         ////////////////////////////////
         ///Add drag event to component
         ///////////////////////////////
-
+        
         this.container.call(d3.drag()
             .on("start", function(d){
                 that.dragstarted(this, d)
@@ -186,10 +183,10 @@ export default class BlueComponent {
             .attr('stroke', this.stroke)
             .attr('stroke-width', 2)
             .on("mouseover", function(d){
-                d3.select(this).transition().duration(150).attr('fill', "#FFCC33")
+                d3.select(this).attr('fill', "#FFCC33")
             })
             .on("mouseout", function(d){
-                d3.select(this).transition().duration(150).attr('fill', that.fill)
+                d3.select(this).attr('fill', that.fill)
             })
 
         //Container for the gradients
@@ -503,11 +500,12 @@ export default class BlueComponent {
     dragstarted(node, d) {
         //this.isDraged = true
        // d3.select(node).raise().classed("active", true);
+       //d3.select('#editorborad').append('g').attr('id', 'dragedrect')
        return 1;
+       
     }
     dragged(node, d){
-        var that = this
-
+        let that = this
         d3.select(node).attr("transform", function(q){
             that.dx = d3.event.x - that.x
             that.dy = d3.event.y - that.y
@@ -523,7 +521,8 @@ export default class BlueComponent {
                 .attr('none', function(d){
                 d.parentX = that.x
                 d.parentY = that.y
-            })
+        })
+        
         return 1;
     }
     dragended(node,d) {
