@@ -129,7 +129,6 @@ const mutation = {
   },
 
   commitDataMapper(state, payload) {
-    console.log(payload);
     if (payload[0] == "precipitation" && payload[1] == "date") {
       state.interacBarData = state.weatherData.barData;
     }
@@ -162,6 +161,9 @@ const mutation = {
     } else {
       state.chartArray[payload.index].static = false;
     }
+  },
+  commitDataInfoStore(state, payload){
+    state.dataInfoStore.push(payload)
   }
 };
 
