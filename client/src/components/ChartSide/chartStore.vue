@@ -93,7 +93,6 @@ $.extend({
         }
       }
 
-      console.log(data);
       ``;
       var titlemap = d3.map();
       for (var i = 0; i < title.length; i++) {
@@ -124,10 +123,13 @@ $.extend({
 });
 $.csvtitle("../../../static/data/seattle-weather.csv", function(datas) {
   datamap.set("Weather", datas);
+  console.log(datas)
+  store.commit('commitDataInfoStore', {'name': 'Weather', 'titlemap': datas.titlemap.entries(), 'dataTypes': [...new Set(datas.titlemap.values())]})
   add(datas.title, "Weather");
 });
 $.csvtitle("../../../static/data/testdata.csv", function(datas) {
   datamap.set("Week", datas);
+  store.commit('commitDataInfoStore', {'name': 'Week', 'titlemap': datas.titlemap.entries(), 'dataTypes': [...new Set(datas.titlemap.values())]})
   add(datas.title, "Week");
 });
 //name为表名，或者state存储的data数据昵称

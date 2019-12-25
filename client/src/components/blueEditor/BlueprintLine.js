@@ -428,7 +428,6 @@ let TextBlueLine = function(option){
         return attribu.id
     }
     this.getst = function(){
-        console.log("attribu", attribu.actionTypeIndex)
         return {
             "sourceId": attribu.sourceId,
             "targetId": attribu.targetId,

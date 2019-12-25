@@ -27,6 +27,7 @@ const state = {
   interacLineData:[],   //交互先
   dataMapper:[],
   weatherData:{},
+  dataInfoStore:[],
 
   //相同数据字段配置
   sameFiledName:{

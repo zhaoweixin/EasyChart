@@ -19,5 +19,11 @@
         "name":"Processor",
         "childrens":["Filter"],
         "color":"grey"
+    },
+    "data":{
+        "name": "data",
+        "childrens": [],
+        "color": "#ffa824"
     }
+    
 }
