@@ -1,5 +1,5 @@
 <template>
-  <el-collapse v-model="activeNames" style="padding-left:20px; padding-right:20px">
+  <el-collapse v-model="activeNames">
     <el-collapse-item
       v-for="(value, key) in baseData"
       :key="key"
@@ -8,7 +8,7 @@
       v-show="collapseShow(key)"
     >
       <div v-for="(val, k) in value" :key="k">
-        <div v-if="key =='metaConfig'" >
+        <div v-if="key =='MetaConfig'" >
           <span>{{k}}</span>
           <el-input v-model="value.title" size="mini" v-if="value.hasOwnProperty('title')"></el-input>
         </div>
@@ -109,7 +109,7 @@ export default {
   data() {
     return {
       baseData: {
-        metaConfig: {
+        MetaConfig: {
           title: ""
         },
         style: {
@@ -132,7 +132,7 @@ export default {
         ]
       },
 
-      activeNames: ["metaConfig", "style", "data", "button", "datamappers"], //折叠面板
+      activeNames: ["MetaConfig", "style", "data", "button", "datamappers"], //折叠面板
 
       columnsName: [
         {
@@ -282,7 +282,7 @@ export default {
       else return "x";
     },
     collapseShow(key) {
-      return (key == "metaConfig" ||key == "style" ||(key == "data" && this.baseData.data.length != 0)||key == "button" ||key == "datamappers");
+      return (key == "MetaConfig" ||key == "style" ||(key == "data" && this.baseData.data.length != 0)||key == "button" ||key == "datamappers");
     }
   }
 };
@@ -295,5 +295,15 @@ export default {
 .colorInput {
   width: 100px;
   float: left;
+}
+.el-collapse-item__content {
+    font-size: 10px !important;
+    color: black !important;
+}
+.el-input__inner{
+  width: 80% !important;
+}
+.colorInput {
+  padding-left: 10px !important;
 }
 </style>

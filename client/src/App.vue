@@ -17,6 +17,7 @@
             <blueEditor></blueEditor>
           </el-main>
           <el-aside width="200px" style="border-left: 2px solid #eee9e9">
+             <el-divider><i class="el-icon-setting"></i></el-divider>
             <SettingSide></SettingSide>
           </el-aside>
       </el-container>

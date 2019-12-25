@@ -40,7 +40,7 @@ export default {
     //   "type": Object,
     //   "default": function() {
     //     let a = {
-    //       metaConfig: {
+    //       MetaConfig: {
     //         title: "降雨量"
     //       },
     //       "style": {
@@ -93,7 +93,7 @@ export default {
           }
         },
         title: {
-          text: this.baseData.metaConfig.title
+          text: this.baseData.MetaConfig.title
         },
         grid: {
           left: "3%",
@@ -178,7 +178,7 @@ export default {
       // if (newVal.id == this.id){
       this.myChart.setOption({
         title: {
-          text: newVal.metaConfig.title
+          text: newVal.MetaConfig.title
         },
         color: newVal.style.color,
         xAxis: [
@@ -223,7 +223,7 @@ export default {
         if (newVal.id == this.id) {
           this.myChart.setOption({
             title: {
-              text: newVal.metaConfig.title
+              text: newVal.MetaConfig.title
             },
             color: newVal.style.color,
             xAxis: [

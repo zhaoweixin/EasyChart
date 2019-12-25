@@ -16,7 +16,7 @@
         type:Object,
         default:function () {
           let a= {
-            metaConfig: {
+            MetaConfig: {
               title:'漏斗'
             },
             style:{
@@ -88,7 +88,7 @@
         return{
           color: this.baseData.style.color,
           title: {
-            text: this.baseData.metaConfig.title,
+            text: this.baseData.MetaConfig.title,
             // subtext: '纯属虚构'
           },
           tooltip: {
@@ -145,7 +145,7 @@
             this.myChart.setOption({
               color:newVal.style.color,
               title:{
-                text: newVal.metaConfig.title
+                text: newVal.MetaConfig.title
               },
               series:{
                 data:newVal.data

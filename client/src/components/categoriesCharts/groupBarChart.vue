@@ -17,7 +17,7 @@ export default {
           type:Object,
           default: function() {
             let a= {
-              metaConfig: {
+              MetaConfig: {
                 title:'扶贫'
               },
               style:{

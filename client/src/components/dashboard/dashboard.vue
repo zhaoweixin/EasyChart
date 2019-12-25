@@ -61,7 +61,7 @@ export default {
       chartLayer: "preview",
       baseData: {
         //基本配置
-        metaConfig: {
+        MetaConfig: {
           title: ""
         },
         style: {

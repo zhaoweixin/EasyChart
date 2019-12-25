@@ -1,5 +1,5 @@
 <template>
-  <div id="Store">
+  <div id="Store" >
     <el-collapse>
       <el-collapse-item title="Data Store">
         <div>
@@ -162,7 +162,7 @@ function add(data, name) {
     var groubv = "&nbsp" + null;
     // if (datamap.get(s).titlemap.get(data[i]) == "string") {
     perv =
-      "<select class='selectper'>" +
+      "<select class='selectper' style='fontsize: 10px !important;'>" +
       "<option value ='null'>null</option>" +
       "<option value ='count'>count</option>" + //count计算条数
       "<option value='avg'>avg</option>" + //avg是计算的平均值
@@ -629,6 +629,12 @@ function clickdata() {
 }
 #Store .el-collapse-item .el-collapse-item__header {
   text-align: center;
-  font: 10px Microsoft YaHei;
+  font: 12px Microsoft YaHei;
+}
+.el-collapse-item__header{
+  padding-left: 10% !important;
+}
+.dropdown-menu th{
+  font-size:10px !important;
 }
 </style>

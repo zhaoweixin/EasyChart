@@ -2,7 +2,7 @@
 
   <div v-bind:id="id" class='container' @click="selectChart">
     <div v-bind:id="g2id" class="container_2">
-      <H3 class="title">{{ baseData.metaConfig.title }}</H3>
+      <H3 class="title">{{ baseData.MetaConfig.title }}</H3>
       <div id="linechart_top">
       </div>
       <div id="slider" class="slider_1"></div>
@@ -31,7 +31,7 @@ export default {
         //   type:Object,
         //   default: function() {
         //     let a= {
-        //       metaConfig: {
+        //       MetaConfig: {
         //         title:'温度变化'
         //       },
         //       style:{

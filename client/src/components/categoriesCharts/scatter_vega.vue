@@ -19,7 +19,7 @@ export default {
         //     type:Object,
         //     default: function(){
         //         let data = {
-        //             metaConfig: {
+        //             MetaConfig: {
         //                 title: "scatter_vega"
         //             },
         //             style:{
@@ -50,7 +50,7 @@ export default {
         t(){
             return{
                 "$schema": "https://vega.github.io/schema/vega-lite/v3.json",
-                "description": this.baseData.metaConfig,
+                "description": this.baseData.MetaConfig,
                 "data": {"values": this.baseData.data},
                 "mark": "point",
                 "encoding": {
@@ -95,7 +95,7 @@ export default {
         reDraw(newVal){
           if (newVal.id == this.id) {
             this.baseData.style.color = newVal.style.color
-            this.baseData.metaConfig.title = newVal.metaConfig.title
+            this.baseData.MetaConfig.title = newVal.MetaConfig.title
             this.baseData.data = newVal.data
             this.draw()
           }
@@ -106,7 +106,7 @@ export default {
             handler(newVal){
                 if (newVal.id==this.id){
                     this.baseData.style.color = newVal.style.color,
-                    this.baseData.metaConfig.title = newVal.metaConfig.title
+                    this.baseData.MetaConfig.title = newVal.MetaConfig.title
                     this.baseData.data = newVal.data
                     this.draw()
                 }

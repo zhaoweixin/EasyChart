@@ -9,22 +9,14 @@
     active-text-color="#fff">
     
     <!-- <el-menu-item style="width:10px"></el-menu-item> -->
-    <div style="padding-top:10px">
+    <div style="padding-top:10px; padding-left:1.5%">
       <p style="color:white; text-align:left; font-weight:600; font-size:20px">OpenVisConnector</p>
     </div>
-    <div calss="left-button" style="width:300px;position: absolute;top:14%;left:11%">
-      <el-tooltip effect="dark" content="undo" placement="bottom">
-        <el-button type="info" icon="el-icon-d-arrow-left" size="small"></el-button>
-      </el-tooltip>
-      <el-tooltip effect="dark" content="redo" placement="bottom">
-        <el-button type="info" icon="el-icon-d-arrow-right" size="small"></el-button>
-      </el-tooltip>
-      <el-tooltip effect="dark" content="delete" placement="bottom">
-        <el-button type="info" icon="el-icon-delete" size="small"></el-button>
-      </el-tooltip>
+    <div calss="left-button" >
+      <!-- style="width:300px;position: absolute;top:14%;left:11%" -->
       
     </div>
-    <div  calss="right-button"  style="width:600px;position: absolute;top:14%;right:0%">
+    <div  calss="right-button"  style="width:600px;position: absolute;top:14%;right:-6%">
       <el-tooltip effect="dark" content="Click Save" placement="bottom">
         <el-button type="info" @click="saveOption" size="small" icon="el-icon-edit"></el-button>
       </el-tooltip>
@@ -36,6 +28,15 @@
       </el-tooltip>
       <el-tooltip effect="dark" content="Preview" placement="bottom">
         <el-button type="info" icon="el-icon-view" size="small"></el-button>
+      </el-tooltip>
+      <el-tooltip effect="dark" content="undo" placement="bottom">
+        <el-button type="info" icon="el-icon-d-arrow-left" size="small"></el-button>
+      </el-tooltip>
+      <el-tooltip effect="dark" content="redo" placement="bottom">
+        <el-button type="info" icon="el-icon-d-arrow-right" size="small"></el-button>
+      </el-tooltip>
+      <el-tooltip effect="dark" content="delete" placement="bottom">
+        <el-button type="info" icon="el-icon-delete" size="small"></el-button>
       </el-tooltip>
     </div>
     <!-- <el-menu-item index="4" style="padding-left:83%">

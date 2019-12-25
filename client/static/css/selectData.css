@@ -13,26 +13,28 @@
 
 .dropdown a {
   text-decoration: none;
+  font-size: 10px;
 }
 .dropdown [data-toggle="dropdown"] {
   position: relative;
   display: block;
-  color: white;
-  background: #2980b9;
-  -moz-box-shadow: 0 1px 0 #409ad5 inset, 0 -1px 0 #20638f inset;
-  -webkit-box-shadow: 0 1px 0 #409ad5 inset, 0 -1px 0 #20638f inset;
-  box-shadow: 0 1px 0 #409ad5 inset, 0 -1px 0 #20638f inset;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+  color: black;
+  background: white;
+  -moz-box-shadow: 0 0.3px 0 grey inset;
+  /* , 0 -1px 0 grey inset; */
+  -webkit-box-shadow: 0 0.3px 0 grey inset, 0 -1px 0 grey inset;
+  /* box-shadow: 0 1px 0 #409ad5 inset, 0 -1px 0 #20638f inset; */
+  /* text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3); */
   padding: 10px;
 }
 .dropdown [data-toggle="dropdown"]:hover {
-  background: #2c89c6;
+  background: rgba(0, 0, 0, 0.3);
 }
 .dropdown .icon-arrow {
   position: absolute;
   display: block;
   font-size: 0.7em;
-  color: #fff;
+  color: grey;
   top: 14px;
   right: 10px;
 }

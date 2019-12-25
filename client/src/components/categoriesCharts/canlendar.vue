@@ -28,7 +28,7 @@
           myChart:"",
           option:"",
           // baseData:{
-          //       metaConfig:{
+          //       MetaConfig:{
           //         title:"日历图",
           //       },
           //       style:{
@@ -71,7 +71,7 @@
               },
 
               title:{
-                text: newVal.metaConfig.title
+                text: newVal.MetaConfig.title
               },
               series:{
                 data:this.changeArray(newVal.data)
@@ -205,7 +205,7 @@
               },
 
               title: {
-                text: newVal.metaConfig.title
+                text: newVal.MetaConfig.title
               },
               series: {
                 data: this.changeArray(newVal.data)

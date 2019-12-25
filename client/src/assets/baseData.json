@@ -1,7 +1,7 @@
 {
   "barChart": {
     "baseData": {
-      "metaConfig": {
+      "MetaConfig": {
         "title": "降雨量"
       },
       "style": {
@@ -49,7 +49,7 @@
   },
   "piechart": {
     "baseData": {
-      "metaConfig": {
+      "MetaConfig": {
         "title": "饼状图"
       },
       "style": {
@@ -115,7 +115,7 @@
   },
   "canlendar": {
     "baseData": {
-      "metaConfig": {
+      "MetaConfig": {
         "title": "日历图"
       },
       "style": {
@@ -146,7 +146,7 @@
   },
   "linechart": {
     "baseData": {
-      "metaConfig": {
+      "MetaConfig": {
         "title": "温度变化"
       },
       "style": {
@@ -198,7 +198,7 @@
   },
   "scatter_vega": {
     "baseData": {
-      "metaConfig": {
+      "MetaConfig": {
         "title": "scatter_vega"
       },
       "style": {
