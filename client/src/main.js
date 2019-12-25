@@ -13,8 +13,7 @@ import 'material-icons/iconfont/material-icons.css';
 
 import Vuesax from 'vuesax'
 import 'vuesax/dist/vuesax.css' //Vuesax styles
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.min'
+
 window.$ = require('jquery')
 
 Vue.use(Vuesax)
